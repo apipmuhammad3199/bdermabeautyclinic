@@ -30,8 +30,8 @@ function App() {
       {/* Header */}
       <header className="header">
         <div className="logo-container">
-          <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enif Clinic Logo" className="logo" />
-          <div className="clinic-name">Enif Clinic</div>
+          <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
+          <div className="clinic-name">Enef Clinic</div>
         </div>
         <div className="social-links">
           <a href="https://www.instagram.com/enefclinic/" target="_blank" rel="noopener noreferrer" className="social-icon instagram" title="Instagram">
@@ -107,7 +107,7 @@ function App() {
             {/* Replace src with your uploaded video path e.g. src="/assets/video1.mp4" */}
             <video controls src=""></video>
             <div className="video-info">
-              <h3>Enif Clinic Experience</h3>
+              <h3>Enef Clinic Experience</h3>
             </div>
           </div>
           <div className="video-card" data-aos="fade-up" data-aos-delay="200">
@@ -121,14 +121,14 @@ function App() {
 
       {/* Location Section */}
       <section className="maps-section" data-aos="fade-up">
-        <h2>Enif Clinic Ambara Bawen</h2>
+        <h2>Enef Clinic Ambara Bawen</h2>
         <div className="maps-container">
           <iframe 
             src="https://maps.google.com/maps?q=-7.2488434,110.4267805&t=&z=17&ie=UTF8&iwloc=&output=embed" 
             allowFullScreen="" 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="Enif Clinic Ambara Bawen Location"
+            title="Enef Clinic Ambara Bawen Location"
           ></iframe>
         </div>
       </section>
@@ -137,7 +137,7 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Enif Clinic. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Enef Clinic. All rights reserved.</p>
         <p style={{ marginTop: '0.5rem' }}>Elegance in every detail.</p>
       </footer>
     </div>

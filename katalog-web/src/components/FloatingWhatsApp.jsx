@@ -3,7 +3,7 @@ import React from 'react';
 const FloatingWhatsApp = () => {
   return (
     <a 
-      href="https://wa.me/628214464406?text=Halo%20Enif%20Clinic,%20saya%20ingin%20melakukan%20reservasi" 
+      href="https://wa.me/628214464406?text=Halo%20Enef%20Clinic,%20saya%20ingin%20melakukan%20reservasi" 
       target="_blank" 
       rel="noopener noreferrer" 
       className="floating-wa"
