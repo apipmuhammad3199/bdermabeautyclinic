@@ -129,7 +129,16 @@ function Admin() {
 
   const handleAddVideo = (e) => {
     e.preventDefault();
-    addVideo({ title: videoTitle, src: videoSrc });
+    let finalSrc = videoSrc.trim();
+    if (finalSrc.includes('instagram.com') && !finalSrc.includes('/embed')) {
+      finalSrc = finalSrc.split('?')[0]; 
+      if (!finalSrc.endsWith('/')) {
+        finalSrc += '/';
+      }
+      finalSrc += 'embed';
+    }
+    
+    addVideo({ title: videoTitle, src: finalSrc });
     setVideoTitle('');
     setVideoSrc('');
     showNotification('Video berhasil ditambahkan!');
@@ -327,8 +336,8 @@ function Admin() {
                   <input type="text" className="admin-input" placeholder="Masukkan judul video" value={videoTitle} onChange={e => setVideoTitle(e.target.value)} required />
                 </div>
                 <div className="admin-form-group">
-                  <label>Upload File Video (Demo Lokal)</label>
-                  <input type="file" accept="video/*" className="admin-input" required onChange={(e) => handleFileChange(e, setVideoSrc)} />
+                  <label>Link Instagram (Reels / Post)</label>
+                  <input type="text" className="admin-input" placeholder="Misal: https://www.instagram.com/p/..." value={videoSrc} required onChange={(e) => setVideoSrc(e.target.value)} />
                 </div>
                 <button type="submit" className="admin-btn" style={{ width: '100%' }}>Simpan Video</button>
               </form>
@@ -339,7 +348,7 @@ function Admin() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {videos.map((v, idx) => (
                   <div key={v.id || idx} className="admin-list-item" style={{ alignItems: 'flex-start' }}>
-                    <video src={v.src} style={{ width: '120px', height: '80px', objectFit: 'cover', borderRadius: '8px', background: '#000' }}></video>
+                    <iframe src={v.src} style={{ width: '120px', height: '80px', objectFit: 'cover', borderRadius: '8px', background: '#000', border: 'none', overflow: 'hidden' }} scrolling="no" allowtransparency="true"></iframe>
                     <div style={{ flex: 1, marginLeft: '1rem' }}>
                       <div style={{ fontWeight: '600' }}>{v.title}</div>
                     </div>

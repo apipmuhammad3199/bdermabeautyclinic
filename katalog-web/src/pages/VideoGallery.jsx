@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
 function VideoGallery() {
   const { videos } = useContext(CMSContext);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,16 +35,30 @@ function VideoGallery() {
             Belum ada video yang diunggah.
           </div>
         ) : (
-          <div className="video-grid">
-            {videos.map((vid, idx) => (
-              <div key={idx} className="video-card">
-                <video controls src={vid.src}></video>
-                <div className="video-info">
-                  <h3>{vid.title}</h3>
+          <>
+            <div className="video-grid">
+              {videos.slice(0, visibleCount).map((vid, idx) => (
+                <div key={idx} className="video-card">
+                  <iframe src={vid.src} width="100%" height="450" frameBorder="0" scrolling="no" allowtransparency="true" style={{ display: 'block', background: '#f4f4f4' }}></iframe>
+                  <div className="video-info">
+                    <h3>{vid.title}</h3>
+                  </div>
                 </div>
+              ))}
+            </div>
+
+            {visibleCount < videos.length && (
+              <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                <button 
+                  onClick={() => setVisibleCount(prev => prev + 6)}
+                  className="contact-us-btn"
+                  style={{ border: 'none', cursor: 'pointer', padding: '0.8rem 2rem' }}
+                >
+                  Tampilkan Lebih Banyak
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </section>
 
