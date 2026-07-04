@@ -32,9 +32,11 @@ export const CMSProvider = ({ children }) => {
       promosData.sort((a, b) => b.createdAt - a.createdAt);
       if (promosData.length === 0) {
         setPromos([
-          { id: 'default1', url: `${import.meta.env.BASE_URL}assets/Slide1.jpg` },
-          { id: 'default2', url: `${import.meta.env.BASE_URL}assets/Slide2.jpg` },
-          { id: 'default3', url: `${import.meta.env.BASE_URL}assets/Slide3.jpg` },
+          { id: 'default1', url: `${import.meta.env.BASE_URL}assets/Slide1.png` },
+          { id: 'default2', url: `${import.meta.env.BASE_URL}assets/Slide2.png` },
+          { id: 'default3', url: `${import.meta.env.BASE_URL}assets/Slide3.png` },
+          { id: 'default4', url: `${import.meta.env.BASE_URL}assets/Slide4.png` },
+          { id: 'default5', url: `${import.meta.env.BASE_URL}assets/Slide5.png` },
         ]);
       } else {
         setPromos(promosData);

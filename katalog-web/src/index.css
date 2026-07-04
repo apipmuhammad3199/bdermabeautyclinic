@@ -135,8 +135,7 @@ h1, h2, h3, h4, h5, h6 {
 .promo-slider {
   position: relative;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   overflow: hidden;
   background-color: #f9f9f9;
 }
@@ -148,6 +147,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .slide {
   min-width: 100%;
+  height: 65vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -155,8 +155,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .slide img {
   width: 100%;
-  height: auto;
-  max-height: 70vh;
+  height: 100%;
   object-fit: contain;
   display: block;
 }
@@ -804,7 +803,7 @@ button.floating-wa {
   width: 100%;
   max-width: 450px;
   border-radius: 24px;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   box-shadow: 0 20px 60px rgba(0,0,0,0.05);
   text-align: center;
   position: relative;
@@ -826,16 +825,16 @@ button.floating-wa {
 }
 
 .socials-logo {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   border: 3px solid var(--border-color);
 }
 
 .socials-header h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   margin-bottom: 0.3rem;
   color: var(--text-dark);
 }
@@ -843,13 +842,13 @@ button.floating-wa {
 .socials-header p {
   color: var(--text-light);
   font-size: 0.9rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .socials-links {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .social-btn {
@@ -857,11 +856,11 @@ button.floating-wa {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 1rem;
+  padding: 0.8rem;
   border-radius: 12px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   color: white;
 }
@@ -1066,3 +1065,4 @@ button.floating-wa {
 .book-now-btn:hover {
   background-color: #9c7659;
 }
+
