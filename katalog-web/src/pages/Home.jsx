@@ -186,7 +186,7 @@ function Home() {
           <div className="maps-info">
             <div className="info-card">
               <h3>Alamat Kami</h3>
-              <p>Jalan Raya Bawen No. 89, Ambarawa Bawen,<br/>Kabupaten Semarang, Jawa Tengah</p>
+              <p>Ruko Emporium Citra Niaga No. 10<br/>Jl. Palagan Ambarawa, Ngrawan Kidul, Bawen,<br/>Jawa Tengah, Indonesia.</p>
             </div>
             <div className="info-card">
               <h3>Kontak Admin</h3>
