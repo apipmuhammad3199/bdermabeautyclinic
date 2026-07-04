@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import VideoGallery from './pages/VideoGallery';
+import Socials from './pages/Socials';
 import { CMSProvider } from './context/CMSContext';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/videos" element={<VideoGallery />} />
+          <Route path="/socials" element={<Socials />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>

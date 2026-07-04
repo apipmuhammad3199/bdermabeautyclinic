@@ -640,8 +640,195 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(0.9);
     opacity: 0;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
+}
+
+/* New CSS Additions */
+
+/* Contact Us Button in Header */
+.contact-us-btn {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(212, 184, 149, 0.4);
+}
+
+.contact-us-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 184, 149, 0.6);
+  background-color: #c4a781;
+}
+
+/* Maps Section Layout */
+.maps-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+  text-align: left;
+}
+
+.maps-container {
+  flex: 2;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  height: 400px;
+}
+
+.maps-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.info-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.info-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.8rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.info-card p {
+  color: var(--text-light);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  color: #25d366;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.contact-link:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .maps-layout {
+    flex-direction: column;
   }
+  .maps-container {
+    height: 300px;
+  }
+}
+
+/* Socials Page */
+.socials-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-image: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+.socials-card {
+  background: white;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+  text-align: center;
+  position: relative;
+}
+
+.back-link {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  text-decoration: none;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.back-link:hover {
+  color: var(--primary-color);
+}
+
+.socials-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid var(--border-color);
+}
+
+.socials-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-dark);
+}
+
+.socials-header p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.socials-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: white;
+}
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.wa-btn {
+  background-color: #25d366;
+}
+
+.ig-btn {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.tiktok-btn {
+  background-color: #000000;
+}
+
+.maps-btn {
+  background-color: #4285F4;
 }
