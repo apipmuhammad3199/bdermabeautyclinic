@@ -6,6 +6,8 @@ import Admin from './pages/Admin';
 import VideoGallery from './pages/VideoGallery';
 import Socials from './pages/Socials';
 import Booking from './pages/Booking';
+import Promo50 from './pages/Promo50';
+import Promo45 from './pages/Promo45';
 import { CMSProvider } from './context/CMSContext';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/promo-50" element={<Promo50 />} />
+          <Route path="/promo-45" element={<Promo45 />} />
           <Route path="/videos" element={<VideoGallery />} />
           <Route path="/socials" element={<Socials />} />
           <Route path="/booking" element={<Booking />} />

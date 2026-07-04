@@ -10,7 +10,6 @@ import { CMSContext } from '../context/CMSContext';
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('All');
   const { treatments, videos, promoSettings } = useContext(CMSContext);
 
   useEffect(() => {
@@ -50,14 +49,25 @@ function Home() {
     return { ...treatment, effectiveDiscount };
   });
 
-  const hasActive45 = processedTreatments.some(t => t.effectiveDiscount === 45);
-  const hasActive50 = processedTreatments.some(t => t.effectiveDiscount === 50);
-
-  const filteredTreatments = processedTreatments.filter(treatment => {
-    const matchesSearch = treatment.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTab = activeTab === 'All' || treatment.effectiveDiscount === parseInt(activeTab, 10);
-    return matchesSearch && matchesTab;
+  const treatments50 = processedTreatments.filter(t => t.effectiveDiscount === 50 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const treatments45 = processedTreatments.filter(t => t.effectiveDiscount === 45 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  
+  // Logika Semua Layanan: 
+  // Jika sedang mencari (searchTerm tidak kosong), tampilkan semuanya.
+  // Jika tidak mencari, sembunyikan yang sedang promo agar tidak dobel.
+  const treatmentsAll = processedTreatments.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase());
+    if (searchTerm === '') {
+      return t.effectiveDiscount === 0 && matchesSearch;
+    }
+    return matchesSearch;
   });
+
+  const preview50 = treatments50.slice(0, 4);
+  const preview45 = treatments45.slice(0, 4);
+
+  const hasActive50 = processedTreatments.some(t => t.effectiveDiscount === 50);
+  const hasActive45 = processedTreatments.some(t => t.effectiveDiscount === 45);
 
   return (
     <div className="app-container">
@@ -78,56 +88,82 @@ function Home() {
       <PromoSlider />
 
       {/* Hero Section */}
-      <section className="hero" data-aos="fade-up">
+      <section className="hero" data-aos="fade-up" style={{ paddingBottom: '1rem' }}>
         <h1>Signature Treatments</h1>
         <p>Discover our range of premium aesthetic treatments designed to enhance your natural beauty.</p>
         
         <div className="search-container">
           <input 
             type="text" 
-            placeholder="Search treatments..." 
+            placeholder="Cari perawatan..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </section>
 
-      {/* Catalog Section */}
-      <section className="catalog-container" data-aos="fade-up" data-aos-delay="100">
-        
-        {/* Discount Tabs */}
-        <div className="tabs-container">
-          {hasActive45 && (
-            <button 
-              className={`tab-button ${activeTab === '45' ? 'active' : ''}`}
-              onClick={() => setActiveTab('45')}
-            >
-              Promo 45% OFF
-            </button>
-          )}
-          {hasActive50 && (
-            <button 
-              className={`tab-button ${activeTab === '50' ? 'active' : ''}`}
-              onClick={() => setActiveTab('50')}
-            >
-              Promo 50% OFF
-            </button>
-          )}
-          <button 
-            className={`tab-button ${activeTab === 'All' ? 'active' : ''}`}
-            onClick={() => setActiveTab('All')}
-          >
-            All Treatments
-          </button>
-        </div>
-
-        {filteredTreatments.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-light)' }}>
-            No treatments found matching your criteria.
+      {/* 50% Promo Section */}
+      {hasActive50 && (
+        <section className="catalog-container horizontal-section" data-aos="fade-up" data-aos-delay="100" style={{ paddingBottom: '1rem', paddingTop: '1rem', marginTop: '1rem' }}>
+          <div className="catalog-header" style={{ marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '2rem', color: 'var(--primary-color)' }}>Promo Spesial 50%</h2>
+            <p style={{ color: 'var(--text-light)' }}>Penawaran Spesial Terbatas, Jangan Sampai Terlewatkan!</p>
           </div>
-        ) : (
+          {preview50.length === 0 ? null : (
+            <>
+              <div className="horizontal-scroll-container" style={{ paddingBottom: '1rem' }}>
+                {preview50.map((treatment, index) => (
+                  <div className="horizontal-card-wrapper" key={index}>
+                    <TreatmentCard treatment={treatment} />
+                  </div>
+                ))}
+              </div>
+              {treatments50.length > 4 && (
+                <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+                  <Link to="/promo-50" className="contact-us-btn">
+                    Lihat Semua Promo 50% ➔
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      )}
+
+      {/* 45% Promo Section */}
+      {hasActive45 && (
+        <section className="catalog-container horizontal-section" data-aos="fade-up" data-aos-delay="100" style={{ paddingBottom: '1rem', paddingTop: '1rem', marginTop: '1rem' }}>
+          <div className="catalog-header" style={{ marginBottom: '1.5rem' }}>
+            <h2 style={{ fontSize: '2rem', color: 'var(--primary-color)' }}>Promo Spesial 45%</h2>
+            <p style={{ color: 'var(--text-light)' }}>Perawatan Premium dengan Harga Terbaik untuk Anda</p>
+          </div>
+          {preview45.length === 0 ? null : (
+            <>
+              <div className="horizontal-scroll-container" style={{ paddingBottom: '1rem' }}>
+                {preview45.map((treatment, index) => (
+                  <div className="horizontal-card-wrapper" key={index}>
+                    <TreatmentCard treatment={treatment} />
+                  </div>
+                ))}
+              </div>
+              {treatments45.length > 4 && (
+                <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+                  <Link to="/promo-45" className="contact-us-btn">
+                    Lihat Semua Promo 45% ➔
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      )}
+
+      {/* All Treatments Section */}
+      <section className="catalog-container theme-All" data-aos="fade-up" data-aos-delay="100" style={{ paddingTop: '1rem', marginTop: '1rem' }}>
+        
+        {treatmentsAll.length > 0 && (
           <div className="catalog-grid">
-            {filteredTreatments.map((treatment, index) => (
+            {treatmentsAll.map((treatment, index) => (
               <TreatmentCard key={index} treatment={treatment} />
             ))}
           </div>

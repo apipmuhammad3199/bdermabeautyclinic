@@ -1066,3 +1066,120 @@ button.floating-wa {
   background-color: #9c7659;
 }
 
+
+
+/* Themed Catalog Tabs */
+.catalog-container {
+  transition: all 0.5s ease;
+  border-radius: 20px;
+  margin-top: 2rem;
+  padding-top: 3rem;
+}
+
+.catalog-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.8s ease forwards;
+}
+.catalog-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.sparkle {
+  color: #FFD700;
+}
+
+.theme-50 {
+  background: linear-gradient(135deg, #111 0%, #2a2015 100%);
+  color: #fdf5e6;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.theme-50 .catalog-header h2 {
+  color: #ffd700;
+  text-shadow: 0 2px 10px rgba(255,215,0,0.3);
+}
+.theme-50 .tab-button {
+  border-color: rgba(255,215,0,0.3);
+  color: #ccc;
+}
+.theme-50 .tab-50.active {
+  background: linear-gradient(135deg, #ffd700, #d4af37);
+  color: #000;
+  border-color: #ffd700;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+}
+
+.theme-45 {
+  background: linear-gradient(135deg, #fff5f8 0%, #ffe4e8 100%);
+  color: #4a2e35;
+  box-shadow: 0 10px 40px rgba(255,182,193,0.3);
+}
+.theme-45 .catalog-header h2 {
+  color: #d16b8a;
+}
+.theme-45 .tab-button {
+  border-color: rgba(209,107,138,0.3);
+  color: #775560;
+}
+.theme-45 .tab-45.active {
+  background: linear-gradient(135deg, #d16b8a, #b3526d);
+  color: #fff;
+  border-color: #d16b8a;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(209,107,138,0.4);
+}
+
+.theme-All {
+  background: transparent;
+  color: inherit;
+}
+.theme-All .tab-all.active {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(186,155,92,0.4);
+}
+
+.tab-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2rem;
+  font-weight: 600;
+  border-radius: 30px;
+  backdrop-filter: blur(5px);
+}
+.tab-icon {
+  font-size: 1.2rem;
+}
+
+
+/* Horizontal Scroll for Promos */
+.horizontal-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.horizontal-card-wrapper {
+  flex: 0 0 calc(100% - 2rem);
+  max-width: 350px;
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+  .horizontal-card-wrapper {
+    flex: 0 0 350px;
+    scroll-snap-align: start;
+  }
+}
