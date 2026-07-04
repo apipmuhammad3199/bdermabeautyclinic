@@ -50,15 +50,15 @@ const TreatmentCard = ({ treatment }) => {
                     {calculateDiscountedPrice(treatment.price, activeDiscount)}
                   </span>
                 </div>
-                {treatment.endDate && (
-                  <div style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '600', marginTop: '0.2rem' }}>
-                    *Promo s/d {formatDate(treatment.endDate)}
-                  </div>
-                )}
               </div>
             ) : (
               <span>{treatment.price}</span>
             )}
+          </div>
+        )}
+        {treatment.endDate && (
+          <div style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: '600', marginTop: treatment.price ? '0.2rem' : '0.5rem' }}>
+            *Promo s/d {formatDate(treatment.endDate)}
           </div>
         )}
       </div>
