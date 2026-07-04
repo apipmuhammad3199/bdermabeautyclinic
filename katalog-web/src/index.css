@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
 
 :root {
-  --bg-color: #FDF8F2;
-  --text-dark: #3E362E;
-  --text-light: #7A726A;
-  --accent: #D4B895;
-  --primary-color: #D4B895;
-  --border-color: #E8DCC8;
+  --bg-color: #FFF5E6;
+  --text-dark: #4A3B32;
+  --text-light: #8B7365;
+  --accent: #B08968;
+  --primary-color: #B08968;
+  --border-color: #E3D1C1;
 }
 
 html, body {
@@ -500,7 +500,7 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-btn.active {
   background-color: var(--primary-color);
   color: white;
-  box-shadow: 0 4px 10px rgba(186, 155, 92, 0.3);
+  box-shadow: 0 4px 10px rgba(176, 137, 104, 0.3);
 }
 
 .admin-main {
@@ -566,7 +566,7 @@ h1, h2, h3, h4, h5, h6 {
 .admin-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(186, 155, 92, 0.1);
+  box-shadow: 0 0 0 3px rgba(176, 137, 104, 0.1);
 }
 
 .admin-btn {
@@ -655,13 +655,13 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   font-size: 0.95rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(212, 184, 149, 0.4);
+  box-shadow: 0 4px 15px rgba(176, 137, 104, 0.4);
 }
 
 .contact-us-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 184, 149, 0.6);
-  background-color: #c4a781;
+  box-shadow: 0 6px 20px rgba(176, 137, 104, 0.6);
+  background-color: #9c7659;
 }
 
 /* Maps Section Layout */
