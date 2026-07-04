@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-const chatAdminText = `Hai, Kak 🥰
-Selamat Datang di Layanan Booking Online Enef Clinic 🤎
+const chatAdminText = `Hai, Kak \u{1F970}
+Selamat Datang di Layanan Booking Online Enef Clinic \u{1F90E}
 
 Kami informasikan, slot booking dibuka mulai jam 11.00-17.00
-Booking maksimal H-1 sebelum kedatangan 🥰
+Booking maksimal H-1 sebelum kedatangan \u{1F970}
 
-Terima kasih 🥰
+Terima kasih \u{1F970}
 Salam hangat
 Enef Clinic
 
