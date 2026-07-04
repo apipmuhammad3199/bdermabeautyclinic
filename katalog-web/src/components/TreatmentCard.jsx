@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const getDiscountBadge = (discount) => {
   if (discount === 50) return <div className="badge badge-50">50% OFF</div>;
@@ -35,7 +36,7 @@ const TreatmentCard = ({ treatment }) => {
   const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
 
   return (
-    <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="treatment-card" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+    <div className="treatment-card" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
       {getDiscountBadge(activeDiscount)}
       
       <div>
@@ -63,14 +64,20 @@ const TreatmentCard = ({ treatment }) => {
         )}
       </div>
       
-      <div className="treatment-action">
-        <span>View Details</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 12h14"></path>
-          <path d="M12 5l7 7-7 7"></path>
-        </svg>
+      <div className="treatment-actions-group">
+        <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="treatment-action">
+          <span>View Details</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+        
+        <Link to={`/booking?treatment=${encodeURIComponent(treatment.name)}`} className="book-now-btn">
+          Book Now
+        </Link>
       </div>
-    </a>
+    </div>
   );
 };
 
