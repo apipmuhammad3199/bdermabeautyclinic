@@ -31,9 +31,6 @@ const FloatingWhatsApp = () => {
   return (
     <div className="floating-wa-wrapper" ref={menuRef}>
       <div className={`floating-wa-menu ${isOpen ? 'show' : ''}`}>
-        <Link to="/booking" className="wa-menu-item" onClick={() => setIsOpen(false)}>
-          📝 Booking Treatment
-        </Link>
         <a 
           href={`https://wa.me/628214464406?text=${encodeURIComponent(chatAdminText)}`} 
           target="_blank" 
