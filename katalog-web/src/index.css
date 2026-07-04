@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
 
 :root {
-  --bg-color: #fcfcfc;
-  --text-dark: #2d2d2d;
-  --text-light: #737373;
-  --accent: #d4af37;
-  --border-color: #e5e5e5;
+  --bg-color: #FDF8F2;
+  --text-dark: #3E362E;
+  --text-light: #7A726A;
+  --accent: #D4B895;
+  --primary-color: #D4B895;
+  --border-color: #E8DCC8;
 }
 
 html, body {
@@ -98,8 +99,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 240px));
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 .video-card {
@@ -111,19 +113,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .video-card video {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: auto;
+  max-height: 400px;
   object-fit: cover;
   display: block;
   background: #000;
 }
 
 .video-info {
-  padding: 1rem;
+  padding: 0.8rem;
   text-align: left;
 }
 
 .video-info h3 {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 500;
   font-family: 'Inter', sans-serif;
 }
@@ -443,5 +446,202 @@ h1, h2, h3, h4, h5, h6 {
   .floating-wa svg {
     width: 24px;
     height: 24px;
+  }
+}
+
+/* Admin Dashboard Styles */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-sidebar {
+  width: 260px;
+  background-color: #ffffff;
+  border-right: 1px solid #eaeaea;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+}
+
+.admin-sidebar h2 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-btn {
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.sidebar-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 10px rgba(186, 155, 92, 0.3);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.admin-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  margin-bottom: 2rem;
+}
+
+.admin-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #222;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.8rem;
+}
+
+.admin-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.admin-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(186, 155, 92, 0.1);
+}
+
+.admin-btn {
+  padding: 0.8rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-btn:hover {
+  filter: brightness(1.1);
+}
+
+.admin-btn-outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.admin-btn-danger {
+  background: #ff4757;
+  color: white;
+}
+
+.admin-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: background 0.2s;
+}
+
+.admin-list-item:hover {
+  background: #fafafa;
+}
+
+/* Custom Toast Notification */
+.admin-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 9999;
+  font-weight: 500;
+  transform: translateX(150%);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+.admin-toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
