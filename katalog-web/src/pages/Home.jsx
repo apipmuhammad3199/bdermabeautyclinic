@@ -172,7 +172,7 @@ function Home() {
 
       {/* Location Section */}
       <section className="maps-section" data-aos="fade-up">
-        <h2>Enef Clinic Ambara Bawen</h2>
+        <h2>Enef Clinic Ambarawa Bawen</h2>
         <div className="maps-layout">
           <div className="maps-container">
             <iframe 
@@ -180,13 +180,13 @@ function Home() {
               allowFullScreen="" 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              title="Enef Clinic Ambara Bawen Location"
+              title="Enef Clinic Ambarawa Bawen Location"
             ></iframe>
           </div>
           <div className="maps-info">
             <div className="info-card">
               <h3>Alamat Kami</h3>
-              <p>Jalan Raya Bawen No. 89, Ambara Bawen,<br/>Kabupaten Semarang, Jawa Tengah</p>
+              <p>Jalan Raya Bawen No. 89, Ambarawa Bawen,<br/>Kabupaten Semarang, Jawa Tengah</p>
             </div>
             <div className="info-card">
               <h3>Kontak Admin</h3>
