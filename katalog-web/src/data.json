@@ -2,12 +2,14 @@
   {
     "filename": "disc45/ACNE TREATMENT.pdf",
     "name": "ACNE TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/ACNE TREATMENT.png"
   },
   {
     "filename": "disc45/BODY CONTOUR.pdf",
     "name": "BODY CONTOUR",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/PAKET BODY CONTOUR.png"
   },
   {
     "filename": "disc45/BODY TREATMENT.pdf",
@@ -17,12 +19,14 @@
   {
     "filename": "disc45/BOTOX TREATMENT.pdf",
     "name": "BOTOX TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/BOTOX TREATMENT.png"
   },
   {
     "filename": "disc45/CAUTER.pdf",
     "name": "CAUTER",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/CAUTER.png"
   },
   {
     "filename": "disc45/FACE CONTOUR TREATMENT.pdf",
@@ -32,116 +36,139 @@
   {
     "filename": "disc45/FACIAL TREATMENT.pdf",
     "name": "FACIAL TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/FACIAL TREATMENT.png"
   },
   {
     "filename": "disc45/FILLER.pdf",
     "name": "FILLER",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/FILLER.png"
   },
   {
     "filename": "disc45/GLOWING TREATMENT.pdf",
     "name": "GLOWING TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/GLOWING TREATMENT.png"
   },
   {
     "filename": "disc45/HAIR REMOVEL TRATMENT.pdf",
     "name": "HAIR REMOVEL TRATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/HAIR REMOVEL TRATMENT.png"
   },
   {
     "filename": "disc45/INJECTION TREATMENT.pdf",
     "name": "INJECTION TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/INJECTION TREATMENT.png"
   },
   {
     "filename": "disc45/LASER TREATMENT.pdf",
     "name": "LASER TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/LASER TREATMENT.png"
   },
   {
     "filename": "disc45/LUXURY SKINBOOSTER.pdf",
     "name": "LUXURY SKINBOOSTER",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/LUXURY SKINBOOSTER.png"
   },
   {
     "filename": "disc45/MASSAGE BADAN.pdf",
     "name": "MASSAGE BADAN",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/MASSAGE BADAN.png"
   },
   {
     "filename": "disc45/MELASMA FLEK TREATMENT.pdf",
     "name": "MELASMA FLEK TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/MELASMA FLEK TREATMENT.png"
   },
   {
     "filename": "disc45/MESOLIPO.pdf",
     "name": "MESOLIPO",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/MESOLIPO.png"
   },
   {
     "filename": "disc45/PAKET BODY CONTOUR.pdf",
     "name": "PAKET BODY CONTOUR",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/PAKET BODY CONTOUR.png"
   },
   {
     "filename": "disc45/PEELING.pdf",
     "name": "PEELING",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/PEELING.png"
   },
   {
     "filename": "disc45/RADIO FREQUENCY.pdf",
     "name": "RADIO FREQUENCY",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/RADIO FREQUENCY.png"
   },
   {
     "filename": "disc45/SCAR TREATMENT.pdf",
     "name": "SCAR TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/SCAR TREATMENT.png"
   },
   {
     "filename": "disc45/SUBSISI.pdf",
     "name": "SUBSISI",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/SUBSISI.png"
   },
   {
     "filename": "disc45/THREADLIFT..pdf",
     "name": "THREADLIFT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/THREADLIFT..png"
   },
   {
     "filename": "disc45/TUNGGAL TREATMENT.pdf",
     "name": "TUNGGAL TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/TUNGGAL TREATMENT.png"
   },
   {
     "filename": "disc45/WHITENING TREATMENT.pdf",
     "name": "WHITENING TREATMENT",
-    "discount": 45
+    "discount": 45,
+    "image": "assets/images_enif/WHITENING TREATMENT.png"
   },
   {
     "filename": "disc50/ACNE TREATMENT.pdf",
     "name": "ACNE TREATMENT",
-    "discount": 50
+    "discount": 50,
+    "image": "assets/images_enif/ACNE TREATMENT.png"
   },
   {
     "filename": "disc50/GLOWING TREATMENT.pdf",
     "name": "GLOWING TREATMENT",
-    "discount": 50
+    "discount": 50,
+    "image": "assets/images_enif/GLOWING TREATMENT.png"
   },
   {
     "filename": "disc50/MELASMA TREATMENT.pdf",
     "name": "MELASMA TREATMENT",
-    "discount": 50
+    "discount": 50,
+    "image": "assets/images_enif/MELASMA FLEK TREATMENT.png"
   },
   {
     "filename": "disc50/SCAR TREATMENT.pdf",
     "name": "SCAR TREATMENT",
-    "discount": 50
+    "discount": 50,
+    "image": "assets/images_enif/SCAR TREATMENT.png"
   },
   {
     "filename": "disc50/WHITENING TREATMENT.pdf",
     "name": "WHITENING TREATMENT",
-    "discount": 50
+    "discount": 50,
+    "image": "assets/images_enif/WHITENING TREATMENT.png"
   }
 ]

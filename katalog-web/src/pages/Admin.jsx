@@ -10,7 +10,12 @@ function Admin() {
     treatments, addTreatment, updateTreatment, removeTreatment,
     promos, addPromo, removePromo,
     videos, addVideo, removeVideo,
-    promoSettings, updatePromoSettings
+    promoSettings, updatePromoSettings,
+    skincareProducts, addSkincare, removeSkincare,
+    perawatanPDFs, addPerawatanPDF, removePerawatanPDF,
+    beforeAfterImages, addBeforeAfter, removeBeforeAfter,
+    users, addUser, removeUser,
+    testimonials, addTestimonial, removeTestimonial
   } = useContext(CMSContext);
 
   const [activeTab, setActiveTab] = useState('promo');
@@ -52,6 +57,152 @@ function Admin() {
     showNotification('Promo Slider berhasil ditambahkan!');
   };
 
+
+  // --- Skincare State ---
+  const [skincareName, setSkincareName] = useState('');
+  const [skincareFile, setSkincareFile] = useState(null);
+  const [uploadingSkincare, setUploadingSkincare] = useState(false);
+
+  const handleAddSkincare = async (e) => {
+    e.preventDefault();
+    if (!skincareName || !skincareFile) {
+      showNotification('Nama dan foto produk wajib diisi!');
+      return;
+    }
+    setUploadingSkincare(true);
+    const storageRef = ref(storage, `skincare/${Date.now()}_${skincareFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, skincareFile);
+    uploadTask.on('state_changed', null, 
+      (err) => { setUploadingSkincare(false); showNotification('Gagal upload!'); },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        addSkincare({ name: skincareName, image: url });
+        setSkincareName(''); setSkincareFile(null); setUploadingSkincare(false);
+        showNotification('Produk berhasil ditambahkan!');
+      }
+    );
+  };
+
+  // --- Perawatan PDF State ---
+  const [perawatanName, setPerawatanName] = useState('');
+  const [perawatanFile, setPerawatanFile] = useState(null);
+  const [perawatanImageFile, setPerawatanImageFile] = useState(null);
+  const [uploadingPerawatan, setUploadingPerawatan] = useState(false);
+
+  const handleAddPerawatanPDF = async (e) => {
+    e.preventDefault();
+    if (!perawatanName || !perawatanFile) {
+      showNotification('Nama dan file PDF wajib diisi!');
+      return;
+    }
+    setUploadingPerawatan(true);
+    
+    let imgUrl = '';
+    if (perawatanImageFile) {
+      try {
+        const imgRef = ref(storage, `perawatan_images/${Date.now()}_${perawatanImageFile.name}`);
+        const imgUpload = uploadBytesResumable(imgRef, perawatanImageFile);
+        await new Promise((resolve, reject) => {
+          imgUpload.on('state_changed', null, reject, resolve);
+        });
+        imgUrl = await getDownloadURL(imgUpload.snapshot.ref);
+      } catch (err) {
+        showNotification('Gagal upload gambar perawatan!');
+        setUploadingPerawatan(false);
+        return;
+      }
+    }
+
+    const storageRef = ref(storage, `perawatan/${Date.now()}_${perawatanFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, perawatanFile);
+    uploadTask.on('state_changed', null, 
+      (err) => { setUploadingPerawatan(false); showNotification('Gagal upload!'); },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        const data = { name: perawatanName, pdfLink: url };
+        if (imgUrl) data.image = imgUrl;
+        addPerawatanPDF(data);
+        setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); setUploadingPerawatan(false);
+        showNotification('Perawatan berhasil ditambahkan!');
+      }
+    );
+  };
+
+  // --- Before After State ---
+  const [baTitle, setBaTitle] = useState('');
+  const [baFile, setBaFile] = useState(null);
+  const [uploadingBa, setUploadingBa] = useState(false);
+
+  const handleAddBeforeAfter = async (e) => {
+    e.preventDefault();
+    if (!baFile) {
+      showNotification('Foto Before-After wajib diisi!');
+      return;
+    }
+    setUploadingBa(true);
+    const storageRef = ref(storage, `before_after/${Date.now()}_${baFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, baFile);
+    uploadTask.on('state_changed', null, 
+      (err) => { setUploadingBa(false); showNotification('Gagal upload!'); },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        addBeforeAfter({ title: baTitle || "Treatment By Enef Clinic", img: url, doctor: "Treatment by : dr. Enef" });
+        setBaTitle(''); setBaFile(null); setUploadingBa(false);
+        showNotification('Foto berhasil ditambahkan!');
+      }
+    );
+  };
+
+  // --- Users State ---
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  const handleAddUser = (e) => {
+    e.preventDefault();
+    if (!newUsername || !newPassword) return;
+    if (users.some(u => u.username === newUsername)) {
+      showNotification('Username sudah ada!');
+      return;
+    }
+    addUser({ username: newUsername, password: newPassword });
+    setNewUsername(''); setNewPassword('');
+    showNotification('User berhasil ditambahkan!');
+  };
+
+  // --- Testimonial State ---
+  const [testiName, setTestiName] = useState('');
+  const [testiTreatment, setTestiTreatment] = useState('');
+  const [testiQuote, setTestiQuote] = useState('');
+  const [testiFile, setTestiFile] = useState(null);
+  const [uploadingTesti, setUploadingTesti] = useState(false);
+
+  const handleAddTestimonial = async (e) => {
+    e.preventDefault();
+    if (!testiName || !testiTreatment || !testiQuote) {
+      showNotification('Nama, treatment, dan ulasan wajib diisi!');
+      return;
+    }
+    
+    if (testiFile) {
+      setUploadingTesti(true);
+      const storageRef = ref(storage, `testimonials/${Date.now()}_${testiFile.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, testiFile);
+      uploadTask.on('state_changed', null, 
+        (err) => { setUploadingTesti(false); showNotification('Gagal upload!'); },
+        async () => {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          addTestimonial({ name: testiName, treatment: testiTreatment, quote: testiQuote, image: url });
+          setTestiName(''); setTestiTreatment(''); setTestiQuote(''); setTestiFile(null); setUploadingTesti(false);
+          showNotification('Testimoni berhasil ditambahkan!');
+        }
+      );
+    } else {
+      addTestimonial({ name: testiName, treatment: testiTreatment, quote: testiQuote, image: '' });
+      setTestiName(''); setTestiTreatment(''); setTestiQuote('');
+      showNotification('Testimoni berhasil ditambahkan!');
+    }
+  };
+
   // Treatment State
   const [treatmentName, setTreatmentName] = useState('');
   const [treatmentDesc, setTreatmentDesc] = useState('');
@@ -60,6 +211,8 @@ function Admin() {
   const [treatmentPdf, setTreatmentPdf] = useState('');
   const [treatmentStartDate, setTreatmentStartDate] = useState('');
   const [treatmentEndDate, setTreatmentEndDate] = useState('');
+  const [treatmentImageFile, setTreatmentImageFile] = useState(null);
+  const [uploadingTreatmentImage, setUploadingTreatmentImage] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   const handleEditTreatment = (t) => {
@@ -83,6 +236,7 @@ function Admin() {
     setTreatmentStartDate('');
     setTreatmentEndDate('');
     setTreatmentPdf('');
+    setTreatmentImageFile(null);
   };
 
   const handlePriceChange = (e) => {
@@ -95,8 +249,26 @@ function Admin() {
     setTreatmentPrice(`Rp. ${formatted}`);
   };
 
-  const handleAddTreatment = (e) => {
+  const handleAddTreatment = async (e) => {
     e.preventDefault();
+    setUploadingTreatmentImage(true);
+    let imageUrl = '';
+    
+    if (treatmentImageFile) {
+      try {
+        const storageRef = ref(storage, `treatments/${Date.now()}_${treatmentImageFile.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, treatmentImageFile);
+        await new Promise((resolve, reject) => {
+          uploadTask.on('state_changed', null, reject, resolve);
+        });
+        imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+      } catch (err) {
+        showNotification('Gagal upload gambar treatment!');
+        setUploadingTreatmentImage(false);
+        return;
+      }
+    }
+    
     const data = {
       name: treatmentName,
       description: treatmentDesc,
@@ -106,6 +278,10 @@ function Admin() {
       endDate: treatmentEndDate,
       pdfLink: treatmentPdf || "#"
     };
+    
+    if (imageUrl) {
+      data.image = imageUrl;
+    }
 
     if (editingId) {
       updateTreatment(editingId, data);
@@ -123,6 +299,8 @@ function Admin() {
     setTreatmentStartDate('');
     setTreatmentEndDate('');
     setTreatmentPdf('');
+    setTreatmentImageFile(null);
+    setUploadingTreatmentImage(false);
   };
 
   // Video State
@@ -249,24 +427,14 @@ function Admin() {
           <h2 style={{ marginBottom: 0, padding: 0 }}>Enef CMS</h2>
         </div>
         <div className="sidebar-menu">
-          <button 
-            className={`sidebar-btn ${activeTab === 'promo' ? 'active' : ''}`}
-            onClick={() => setActiveTab('promo')}
-          >
-             Kelola Promo
-          </button>
-          <button 
-            className={`sidebar-btn ${activeTab === 'treatment' ? 'active' : ''}`}
-            onClick={() => setActiveTab('treatment')}
-          >
-             Kelola Treatment
-          </button>
-          <button 
-            className={`sidebar-btn ${activeTab === 'video' ? 'active' : ''}`}
-            onClick={() => setActiveTab('video')}
-          >
-             Kelola Video
-          </button>
+          <button className={`sidebar-btn ${activeTab === 'promo' ? 'active' : ''}`} onClick={() => setActiveTab('promo')}> Kelola Promo</button>
+          <button className={`sidebar-btn ${activeTab === 'treatment' ? 'active' : ''}`} onClick={() => setActiveTab('treatment')}> Kelola Treatment</button>
+          <button className={`sidebar-btn ${activeTab === 'video' ? 'active' : ''}`} onClick={() => setActiveTab('video')}> Kelola Video</button>
+          <button className={`sidebar-btn ${activeTab === 'skincare' ? 'active' : ''}`} onClick={() => setActiveTab('skincare')}> Produk Skincare</button>
+          <button className={`sidebar-btn ${activeTab === 'perawatan' ? 'active' : ''}`} onClick={() => setActiveTab('perawatan')}> Perawatan</button>
+          <button className={`sidebar-btn ${activeTab === 'before_after' ? 'active' : ''}`} onClick={() => setActiveTab('before_after')}> Hasil Nyata</button>
+          <button className={`sidebar-btn ${activeTab === 'testimonial' ? 'active' : ''}`} onClick={() => setActiveTab('testimonial')}> Testimoni</button>
+          <button className={`sidebar-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}> Manajemen Admin</button>
         </div>
       </aside>
 
@@ -349,11 +517,15 @@ function Admin() {
                   </div>
                 )}
                 <div className="admin-form-group">
+                  <label>Upload Gambar Treatment (Opsional)</label>
+                  <input type="file" accept="image/*" className="admin-input" onChange={e => setTreatmentImageFile(e.target.files[0])} />
+                </div>
+                <div className="admin-form-group">
                   <label>Upload PDF Brosur (Opsional - Demo Lokal)</label>
                   <input type="file" accept=".pdf" className="admin-input" onChange={(e) => handleFileChange(e, setTreatmentPdf)} />
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                  <button type="submit" className="admin-btn" style={{ flex: 1 }}>{editingId ? 'Simpan Perubahan' : 'Simpan Treatment'}</button>
+                  <button type="submit" className="admin-btn" disabled={uploadingTreatmentImage} style={{ flex: 1 }}>{uploadingTreatmentImage ? 'Menyimpan...' : (editingId ? 'Simpan Perubahan' : 'Simpan Treatment')}</button>
                   {editingId && (
                     <button type="button" className="admin-btn admin-btn-outline" style={{ flex: 1 }} onClick={handleCancelEdit}>Batal Edit</button>
                   )}
@@ -446,6 +618,180 @@ function Admin() {
             </div>
           </div>
         )}
+
+        {activeTab === 'skincare' && (
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Tambah Produk Skincare</h3>
+              <form onSubmit={handleAddSkincare}>
+                <div className="admin-form-group">
+                  <label>Nama Produk</label>
+                  <input type="text" className="admin-input" value={skincareName} onChange={e => setSkincareName(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Foto Produk</label>
+                  <input type="file" accept="image/*" className="admin-input" onChange={e => setSkincareFile(e.target.files[0])} required />
+                </div>
+                <button type="submit" className="admin-btn" disabled={uploadingSkincare}>{uploadingSkincare ? 'Menyimpan...' : 'Simpan Produk'}</button>
+              </form>
+            </div>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Daftar Produk Skincare</h3>
+              <div>
+                {skincareProducts.map((p, idx) => (
+                  <div key={p.id || idx} className="admin-list-item" style={{ alignItems: 'center' }}>
+                    <img src={p.image} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} />
+                    <div style={{ flex: 1, marginLeft: '1rem', fontWeight: '600' }}>{p.name}</div>
+                    <button onClick={() => removeSkincare(p.id)} className="admin-btn admin-btn-danger">Hapus</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'perawatan' && (
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Tambah Perawatan (PDF)</h3>
+              <form onSubmit={handleAddPerawatanPDF}>
+                <div className="admin-form-group">
+                  <label>Nama Perawatan</label>
+                  <input type="text" className="admin-input" value={perawatanName} onChange={e => setPerawatanName(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Upload PDF</label>
+                  <input type="file" accept=".pdf" className="admin-input" onChange={e => setPerawatanFile(e.target.files[0])} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Upload Gambar (Opsional)</label>
+                  <input type="file" accept="image/*" className="admin-input" onChange={e => setPerawatanImageFile(e.target.files[0])} />
+                </div>
+                <button type="submit" className="admin-btn" disabled={uploadingPerawatan}>{uploadingPerawatan ? 'Menyimpan...' : 'Simpan Perawatan'}</button>
+              </form>
+            </div>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Daftar Perawatan</h3>
+              <div>
+                {perawatanPDFs.map((p, idx) => (
+                  <div key={p.id || idx} className="admin-list-item">
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: '600' }}>{p.name}</div>
+                      <a href={p.pdfLink} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.85rem', color: 'var(--primary-color)', textDecoration: 'underline' }}>Lihat File PDF</a>
+                    </div>
+                    <button onClick={() => removePerawatanPDF(p.id)} className="admin-btn admin-btn-danger">Hapus</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'before_after' && (
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Tambah Foto Hasil Nyata (Before-After)</h3>
+              <form onSubmit={handleAddBeforeAfter}>
+                <div className="admin-form-group">
+                  <label>Judul Hasil (Opsional)</label>
+                  <input type="text" className="admin-input" placeholder="Contoh: Acne Grade 3" value={baTitle} onChange={e => setBaTitle(e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Upload Foto</label>
+                  <input type="file" accept="image/*" className="admin-input" onChange={e => setBaFile(e.target.files[0])} required />
+                </div>
+                <button type="submit" className="admin-btn" disabled={uploadingBa}>{uploadingBa ? 'Menyimpan...' : 'Simpan Foto'}</button>
+              </form>
+            </div>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Daftar Foto</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                {beforeAfterImages.map((b, idx) => (
+                  <div key={b.id || idx} style={{ position: 'relative', border: '1px solid #eee', borderRadius: '12px', overflow: 'hidden' }}>
+                    <img src={b.img} alt={b.title} style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
+                    <button onClick={() => removeBeforeAfter(b.id)} className="admin-btn admin-btn-danger" style={{ position: 'absolute', top: '5px', right: '5px', padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Hapus</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'users' && (
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Tambah Akun Admin Baru</h3>
+              <form onSubmit={handleAddUser}>
+                <div className="admin-form-group">
+                  <label>Username</label>
+                  <input type="text" className="admin-input" value={newUsername} onChange={e => setNewUsername(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Password</label>
+                  <input type="password" className="admin-input" value={newPassword} onChange={e => setNewPassword(e.target.value)} required />
+                </div>
+                <button type="submit" className="admin-btn">Tambah Akun</button>
+              </form>
+            </div>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Daftar Admin</h3>
+              <div>
+                {users.map((u, idx) => (
+                  <div key={u.id || idx} className="admin-list-item">
+                    <div style={{ fontWeight: '600', flex: 1 }}>{u.username}</div>
+                    <button onClick={() => removeUser(u.id)} className="admin-btn admin-btn-danger" disabled={u.username === 'admin'}>Hapus</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'testimonial' && (
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Tambah Testimoni</h3>
+              <form onSubmit={handleAddTestimonial}>
+                <div className="admin-form-group">
+                  <label>Nama Pasien</label>
+                  <input type="text" className="admin-input" value={testiName} onChange={e => setTestiName(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Jenis Treatment</label>
+                  <input type="text" className="admin-input" value={testiTreatment} onChange={e => setTestiTreatment(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Ulasan / Quote</label>
+                  <textarea className="admin-input" rows="3" value={testiQuote} onChange={e => setTestiQuote(e.target.value)} required />
+                </div>
+                <div className="admin-form-group">
+                  <label>Foto Pasien (Opsional)</label>
+                  <input type="file" accept="image/*" className="admin-input" onChange={e => setTestiFile(e.target.files[0])} />
+                </div>
+                <button type="submit" className="admin-btn" disabled={uploadingTesti}>{uploadingTesti ? 'Menyimpan...' : 'Simpan Testimoni'}</button>
+              </form>
+            </div>
+            <div className="admin-card" style={{ flex: 1 }}>
+              <h3>Daftar Testimoni</h3>
+              <div>
+                {(testimonials || []).map((t, idx) => (
+                  <div key={t.id || idx} className="admin-list-item" style={{ alignItems: 'flex-start' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0, overflow: 'hidden' }}>
+                      {t?.image ? <img src={t.image} alt={t?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (t?.name || '?').charAt(0)}
+                    </div>
+                    <div style={{ flex: 1, marginLeft: '1rem' }}>
+                      <div style={{ fontWeight: '600' }}>{t.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>{t.treatment}</div>
+                      <div style={{ fontSize: '0.9rem', fontStyle: 'italic', color: '#444' }}>"{t.quote}"</div>
+                    </div>
+                    <button onClick={() => removeTestimonial(t.id)} className="admin-btn admin-btn-danger" style={{ marginLeft: '1rem' }}>Hapus</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* Custom Toast Notification */}

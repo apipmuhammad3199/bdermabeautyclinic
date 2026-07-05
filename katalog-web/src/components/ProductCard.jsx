@@ -6,7 +6,7 @@ const ProductCard = ({ product }) => {
     <Link to={`/booking?product=${encodeURIComponent(product.name)}`} className="product-card">
       <div className="product-image-container">
         <img 
-          src={`${import.meta.env.BASE_URL}assets/product_skincare/${product.image}`} 
+          src={product.image && (product.image.startsWith('http') || product.image.includes('assets')) ? product.image : `${import.meta.env.BASE_URL}assets/product_skincare/${product.image}`} 
           alt={product.name} 
           className="product-image"
         />

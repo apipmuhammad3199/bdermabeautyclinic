@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CMSContext } from '../context/CMSContext';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { users } = useContext(CMSContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin123') {
+    
+    // Check against users from Firestore
+    const userFound = users.find(u => u.username === username && u.password === password);
+    
+    if (userFound || (username === 'admin' && password === 'admin123')) { // Fallback to hardcoded just in case
       localStorage.setItem('cms_auth', 'true');
       navigate('/admin');
     } else {
       setError('Username atau Password salah!');
     }
+  };
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    if (!username) {
+      alert("Silakan isi Username Anda terlebih dahulu sebelum menekan Lupa Password.");
+      return;
+    }
+    const message = encodeURIComponent(`Halo Developer, saya ingin reset password dengan Username saya: ${username}`);
+    window.open(`https://wa.me/6287714001013?text=${message}`, '_blank');
   };
 
   return (
@@ -52,12 +68,22 @@ function Login() {
           </div>
           <button 
             type="submit"
-            style={{ width: '100%', padding: '1rem', background: 'var(--primary-color)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '1rem', transition: 'all 0.2s', boxShadow: '0 4px 15px rgba(186, 155, 92, 0.3)' }}
+            style={{ width: '100%', padding: '1rem', background: 'var(--primary-color)', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '1rem', transition: 'all 0.2s', boxShadow: '0 4px 15px rgba(186, 155, 92, 0.3)', marginBottom: '1rem' }}
             onMouseOver={(e) => e.target.style.filter = 'brightness(1.1)'}
             onMouseOut={(e) => e.target.style.filter = 'brightness(1)'}
           >
             Masuk ke Dashboard
           </button>
+          
+          <div style={{ textAlign: 'center' }}>
+            <button 
+              type="button" 
+              onClick={handleForgotPassword}
+              style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}
+            >
+              Lupa Password? Hubungi Developer
+            </button>
+          </div>
         </form>
       </div>
     </div>

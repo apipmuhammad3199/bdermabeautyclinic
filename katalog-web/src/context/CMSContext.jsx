@@ -18,6 +18,13 @@ export const CMSProvider = ({ children }) => {
   const [promoSettings, setPromoSettings] = useState({ 
     show45: true, show50: true
   });
+  
+  const [skincareProducts, setSkincareProducts] = useState([]);
+  const [perawatanPDFs, setPerawatanPDFs] = useState([]);
+  const [beforeAfterImages, setBeforeAfterImages] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +35,16 @@ export const CMSProvider = ({ children }) => {
       if (treatmentsData.length === 0 && defaultTreatments) {
         setTreatments(defaultTreatments);
       } else {
-        setTreatments(treatmentsData);
+        const mergedTreatments = treatmentsData.map(t => {
+          if (!t.image && defaultTreatments) {
+            const def = defaultTreatments.find(d => d.name === t.name);
+            if (def && def.image) {
+              return { ...t, image: def.image };
+            }
+          }
+          return t;
+        });
+        setTreatments(mergedTreatments);
       }
     });
 
@@ -70,15 +86,103 @@ export const CMSProvider = ({ children }) => {
       }
     });
 
+    const unsubSkincare = onSnapshot(collection(db, 'skincare_products'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => b.createdAt - a.createdAt);
+      if (data.length === 0) {
+        setSkincareProducts([
+          { id: 'skdefault1', name: 'Body Whitening SPF 20 Strawberry', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare1.jpeg` },
+          { id: 'skdefault2', name: 'Bye Acne Facial Wash', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare2.jpeg` },
+          { id: 'skdefault3', name: 'Bye Acne Toner', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare3.jpeg` },
+          { id: 'skdefault4', name: 'Cera Niacin Gentle Cleanser', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare4.jpeg` },
+          { id: 'skdefault5', name: 'Dreamy Glow HyaluMoist', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare5.jpeg` },
+        ]);
+      } else {
+        setSkincareProducts(data);
+      }
+    });
+
+    const unsubPerawatan = onSnapshot(collection(db, 'perawatan_pdfs'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => b.createdAt - a.createdAt);
+      setPerawatanPDFs(data);
+    });
+
+    const unsubBeforeAfter = onSnapshot(collection(db, 'before_after'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => b.createdAt - a.createdAt);
+      
+      if (data.length === 0) {
+        const titles = ["Acne Grade 3", "Glowing Skin", "Flek Hitam", "Skin Rejuvenation"];
+        const defaults = Array.from({ length: 13 }, (_, i) => ({
+          id: `badefault${i+1}`,
+          title: titles[i % titles.length],
+          img: `${import.meta.env.BASE_URL}assets/before_after/before${i + 1}.jpeg`,
+          doctor: "Treatment by : dr. Enef"
+        }));
+        setBeforeAfterImages(defaults);
+      } else {
+        setBeforeAfterImages(data);
+      }
+    });
+
+    const unsubUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Automatically create a default admin if collection is completely empty
+      if (data.length === 0 && !loading) {
+        addDoc(collection(db, 'users'), { username: 'admin', password: 'admin123', createdAt: Date.now() });
+      }
+      setUsers(data);
+    });
+
     setLoading(false);
 
+
+    const unsubTestimonials = onSnapshot(collection(db, 'testimonials'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => b.createdAt - a.createdAt);
+      
+      if (data.length === 0) {
+        setTestimonials([
+          { id: 't1', name: 'Rina Sari', treatment: 'Facial Acne', quote: 'Pelayanannya sangat ramah dan tempatnya bersih. Wajah saya terasa lebih glowing setelah perawatan pertama!', image: '' },
+          { id: 't2', name: 'Dwi Wahyuni', treatment: 'Peeling Glow', quote: 'Dokternya sabar banget jelasin kondisi kulit saya. Krimnya juga cocok dan nggak bikin iritasi.', image: '' },
+          { id: 't3', name: 'Anita Kusuma', treatment: 'Laser Rejuvenation', quote: 'Klinik favorit! Harganya terjangkau tapi hasilnya nggak main-main. Sangat direkomendasikan.', image: '' },
+          { id: 't4', name: 'Siti Rahma', treatment: 'IPL Hair Removal', quote: 'Hasilnya langsung terlihat sejak treatment pertama. Stafnya sangat profesional dan membantu.', image: '' }
+        ]);
+      } else {
+        setTestimonials(data);
+      }
+    });
+    
     return () => {
       unsubTreatments();
       unsubPromos();
       unsubVideos();
       unsubPromoSettings();
+      unsubSkincare();
+      unsubPerawatan();
+      unsubBeforeAfter();
+      unsubUsers();
+      unsubTestimonials();
     };
   }, []);
+
+  const addTestimonial = async (data) => {
+    try {
+      await addDoc(collection(db, 'testimonials'), { ...data, createdAt: Date.now() });
+    } catch (error) {
+      console.error('Error adding testimonial: ', error);
+    }
+  };
+
+  const removeTestimonial = async (id) => {
+    if(id.startsWith('t')) return; // block deleting defaults
+    try {
+      await deleteDoc(doc(db, 'testimonials', id));
+    } catch (error) {
+      console.error('Error removing testimonial: ', error);
+    }
+  };
 
   const addTreatment = async (newTreatment) => {
     try {
@@ -144,12 +248,45 @@ export const CMSProvider = ({ children }) => {
     }
   };
 
+  const addSkincare = async (product) => {
+    try { await addDoc(collection(db, 'skincare_products'), { ...product, createdAt: Date.now() }); } catch (e) { console.error(e); }
+  };
+  const removeSkincare = async (id) => {
+    try { await deleteDoc(doc(db, 'skincare_products', id)); } catch (e) { console.error(e); }
+  };
+
+  const addPerawatanPDF = async (pdf) => {
+    try { await addDoc(collection(db, 'perawatan_pdfs'), { ...pdf, createdAt: Date.now() }); } catch (e) { console.error(e); }
+  };
+  const removePerawatanPDF = async (id) => {
+    try { await deleteDoc(doc(db, 'perawatan_pdfs', id)); } catch (e) { console.error(e); }
+  };
+
+  const addBeforeAfter = async (image) => {
+    try { await addDoc(collection(db, 'before_after'), { ...image, createdAt: Date.now() }); } catch (e) { console.error(e); }
+  };
+  const removeBeforeAfter = async (id) => {
+    try { await deleteDoc(doc(db, 'before_after', id)); } catch (e) { console.error(e); }
+  };
+
+  const addUser = async (user) => {
+    try { await addDoc(collection(db, 'users'), { ...user, createdAt: Date.now() }); } catch (e) { console.error(e); }
+  };
+  const removeUser = async (id) => {
+    try { await deleteDoc(doc(db, 'users', id)); } catch (e) { console.error(e); }
+  };
+
   return (
     <CMSContext.Provider value={{
       treatments, addTreatment, updateTreatment, removeTreatment,
       promos, addPromo, removePromo,
       videos, addVideo, removeVideo,
       promoSettings, updatePromoSettings,
+      skincareProducts, addSkincare, removeSkincare,
+      perawatanPDFs, addPerawatanPDF, removePerawatanPDF,
+      beforeAfterImages, addBeforeAfter, removeBeforeAfter,
+      users, addUser, removeUser,
+      testimonials, addTestimonial, removeTestimonial,
       loading
     }}>
       {children}

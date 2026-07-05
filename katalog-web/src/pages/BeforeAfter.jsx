@@ -1,24 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
-const images = Array.from({ length: 13 }, (_, i) => `before${i + 1}.jpeg`);
-
-const slideData = images.map((img, index) => {
-  const titles = ["Acne Grade 3", "Glowing Skin", "Flek Hitam", "Skin Rejuvenation"];
-  return {
-    img: img,
-    title: titles[index % titles.length],
-    doctor: "Treatment by : dr. Enef"
-  };
-});
+import { CMSContext } from '../context/CMSContext';
 
 function BeforeAfter() {
   const sliderRef = useRef(null);
+  const { beforeAfterImages } = useContext(CMSContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -82,7 +73,9 @@ function BeforeAfter() {
               msOverflowStyle: 'none'  /* IE/Edge */
             }}
           >
-            {slideData.map((slide, index) => (
+            {beforeAfterImages.length === 0 ? (
+              <div style={{ padding: '2rem', textAlign: 'center', width: '100%', color: '#888' }}>Belum ada foto yang diunggah.</div>
+            ) : beforeAfterImages.map((slide, index) => (
               <div key={index} style={{ 
                 minWidth: '320px', 
                 maxWidth: '350px',
@@ -136,9 +129,9 @@ function BeforeAfter() {
                     marginBottom: '2rem'
                   }}>
                     <img 
-                      src={`${import.meta.env.BASE_URL}assets/before_after/${slide.img}`} 
+                      src={slide.img} 
                       alt={`Before After ${index + 1}`} 
-                      style={{ width: '100%', aspectRatio: '1/1', display: 'block', borderRadius: '8px', objectFit: 'cover' }}
+                      style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '8px', objectFit: 'contain' }}
                       loading="lazy"
                     />
                     

@@ -6,16 +6,15 @@ import PromoSlider from '../components/PromoSlider';
 import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import AOS from 'aos';
-import 'aos/dist/aos.css';
-import '../index.css';
 import { CMSContext } from '../context/CMSContext';
+import '../index.css';
 import { articles } from '../data/articles';
 import Header from '../components/Header';
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isContactOpen, setIsContactOpen] = useState(false);
-  const { treatments, videos, promoSettings } = useContext(CMSContext);
+  const { treatments, promos, videos, promoSettings, skincareProducts, testimonials } = useContext(CMSContext);
   const marqueeRef = useRef(null);
   const testiMarqueeRef = useRef(null);
   const contactDropdownRef = useRef(null);
@@ -88,7 +87,7 @@ function Home() {
     return today >= start && today <= end;
   };
 
-  const processedTreatments = treatments.map(treatment => {
+  const processedTreatments = (treatments || []).map(treatment => {
     let effectiveDiscount = treatment.discount;
     if (treatment.discount > 0 && !isPromoActive(treatment.startDate, treatment.endDate)) {
       effectiveDiscount = 0;
@@ -110,26 +109,12 @@ function Home() {
     return matchesSearch;
   });
 
-  const skincareProducts = [
-    { name: 'Body Whitening SPF 20 Strawberry', image: 'skincare1.jpeg' },
-    { name: 'Bye Acne Facial Wash', image: 'skincare2.jpeg' },
-    { name: 'Bye Acne Toner', image: 'skincare3.jpeg' },
-    { name: 'Cera Niacin Gentle Cleanser', image: 'skincare4.jpeg' },
-    { name: 'Dreamy Glow HyaluMoist', image: 'skincare5.jpeg' },
-  ];
-  
   const searchedProducts = skincareProducts.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   // Duplicate array for infinite marquee effect
-  const marqueeProducts = [...skincareProducts, ...skincareProducts];
+  const marqueeProducts = [...(skincareProducts || []), ...(skincareProducts || [])];
 
-  const testimonials = [
-    { name: 'Rina Sari', treatment: 'Facial Acne', quote: 'Pelayanannya sangat ramah dan tempatnya bersih. Wajah saya terasa lebih glowing setelah perawatan pertama!', image: 'https://i.pravatar.cc/150?img=1' },
-    { name: 'Dwi Wahyuni', treatment: 'Peeling Glow', quote: 'Dokternya sabar banget jelasin kondisi kulit saya. Krimnya juga cocok dan nggak bikin iritasi.', image: 'https://i.pravatar.cc/150?img=5' },
-    { name: 'Anita Kusuma', treatment: 'Laser Rejuvenation', quote: 'Klinik favorit! Harganya terjangkau tapi hasilnya nggak main-main. Sangat direkomendasikan.', image: 'https://i.pravatar.cc/150?img=9' },
-    { name: 'Siti Rahma', treatment: 'IPL Hair Removal', quote: 'Hasilnya langsung terlihat sejak treatment pertama. Stafnya sangat profesional dan membantu.', image: 'https://i.pravatar.cc/150?img=12' }
-  ];
-  const marqueeTestimonials = [...testimonials, ...testimonials];
+  const marqueeTestimonials = [...(testimonials || []), ...(testimonials || [])];
 
   const preview50 = treatments50.slice(0, 4);
   const preview45 = treatments45.slice(0, 4);
@@ -147,8 +132,8 @@ function Home() {
       {/* Hero Section */}
       <section id="beranda" className="hero" data-aos="fade-up">
         <h3 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--text-light)', marginBottom: '0.5rem' }}>Eksklusif Untuk Anda</h3>
-        <h1>Telah Menjawab Permasalahan Kulit Wanita</h1>
-        <p>Temukan rangkaian perawatan estetika dan produk premium kami yang dirancang khusus untuk memancarkan kecantikan alami Anda.</p>
+        <h1>Telah Menjawab Permasalahan Kulit </h1>
+        <p>Temukan rangkaian perawatan estetika dan produk premium kami yang dirancang khusus untuk memancarkan kecantikan dan kecerahan alami Anda.</p>
         
         <div className="search-container">
           <input 
@@ -216,7 +201,7 @@ function Home() {
           <h2 className="section-title-grey">MEREKA YANG TELAH MEMBUKTIKANNYA</h2>
         </div>
         <div className="video-grid">
-          {videos.slice(0, 4).map((vid, idx) => {
+          {(videos || []).slice(0, 4).map((vid, idx) => {
             const isMp4 = vid.src.includes('firebasestorage') || vid.src.endsWith('.mp4');
             return (
             <div key={idx} className="video-card" data-aos="fade-up" data-aos-delay={100 * (idx + 1)}>
@@ -246,9 +231,9 @@ function Home() {
 
 
       {/* Location Section */}
-      <section id="lokasi" style={{ backgroundColor: 'transparent', paddingTop: '4rem', paddingBottom: '4rem', marginTop: '2rem' }}>
+      <section id="lokasi" style={{ backgroundColor: 'transparent', paddingTop: '1rem', paddingBottom: '2rem', marginTop: '0' }}>
         <div className="maps-section-wrapper" data-aos="fade-up">
-          <div style={{ marginBottom: '2.5rem', textAlign: 'left' }}>
+          <div style={{ marginBottom: '0.5rem', textAlign: 'left' }}>
             <div className="section-subtitle-gold" style={{ textAlign: 'left' }}>DAPATKAN LOKASI TERDEKAT</div>
           </div>
 
@@ -327,11 +312,11 @@ function Home() {
                   </div>
                   <div className="testi-author">
                     <div className="testi-avatar">
-                      {testi.image ? <img src={testi.image} alt={testi.name} /> : testi.name.charAt(0)}
+                      {testi?.image ? <img src={testi.image} alt={testi?.name} /> : (testi?.name || '?').charAt(0)}
                     </div>
                     <div>
-                      <div className="testi-name">{testi.name}</div>
-                      <div className="testi-treatment">{testi.treatment}</div>
+                      <div className="testi-name">{testi?.name}</div>
+                      <div className="testi-treatment">{testi?.treatment}</div>
                     </div>
                   </div>
                 </div>

@@ -39,14 +39,17 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
       {getDiscountBadge(activeDiscount)}
       
       <div className="card-image-container">
-        {/* Placeholder image that scales slightly on hover for an elegant effect */}
-        <div className="card-image-placeholder">
-          <svg className="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-        </div>
+        {treatment.image ? (
+          <img src={`${import.meta.env.BASE_URL}${treatment.image}`} alt={treatment.name} className="card-image" />
+        ) : (
+          <div className="card-image-placeholder">
+            <svg className="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </div>
+        )}
         <div className="card-overlay"></div>
       </div>
 

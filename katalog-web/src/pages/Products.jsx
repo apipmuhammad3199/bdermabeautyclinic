@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { CMSContext } from '../context/CMSContext';
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
-
-  // Ini nantinya akan diganti dengan data dari CMSContext
-  const skincareProducts = [
-    { name: 'Body Whitening SPF 20 Strawberry', image: 'skincare1.jpeg' },
-    { name: 'Bye Acne Facial Wash', image: 'skincare2.jpeg' },
-    { name: 'Bye Acne Toner', image: 'skincare3.jpeg' },
-    { name: 'Cera Niacin Gentle Cleanser', image: 'skincare4.jpeg' },
-    { name: 'Dreamy Glow HyaluMoist', image: 'skincare5.jpeg' },
-  ];
+  const { skincareProducts } = useContext(CMSContext);
 
   const filteredProducts = skincareProducts.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase())

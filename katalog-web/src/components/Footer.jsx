@@ -30,7 +30,7 @@ function Footer() {
           <h3>Kontak Kami</h3>
           <p>Ruko Emporium Citra Niaga No. 10<br/>Jl. Palagan Ambarawa, Bawen<br/>Jawa Tengah, Indonesia</p>
           <p><strong>WhatsApp:</strong> <br/>0821-4464-406</p>
-          <p><strong>Email:</strong> <br/>info@enefclinic.com</p>
+          <p><strong>Email:</strong> <br/>enefclinic@gmail.com</p>
         </div>
       </div>
       <div className="footer-bottom">
