@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AOS from 'aos';
@@ -28,19 +29,7 @@ const Products = () => {
   return (
     <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
       {/* Minimal Header */}
-      <header className="header">
-        <div className="logo-container">
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
-            <div className="clinic-name">Enef Clinic</div>
-          </Link>
-        </div>
-        <div className="social-links">
-          <Link to="/" className="contact-us-btn">
-            Kembali ke Beranda
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', marginTop: '100px', padding: '0 2rem' }}>
         <div style={{ marginBottom: '2rem', textAlign: 'center' }} data-aos="fade-down">

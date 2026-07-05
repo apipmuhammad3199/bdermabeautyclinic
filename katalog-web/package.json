@@ -9,7 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "npx push-dir --dir=dist --branch=gh-pages --cleanup --allow-uncommitted"
+    "deploy": "gh-pages -d dist -t --repo https://github.com/apipmuhammad3199/enif-clinic-katalog.git"
   },
   "dependencies": {
     "aos": "^2.3.4",

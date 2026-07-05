@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import TreatmentCard from '../components/TreatmentCard';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
@@ -9,10 +10,6 @@ import { CMSContext } from '../context/CMSContext';
 
 function Promo45() {
   const { treatments } = useContext(CMSContext);
-
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
-  }, []);
 
   const isPromoActive = (startDate, endDate) => {
     if (!startDate || !endDate) return true;
@@ -30,19 +27,7 @@ function Promo45() {
   return (
     <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
       {/* Minimal Header */}
-      <header className="header">
-        <div className="logo-container">
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
-            <div className="clinic-name">Enef Clinic</div>
-          </Link>
-        </div>
-        <div className="social-links">
-          <Link to="/" className="contact-us-btn">
-            Kembali ke Beranda
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '100px' }}>
         <div className="catalog-header" style={{ marginBottom: '3rem' }}>
