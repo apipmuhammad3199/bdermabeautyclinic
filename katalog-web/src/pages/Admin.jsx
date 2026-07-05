@@ -245,7 +245,7 @@ function Admin() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem', padding: '0 1rem' }}>
-          <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px', objectFit: 'cover' }} />
+          <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px', objectFit: 'cover' }} />
           <h2 style={{ marginBottom: 0, padding: 0 }}>Enef CMS</h2>
         </div>
         <div className="sidebar-menu">
@@ -514,3 +514,4 @@ function Admin() {
 }
 
 export default Admin;
+

@@ -25,7 +25,7 @@ function Socials() {
         </Link>
         
         <div className="socials-header">
-          <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="socials-logo" />
+          <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="socials-logo" />
           <h1>Enef Clinic</h1>
           <p>Elegance in every detail.</p>
         </div>
@@ -62,3 +62,5 @@ function Socials() {
 }
 
 export default Socials;
+
+

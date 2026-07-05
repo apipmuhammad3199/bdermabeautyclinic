@@ -68,7 +68,7 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
       <header className="header" style={{ backgroundColor: '#fff', borderBottom: '1px solid #eaeaea' }}>
         <div className="logo-container">
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
+            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
             <div className="clinic-name">Enef Clinic</div>
           </Link>
         </div>
@@ -161,3 +161,5 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
 }
 
 export default Booking;
+
+

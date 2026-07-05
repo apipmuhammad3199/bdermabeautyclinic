@@ -14,6 +14,8 @@ import Products from './pages/Products';
 import AllTreatment from './pages/AllTreatment';
 import PromoTreatment from './pages/PromoTreatment';
 import Articles from './pages/Articles';
+import Perawatan from './pages/Perawatan';
+import BeforeAfter from './pages/BeforeAfter';
 import { CMSProvider } from './context/CMSContext';
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/promo-45" element={<Promo45 />} />
           <Route path="/products" element={<Products />} />
           <Route path="/articles" element={<Articles />} />
+          <Route path="/perawatan" element={<Perawatan />} />
+          <Route path="/before-after" element={<BeforeAfter />} />
           <Route path="/videos" element={<VideoGallery />} />
           <Route path="/socials" element={<Socials />} />
           <Route path="/booking" element={<Booking />} />

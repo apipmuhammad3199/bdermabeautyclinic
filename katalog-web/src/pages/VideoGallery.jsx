@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
+import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
 function VideoGallery() {
@@ -16,7 +17,7 @@ function VideoGallery() {
       {/* Header (Simplified) */}
       <header className="header" style={{ justifyContent: 'center', padding: '1.5rem' }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', color: 'var(--text-dark)' }}>
-          <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
+          <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
           <div className="clinic-name">Enef Clinic</div>
         </Link>
       </header>
@@ -71,6 +72,7 @@ function VideoGallery() {
         )}
       </section>
 
+      <Footer />
       <FloatingWhatsApp />
 
       {/* Footer */}
@@ -83,3 +85,5 @@ function VideoGallery() {
 }
 
 export default VideoGallery;
+
+

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -71,9 +72,11 @@ function PromoTreatment() {
         </div>
       </section>
       
+      <Footer />
       <FloatingWhatsApp />
     </div>
   );
 }
 
 export default PromoTreatment;
+

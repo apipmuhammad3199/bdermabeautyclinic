@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -18,7 +19,7 @@ function Articles() {
       <header className="header" style={{ backgroundColor: '#fff', borderBottom: '1px solid #eaeaea' }}>
         <div className="logo-container">
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="Enef Clinic Logo" className="logo" />
+            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
             <div className="clinic-name">Enef Clinic</div>
           </Link>
         </div>
@@ -60,9 +61,12 @@ function Articles() {
         </div>
       </section>
       
+      <Footer />
       <FloatingWhatsApp />
     </div>
   );
 }
 
 export default Articles;
+
+

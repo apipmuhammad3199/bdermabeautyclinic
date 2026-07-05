@@ -44,8 +44,8 @@ function Header() {
   return (
     <header className="header">
       <div className="logo-container">
-        <img src={`${import.meta.env.BASE_URL}assets/logo.jpg`} alt="ENIF Clinic" className="logo" />
-        <span className="clinic-name">ENIF Clinic</span>
+        <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic" className="logo" />
+        <span className="clinic-name">Enef Clinic</span>
       </div>
 
       <button 
@@ -61,7 +61,9 @@ function Header() {
       <nav className={`desktop-nav ${isMobileMenuOpen ? 'mobile-open' : ''}`} ref={mobileMenuRef}>
         <Link to="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Beranda</Link>
         <Link to="/products" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Skincare</Link>
+        <Link to="/perawatan" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Perawatan</Link>
         <Link to="/promo" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Promo Treatment</Link>
+        <Link to="/before-after" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Before After</Link>
         <a href="#/" onClick={(e) => handleNavClick(e, 'lokasi')} className="nav-link">Klinik</a>
 
         <div className="social-links click-dropdown" ref={contactDropdownRef}>
@@ -100,3 +102,6 @@ function Header() {
 }
 
 export default Header;
+
+
+
