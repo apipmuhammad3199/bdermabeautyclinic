@@ -2,7 +2,51 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
 import { storage } from '../firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL } from 'firebase/storage';
+
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+const compressImageToBase64 = async (file, maxWidth = 800) => {
+  if (!file) return null;
+  if (!file.type.startsWith('image/')) {
+    return await fileToBase64(file); // For PDFs and non-images
+  }
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Return Base64 string directly
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(dataUrl);
+      };
+      img.onerror = (err) => resolve(event.target.result); // Fallback to uncompressed Base64
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
 
 function Admin() {
   const navigate = useNavigate();
@@ -71,26 +115,32 @@ function Admin() {
     }
 
     setUploadingPromo(true);
-    const storageRef = ref(storage, `promos/${Date.now()}_${promoFile.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, promoFile);
-    uploadTask.on('state_changed', null, 
-      (err) => { setUploadingPromo(false); showNotification('Gagal upload!'); },
-      async () => {
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        if (editingPromoId) {
-          updatePromo(editingPromoId, { url });
-          setEditingPromoId(null);
-          showNotification('Promo berhasil diubah!');
-        } else {
-          addPromo(url);
-          showNotification('Promo berhasil ditambahkan!');
-        }
-        setPromoFile(null); setUploadingPromo(false);
-        // Reset file input value
-        const fileInput = document.getElementById('promoFileInput');
-        if (fileInput) fileInput.value = '';
+    try {
+      let url = null;
+      if (promoFile) {
+        url = await compressImageToBase64(promoFile);
       }
-    );
+
+      if (editingPromoId) {
+        if (url) {
+          updatePromo(editingPromoId, { url });
+        }
+        setEditingPromoId(null);
+        showNotification('Promo berhasil diubah!');
+      } else {
+        addPromo(url);
+        showNotification('Promo berhasil ditambahkan!');
+      }
+      
+      setPromoFile(null); 
+      setUploadingPromo(false);
+      const fileInput = document.getElementById('promoFileInput');
+      if (fileInput) fileInput.value = '';
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingPromo(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
+    }
   };
 
   const handleEditPromoClick = (promo) => {
@@ -102,6 +152,8 @@ function Admin() {
 
   // --- Skincare State ---
   const [skincareName, setSkincareName] = useState('');
+  const [skincarePrice, setSkincarePrice] = useState('');
+  const [skincareDesc, setSkincareDesc] = useState('');
   const [skincareFile, setSkincareFile] = useState(null);
   const [uploadingSkincare, setUploadingSkincare] = useState(false);
   const [editingSkincareId, setEditingSkincareId] = useState(null);
@@ -109,6 +161,8 @@ function Admin() {
   const handleEditSkincare = (p) => {
     setEditingSkincareId(p.id);
     setSkincareName(p.name);
+    setSkincarePrice(p.price || '');
+    setSkincareDesc(p.description || '');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -122,30 +176,31 @@ function Admin() {
       showNotification('Foto produk wajib diisi!');
       return;
     }
-    
     setUploadingSkincare(true);
-
-    if (skincareFile) {
-      const storageRef = ref(storage, `skincare/${Date.now()}_${skincareFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, skincareFile);
-      uploadTask.on('state_changed', null, 
-        (err) => { setUploadingSkincare(false); showNotification('Gagal upload!'); },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          if (editingSkincareId) {
-            updateSkincare(editingSkincareId, { name: skincareName, image: url });
-            showNotification('Produk berhasil diubah!');
-          } else {
-            addSkincare({ name: skincareName, image: url });
-            showNotification('Produk berhasil ditambahkan!');
-          }
-          setSkincareName(''); setSkincareFile(null); setUploadingSkincare(false); setEditingSkincareId(null);
-        }
-      );
-    } else if (editingSkincareId) {
-      updateSkincare(editingSkincareId, { name: skincareName });
-      setSkincareName(''); setUploadingSkincare(false); setEditingSkincareId(null);
-      showNotification('Produk berhasil diubah!');
+    try {
+      let url = null;
+      if (skincareFile) {
+        url = await compressImageToBase64(skincareFile);
+      }
+      
+      if (editingSkincareId) {
+        const updateData = { name: skincareName, price: skincarePrice, description: skincareDesc };
+        if (url) updateData.image = url;
+        updateSkincare(editingSkincareId, updateData);
+        setEditingSkincareId(null);
+        showNotification('Produk berhasil diubah!');
+      } else {
+        addSkincare({ name: skincareName, price: skincarePrice, description: skincareDesc, image: url });
+        showNotification('Produk berhasil ditambahkan!');
+      }
+      setSkincareName(''); setSkincarePrice(''); setSkincareDesc(''); setSkincareFile(null); 
+      setUploadingSkincare(false);
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingSkincare(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
   };
 
@@ -174,47 +229,39 @@ function Admin() {
     }
     setUploadingPerawatan(true);
     
-    let imgUrl = '';
-    if (perawatanImageFile) {
-      try {
-        const imgRef = ref(storage, `perawatan_images/${Date.now()}_${perawatanImageFile.name}`);
-        const imgUpload = uploadBytesResumable(imgRef, perawatanImageFile);
-        await new Promise((resolve, reject) => {
-          imgUpload.on('state_changed', null, reject, resolve);
-        });
-        imgUrl = await getDownloadURL(imgUpload.snapshot.ref);
-      } catch (err) {
-        showNotification('Gagal upload gambar perawatan!');
-        setUploadingPerawatan(false);
-        return;
+    try {
+      let imgUrl = '';
+      let pdfUrl = '';
+      
+      if (perawatanImageFile) {
+        imgUrl = await compressImageToBase64(perawatanImageFile);
       }
-    }
+      
+      if (perawatanFile) {
+        pdfUrl = await fileToBase64(perawatanFile);
+      }
+      
+      const updateData = { name: perawatanName };
+      if (pdfUrl) updateData.pdfLink = pdfUrl;
+      if (imgUrl) updateData.image = imgUrl;
 
-    if (perawatanFile) {
-      const storageRef = ref(storage, `perawatan/${Date.now()}_${perawatanFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, perawatanFile);
-      uploadTask.on('state_changed', null, 
-        (err) => { setUploadingPerawatan(false); showNotification('Gagal upload!'); },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          const data = { name: perawatanName, pdfLink: url };
-          if (imgUrl) data.image = imgUrl;
-          if (editingPerawatanId) {
-            updatePerawatanPDF(editingPerawatanId, data);
-            showNotification('Perawatan berhasil diubah!');
-          } else {
-            addPerawatanPDF(data);
-            showNotification('Perawatan berhasil ditambahkan!');
-          }
-          setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); setUploadingPerawatan(false); setEditingPerawatanId(null);
-        }
-      );
-    } else if (editingPerawatanId) {
-      const data = { name: perawatanName };
-      if (imgUrl) data.image = imgUrl;
-      updatePerawatanPDF(editingPerawatanId, data);
-      setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); setUploadingPerawatan(false); setEditingPerawatanId(null);
-      showNotification('Perawatan berhasil diubah!');
+      if (editingPerawatanId) {
+        updatePerawatanPDF(editingPerawatanId, updateData);
+        setEditingPerawatanId(null);
+        showNotification('Perawatan berhasil diubah!');
+      } else {
+        addPerawatanPDF(updateData);
+        showNotification('Perawatan berhasil ditambahkan!');
+      }
+
+      setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); 
+      setUploadingPerawatan(false);
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingPerawatan(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
   };
 
@@ -238,27 +285,34 @@ function Admin() {
     }
     setUploadingBa(true);
     
-    if (baFile) {
-      const storageRef = ref(storage, `before_after/${Date.now()}_${baFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, baFile);
-      uploadTask.on('state_changed', null, 
-        (err) => { setUploadingBa(false); showNotification('Gagal upload!'); },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          if (editingBaId) {
-            updateBeforeAfter(editingBaId, { title: baTitle || "Treatment By Enef Clinic", img: url, doctor: "Treatment by : dr. Enef" });
-            showNotification('Foto berhasil diubah!');
-          } else {
-            addBeforeAfter({ title: baTitle || "Treatment By Enef Clinic", img: url, doctor: "Treatment by : dr. Enef" });
-            showNotification('Foto berhasil ditambahkan!');
-          }
-          setBaTitle(''); setBaFile(null); setUploadingBa(false); setEditingBaId(null);
-        }
-      );
-    } else if (editingBaId) {
-      updateBeforeAfter(editingBaId, { title: baTitle || "Treatment By Enef Clinic", doctor: "Treatment by : dr. Enef" });
-      setBaTitle(''); setUploadingBa(false); setEditingBaId(null);
-      showNotification('Foto berhasil diubah!');
+    try {
+      let url = null;
+      if (baFile) {
+        url = await compressImageToBase64(baFile);
+      }
+      
+      const title = baTitle || "Treatment By Enef Clinic";
+      const doctor = "Treatment by : dr. Enef";
+      
+      if (editingBaId) {
+        const updateData = { title, doctor };
+        if (url) updateData.img = url;
+        updateBeforeAfter(editingBaId, updateData);
+        setEditingBaId(null);
+        showNotification('Foto berhasil diubah!');
+      } else {
+        addBeforeAfter({ title, img: url, doctor });
+        showNotification('Foto berhasil ditambahkan!');
+      }
+
+      setBaTitle(''); setBaFile(null); 
+      setUploadingBa(false);
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingBa(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
   };
 
@@ -301,33 +355,32 @@ function Admin() {
       return;
     }
     
-    if (testiFile) {
-      setUploadingTesti(true);
-      const storageRef = ref(storage, `testimonials/${Date.now()}_${testiFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, testiFile);
-      uploadTask.on('state_changed', null, 
-        (err) => { setUploadingTesti(false); showNotification('Gagal upload!'); },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          if (editingTestiId) {
-            updateTestimonial(editingTestiId, { name: testiName, treatment: testiTreatment, quote: testiQuote, image: url });
-            showNotification('Testimoni berhasil diubah!');
-          } else {
-            addTestimonial({ name: testiName, treatment: testiTreatment, quote: testiQuote, image: url });
-            showNotification('Testimoni berhasil ditambahkan!');
-          }
-          setTestiName(''); setTestiTreatment(''); setTestiQuote(''); setTestiFile(null); setUploadingTesti(false); setEditingTestiId(null);
-        }
-      );
-    } else {
+    setUploadingTesti(true);
+    
+    try {
+      let url = '';
+      if (testiFile) {
+        url = await compressImageToBase64(testiFile);
+      }
+      
       if (editingTestiId) {
-        updateTestimonial(editingTestiId, { name: testiName, treatment: testiTreatment, quote: testiQuote });
+        const updateData = { name: testiName, treatment: testiTreatment, quote: testiQuote };
+        if (url) updateData.image = url;
+        updateTestimonial(editingTestiId, updateData);
         showNotification('Testimoni berhasil diubah!');
       } else {
-        addTestimonial({ name: testiName, treatment: testiTreatment, quote: testiQuote, image: '' });
+        addTestimonial({ name: testiName, treatment: testiTreatment, quote: testiQuote, image: url });
         showNotification('Testimoni berhasil ditambahkan!');
       }
-      setTestiName(''); setTestiTreatment(''); setTestiQuote(''); setEditingTestiId(null);
+      
+      setTestiName(''); setTestiTreatment(''); setTestiQuote(''); setTestiFile(null); 
+      setUploadingTesti(false); setEditingTestiId(null);
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingTesti(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
   };
 
@@ -358,30 +411,34 @@ function Admin() {
 
     setUploadingArticle(true);
     
-    if (articleFile) {
-      const storageRef = ref(storage, `articles/${Date.now()}_${articleFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, articleFile);
-      uploadTask.on('state_changed', null, 
-        (err) => { setUploadingArticle(false); showNotification('Gagal upload!'); },
-        async () => {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          const options = { year: 'numeric', month: 'long', day: 'numeric' };
-          const date = new Date().toLocaleDateString('id-ID', options);
-          
-          if (editingArticleId) {
-            updateArticle(editingArticleId, { title: articleTitle, summary: articleSummary, image: url });
-            showNotification('Artikel berhasil diubah!');
-          } else {
-            addArticle({ title: articleTitle, summary: articleSummary, image: url, date });
-            showNotification('Artikel berhasil ditambahkan!');
-          }
-          setArticleTitle(''); setArticleSummary(''); setArticleFile(null); setUploadingArticle(false); setEditingArticleId(null);
-        }
-      );
-    } else if (editingArticleId) {
-      updateArticle(editingArticleId, { title: articleTitle, summary: articleSummary });
-      showNotification('Artikel berhasil diubah!');
-      setArticleTitle(''); setArticleSummary(''); setUploadingArticle(false); setEditingArticleId(null);
+    try {
+      let url = null;
+      if (articleFile) {
+        url = await compressImageToBase64(articleFile);
+      }
+      
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date().toLocaleDateString('id-ID', options);
+      
+      if (editingArticleId) {
+        const updateData = { title: articleTitle, summary: articleSummary };
+        if (url) updateData.image = url;
+        updateArticle(editingArticleId, updateData);
+        setEditingArticleId(null);
+        showNotification('Artikel berhasil diubah!');
+      } else {
+        addArticle({ title: articleTitle, summary: articleSummary, image: url, date });
+        showNotification('Artikel berhasil ditambahkan!');
+      }
+      
+      setArticleTitle(''); setArticleSummary(''); setArticleFile(null); 
+      setUploadingArticle(false);
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingArticle(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
   };
 
@@ -434,70 +491,65 @@ function Admin() {
   const handleAddTreatment = async (e) => {
     e.preventDefault();
     setUploadingTreatmentImage(true);
-    let imageUrl = '';
     
-    if (treatmentImageFile) {
-      try {
-        const storageRef = ref(storage, `treatments/${Date.now()}_${treatmentImageFile.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, treatmentImageFile);
-        await new Promise((resolve, reject) => {
-          uploadTask.on('state_changed', null, reject, resolve);
-        });
-        imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
-      } catch (err) {
-        showNotification('Gagal upload gambar treatment!');
-        setUploadingTreatmentImage(false);
-        return;
+    try {
+      let imageUrl = '';
+      
+      if (treatmentImageFile) {
+        imageUrl = await compressImageToBase64(treatmentImageFile);
       }
-    }
-    
-    const data = {
-      name: treatmentName,
-      description: treatmentDesc,
-      price: treatmentPrice,
-      discount: parseInt(treatmentDiscount, 10),
-      startDate: treatmentStartDate,
-      endDate: treatmentEndDate,
-      pdfLink: treatmentPdf || "#"
-    };
-    
-    if (imageUrl) {
-      data.image = imageUrl;
-    }
+      
+      const data = {
+        name: treatmentName,
+        description: treatmentDesc,
+        price: treatmentPrice,
+        discount: parseInt(treatmentDiscount, 10),
+        startDate: treatmentStartDate,
+        endDate: treatmentEndDate,
+        pdfLink: treatmentPdf || "#"
+      };
+      
+      if (imageUrl) {
+        data.image = imageUrl;
+      }
 
-    if (editingId) {
-      updateTreatment(editingId, data);
-      showNotification('Treatment berhasil diperbarui!');
+      if (editingId) {
+        updateTreatment(editingId, data);
+        showNotification('Treatment berhasil diubah!');
+      } else {
+        addTreatment(data);
+        showNotification('Treatment berhasil ditambahkan!');
+      }
+
+      setTreatmentName('');
+      setTreatmentDesc('');
+      setTreatmentPrice('');
+      setTreatmentDiscount('0');
+      setTreatmentStartDate('');
+      setTreatmentEndDate('');
+      setTreatmentPdf('');
+      setTreatmentImageFile(null);
+      setUploadingTreatmentImage(false);
       setEditingId(null);
-    } else {
-      addTreatment(data);
-      showNotification('Treatment berhasil ditambahkan!');
+      
+      const inputs = document.querySelectorAll('input[type="file"]');
+      inputs.forEach(i => i.value = '');
+    } catch (err) {
+      console.error("Upload error: ", err);
+      setUploadingTreatmentImage(false);
+      showNotification('Gagal upload: ' + (err.message || 'Error tidak diketahui'));
     }
-
-    setTreatmentName('');
-    setTreatmentDesc('');
-    setTreatmentPrice('');
-    setTreatmentDiscount('0');
-    setTreatmentStartDate('');
-    setTreatmentEndDate('');
-    setTreatmentPdf('');
-    setTreatmentImageFile(null);
-    setUploadingTreatmentImage(false);
   };
 
   // Video State
   const [videoTitle, setVideoTitle] = useState('');
   const [videoSrc, setVideoSrc] = useState('');
-  const [videoFile, setVideoFile] = useState(null);
   const [uploadingVideo, setUploadingVideo] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [editingVideoId, setEditingVideoId] = useState(null);
 
   const handleEditVideo = (video) => {
     setEditingVideoId(video.id);
     setVideoTitle(video.title || '');
-    // If it's a file from firebase, we might not want to prefill videoSrc
-    // But for links, it's good to prefill
     setVideoSrc(video.src.includes('firebasestorage') ? '' : video.src);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -505,28 +557,8 @@ function Admin() {
   const resetVideoForm = () => {
     setVideoTitle('');
     setVideoSrc('');
-    setVideoFile(null);
     setUploadingVideo(false);
-    setUploadProgress(0);
     setEditingVideoId(null);
-    const fileInput = document.getElementById('videoFileInput');
-    if (fileInput) fileInput.value = '';
-  };
-
-  const handleVideoFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        showNotification('Ukuran video maksimal 10 MB!');
-        setVideoFile(null);
-        e.target.value = null;
-        return;
-      }
-      setVideoFile(file);
-      setVideoSrc(''); // Clear text input if file selected
-    } else {
-      setVideoFile(null);
-    }
   };
 
   const handleAddVideo = async (e) => {
@@ -536,36 +568,19 @@ function Admin() {
       return;
     }
 
-    if (videoFile) {
-      setUploadingVideo(true);
-      const storageRef = ref(storage, `videos/${Date.now()}_${videoFile.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, videoFile);
-
-      uploadTask.on('state_changed', 
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress(progress);
-        }, 
-        (error) => {
-          console.error("Error uploading video: ", error);
-          showNotification('Gagal mengunggah video!');
-          setUploadingVideo(false);
-        }, 
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          if (editingVideoId) {
-            updateVideo(editingVideoId, { title: videoTitle, src: downloadURL });
-            showNotification('Video berhasil diubah!');
-          } else {
-            addVideo({ title: videoTitle, src: downloadURL });
-            showNotification('Video berhasil ditambahkan!');
-          }
-          resetVideoForm();
-        }
-      );
-    } else if (videoSrc) {
+    if (videoSrc) {
       let finalSrc = videoSrc.trim();
-      if (finalSrc.includes('instagram.com') && !finalSrc.includes('/embed')) {
+      
+      // Auto-convert YouTube links to embed format
+      if (finalSrc.includes('youtube.com/watch?v=')) {
+        const videoId = finalSrc.split('v=')[1].split('&')[0];
+        finalSrc = `https://www.youtube.com/embed/${videoId}`;
+      } else if (finalSrc.includes('youtu.be/')) {
+        const videoId = finalSrc.split('youtu.be/')[1].split('?')[0];
+        finalSrc = `https://www.youtube.com/embed/${videoId}`;
+      }
+      // Auto-convert Instagram links to embed format
+      else if (finalSrc.includes('instagram.com') && !finalSrc.includes('/embed')) {
         finalSrc = finalSrc.split('?')[0]; 
         if (!finalSrc.endsWith('/')) {
           finalSrc += '/';
@@ -581,13 +596,13 @@ function Admin() {
         showNotification('Video link berhasil ditambahkan!');
       }
       resetVideoForm();
-    } else if (editingVideoId && !videoFile && !videoSrc) {
-      // Allow saving just title change if no new file/link provided
+    } else if (editingVideoId && !videoSrc) {
+      // Allow saving just title change if no new link provided
       updateVideo(editingVideoId, { title: videoTitle });
       showNotification('Video berhasil diubah!');
       resetVideoForm();
     } else {
-      showNotification('Pilih file video atau masukkan link!');
+      showNotification('Masukkan link URL video dari YouTube atau Instagram!');
     }
   };
 
@@ -639,8 +654,34 @@ function Admin() {
     });
   };
 
+  const isUploadingAny = uploadingPromo || uploadingVideo || uploadingBa || uploadingTesti || uploadingArticle || uploadingPerawatan || uploadingTreatmentImage;
+
   return (
-    <div className="admin-layout">
+    <div className="admin-layout" style={{ position: 'relative' }}>
+      {isUploadingAny && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 9999,
+          display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: 'white'
+        }}>
+          <div style={{
+            width: '60px', height: '60px', border: '6px solid #f3f3f3', 
+            borderTop: '6px solid var(--primary-color)', borderRadius: '50%', 
+            animation: 'spin 1s linear infinite', marginBottom: '1rem'
+          }} />
+          <h2 style={{ margin: 0 }}>Sedang Mengunggah...</h2>
+          <p>Mohon tunggu sebentar, file sedang diproses dan dikirim ke database.</p>
+          <style>
+            {`
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}
+          </style>
+        </div>
+      )}
+
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem', padding: '0 1rem' }}>
@@ -737,9 +778,10 @@ function Admin() {
                     <option value="0">Tidak Ada Diskon</option>
                     <option value="45">Diskon 45%</option>
                     <option value="50">Diskon 50%</option>
+                    <option value="55">Diskon 55%</option>
                   </select>
                 </div>
-                {(treatmentDiscount === '45' || treatmentDiscount === '50') && (
+                {(treatmentDiscount === '45' || treatmentDiscount === '50' || treatmentDiscount === '55') && (
                   <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
                     <div style={{ flex: 1 }}>
                       <label>Berlaku Dari</label>
@@ -802,25 +844,16 @@ function Admin() {
                   <label>Judul Video</label>
                   <input type="text" className="admin-input" placeholder="Masukkan judul video" value={videoTitle} onChange={e => setVideoTitle(e.target.value)} required />
                 </div>
-                
                 <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px', border: '1px solid #e9ecef' }}>
-                  <div className="admin-form-group" style={{ marginBottom: '1rem' }}>
-                    <label>Opsi 1: Unggah Video (.mp4) - <strong>Direkomendasikan (Maks 10MB)</strong></label>
-                    <input id="videoFileInput" type="file" accept="video/mp4,video/x-m4v,video/*" className="admin-input" onChange={handleVideoFileChange} disabled={uploadingVideo} />
-                  </div>
-                  <div style={{ textAlign: 'center', color: '#6c757d', marginBottom: '1rem', fontSize: '0.9rem' }}>- ATAU -</div>
                   <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                    <label>Opsi 2: Link Instagram (Reels / Post)</label>
-                    <input type="text" className="admin-input" placeholder="Misal: https://www.instagram.com/p/..." value={videoSrc} onChange={(e) => setVideoSrc(e.target.value)} disabled={uploadingVideo || videoFile !== null} />
+                    <label>Link Video (YouTube / Instagram Reels)</label>
+                    <input type="text" className="admin-input" placeholder="Misal: https://www.instagram.com/reel/... atau https://youtube.com/watch?v=..." value={videoSrc} onChange={(e) => setVideoSrc(e.target.value)} disabled={uploadingVideo} required />
                   </div>
                 </div>
 
                 {uploadingVideo && (
-                  <div style={{ marginBottom: '1rem' }}>
-                    <div style={{ fontSize: '0.85rem', color: '#666', marginBottom: '0.5rem' }}>Mengunggah Video... {Math.round(uploadProgress)}%</div>
-                    <div style={{ width: '100%', height: '8px', background: '#eee', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: `${uploadProgress}%`, height: '100%', background: 'var(--primary-color)', transition: 'width 0.3s' }}></div>
-                    </div>
+                  <div style={{ marginBottom: '1rem', color: 'var(--primary-color)', fontWeight: 'bold' }}>
+                    Menyimpan Video...
                   </div>
                 )}
                 <div style={{ display: 'flex', gap: '1rem' }}>
@@ -873,13 +906,21 @@ function Admin() {
                   <input type="text" className="admin-input" value={skincareName} onChange={e => setSkincareName(e.target.value)} required />
                 </div>
                 <div className="admin-form-group">
+                  <label>Harga Produk (Contoh: 83000)</label>
+                  <input type="number" className="admin-input" value={skincarePrice} onChange={e => setSkincarePrice(e.target.value)} placeholder="83000" />
+                </div>
+                <div className="admin-form-group">
+                  <label>Deskripsi Produk</label>
+                  <textarea className="admin-input" value={skincareDesc} onChange={e => setSkincareDesc(e.target.value)} placeholder="Detail dan kegunaan produk..." rows="3"></textarea>
+                </div>
+                <div className="admin-form-group">
                   <label>Foto Produk {editingSkincareId && '(Opsional)'}</label>
                   <input type="file" accept="image/*" className="admin-input" onChange={e => setSkincareFile(e.target.files[0])} required={!editingSkincareId} />
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                   <button type="submit" className="admin-btn" style={{ flex: 1 }} disabled={uploadingSkincare}>{uploadingSkincare ? 'Menyimpan...' : (editingSkincareId ? 'Simpan Perubahan' : 'Simpan Produk')}</button>
                   {editingSkincareId && (
-                    <button type="button" className="admin-btn admin-btn-outline" style={{ flex: 1 }} onClick={() => { setEditingSkincareId(null); setSkincareName(''); setSkincareFile(null); }}>Batal Edit</button>
+                    <button type="button" className="admin-btn admin-btn-outline" style={{ flex: 1 }} onClick={() => { setEditingSkincareId(null); setSkincareName(''); setSkincarePrice(''); setSkincareDesc(''); setSkincareFile(null); }}>Batal Edit</button>
                   )}
                 </div>
               </form>
@@ -889,8 +930,11 @@ function Admin() {
               <div>
                 {skincareProducts.map((p, idx) => (
                   <div key={p.id || idx} className="admin-list-item" style={{ alignItems: 'center' }}>
-                    <img src={p.image} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} />
-                    <div style={{ flex: 1, marginLeft: '1rem', fontWeight: '600' }}>{p.name}</div>
+                    <img src={p.image && (p.image.startsWith('data:') || p.image.startsWith('http')) ? p.image : `${import.meta.env.BASE_URL}${p.image ? (p.image.startsWith('/') ? p.image.substring(1) : p.image) : ''}`} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} />
+                    <div style={{ flex: 1, marginLeft: '1rem' }}>
+                      <div style={{ fontWeight: '600' }}>{p.name}</div>
+                      {p.price && <div style={{ fontSize: '0.9rem', color: '#666' }}>Rp. {Number(p.price).toLocaleString('id-ID')}</div>}
+                    </div>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button onClick={() => handleEditSkincare(p)} className="admin-btn" style={{ padding: '0.5rem 1rem', background: '#e0e0e0', color: '#333' }}>Edit</button>
                       <button onClick={() => removeSkincare(p.id)} className="admin-btn admin-btn-danger" style={{ padding: '0.5rem 1rem' }}>Hapus</button>
@@ -953,8 +997,17 @@ function Admin() {
               <h3>{editingBaId ? 'Edit Foto Hasil Nyata' : 'Tambah Foto Hasil Nyata (Before-After)'}</h3>
               <form onSubmit={handleAddBeforeAfter}>
                 <div className="admin-form-group">
-                  <label>Judul Hasil (Opsional)</label>
-                  <input type="text" className="admin-input" placeholder="Contoh: Acne Grade 3" value={baTitle} onChange={e => setBaTitle(e.target.value)} />
+                  <label>Judul Hasil (Pilih Treatment)</label>
+                  <select 
+                    className="admin-input" 
+                    value={baTitle} 
+                    onChange={e => setBaTitle(e.target.value)}
+                  >
+                    <option value="">-- Pilih Treatment (Opsional) --</option>
+                    {treatments.map((t, idx) => (
+                      <option key={idx} value={t.name}>{t.name}</option>
+                    ))}
+                  </select>
                 </div>
                 <div className="admin-form-group">
                   <label>Upload Foto {editingBaId && '(Opsional)'}</label>
@@ -972,11 +1025,16 @@ function Admin() {
               <h3>Daftar Foto</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 {beforeAfterImages.map((b, idx) => (
-                  <div key={b.id || idx} style={{ position: 'relative', border: '1px solid #eee', borderRadius: '12px', overflow: 'hidden' }}>
-                    <img src={b.img} alt={b.title} style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
-                    <div style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '0.5rem' }}>
-                      <button onClick={() => handleEditBa(b)} className="admin-btn" style={{ background: 'var(--primary-color)', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.8rem', minWidth: 'auto' }}>Edit</button>
-                      <button onClick={() => removeBeforeAfter(b.id)} className="admin-btn admin-btn-danger" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Hapus</button>
+                  <div key={b.id || idx} style={{ position: 'relative', border: '1px solid #eee', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ position: 'relative' }}>
+                      <img src={b.img} alt={b.title} style={{ width: '100%', height: '100px', objectFit: 'cover', display: 'block' }} />
+                      <div style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '0.5rem' }}>
+                        <button type="button" onClick={() => handleEditBa(b)} className="admin-btn" style={{ background: 'var(--primary-color)', color: 'white', padding: '0.3rem 0.6rem', fontSize: '0.8rem', minWidth: 'auto' }}>Edit</button>
+                        <button type="button" onClick={() => removeBeforeAfter(b.id)} className="admin-btn admin-btn-danger" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Hapus</button>
+                      </div>
+                    </div>
+                    <div style={{ padding: '0.5rem', backgroundColor: '#fff', fontSize: '0.85rem', fontWeight: '500', textAlign: 'center', borderTop: '1px solid #eee', color: b.title ? 'var(--text-dark)' : 'var(--text-light)' }}>
+                      {b.title || 'Belum ada judul'}
                     </div>
                   </div>
                 ))}
@@ -1050,7 +1108,7 @@ function Admin() {
                 {(testimonials || []).map((t, idx) => (
                   <div key={t.id || idx} className="admin-list-item" style={{ alignItems: 'flex-start' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-light)', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0, overflow: 'hidden' }}>
-                      {t?.image ? <img src={t.image} alt={t?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (t?.name || '?').charAt(0)}
+                      {t?.image ? <img src={t.image && (t.image.startsWith('data:') || t.image.startsWith('http')) ? t.image : `${import.meta.env.BASE_URL}${t.image ? (t.image.startsWith('/') ? t.image.substring(1) : t.image) : ''}`} alt={t?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (t?.name || '?').charAt(0)}
                     </div>
                     <div style={{ flex: 1, marginLeft: '1rem' }}>
                       <div style={{ fontWeight: '600' }}>{t.name}</div>

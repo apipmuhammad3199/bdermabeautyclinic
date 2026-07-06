@@ -48,7 +48,7 @@ function BeforeAfter() {
     <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem', backgroundColor: '#fafafa' }}>
       <Header />
       
-      <section className="catalog-container" style={{ paddingTop: '10px', marginTop: '20px' }}>
+      <section className="catalog-container" style={{ paddingTop: '10px', marginTop: '20px', paddingBottom: '10px' }}>
         <div style={{ marginBottom: '2rem', textAlign: 'center' }} data-aos="fade-up">
           <div className="section-subtitle-gold">HASIL NYATA</div>
           <h2 className="section-title-grey" style={{ marginBottom: '1rem' }}>MEREKA TELAH MENCOBA DAN MEMBUKTIKAN HASILNYA</h2>
@@ -56,9 +56,10 @@ function BeforeAfter() {
             Lihat perubahan luar biasa dari pasien-pasien kami setelah menjalani perawatan di Enef Clinic.
           </p>
         </div>
+      </section>
 
-        <div className="slider-wrapper" style={{ position: 'relative', maxWidth: '1100px', margin: '0 auto' }} data-aos="fade-up" data-aos-delay="100">
-          <button onClick={scrollLeft} className="slider-btn left" style={{ position: 'absolute', left: '-25px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10094;</button>
+      <div className="slider-wrapper" style={{ position: 'relative', width: '100%', margin: '0 auto 4rem auto' }} data-aos="fade-up" data-aos-delay="100">
+        <button onClick={scrollLeft} className="slider-btn left" style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10094;</button>
           
           <div 
             ref={sliderRef}
@@ -202,7 +203,7 @@ function BeforeAfter() {
             ))}
           </div>
           
-          <button onClick={scrollRight} className="slider-btn right" style={{ position: 'absolute', right: '-25px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10095;</button>
+          <button onClick={scrollRight} className="slider-btn right" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10095;</button>
         </div>
 
         <style dangerouslySetInnerHTML={{__html: `
@@ -222,7 +223,6 @@ function BeforeAfter() {
             }
           }
         `}} />
-      </section>
 
       <Footer />
 

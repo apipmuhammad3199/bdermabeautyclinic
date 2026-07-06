@@ -18,7 +18,7 @@ function AllTreatment() {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
+    <div className="app-container" style={{ minHeight: '100vh', }}>
       {/* Minimal Header */}
       <Header />
 
@@ -48,4 +48,5 @@ function AllTreatment() {
 }
 
 export default AllTreatment;
+
 

@@ -94,6 +94,7 @@ function Home() {
     return { ...treatment, effectiveDiscount };
   });
 
+  const treatments55 = processedTreatments.filter(t => t.effectiveDiscount === 55 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
   const treatments50 = processedTreatments.filter(t => t.effectiveDiscount === 50 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
   const treatments45 = processedTreatments.filter(t => t.effectiveDiscount === 45 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
   
@@ -115,9 +116,11 @@ function Home() {
 
   const marqueeTestimonials = [...(testimonials || []), ...(testimonials || [])];
 
+  const preview55 = treatments55.slice(0, 4);
   const preview50 = treatments50.slice(0, 4);
   const preview45 = treatments45.slice(0, 4);
 
+  const hasActive55 = processedTreatments.some(t => t.effectiveDiscount === 55);
   const hasActive50 = processedTreatments.some(t => t.effectiveDiscount === 50);
   const hasActive45 = processedTreatments.some(t => t.effectiveDiscount === 45);
 
@@ -146,7 +149,7 @@ function Home() {
 
       {/* Search Results Section */}
       {searchTerm !== '' ? (
-        <section id="search-results" className="catalog-container" style={{ paddingTop: '2rem', marginTop: '1rem', paddingBottom: '4rem' }}>
+        <section id="search-results" className="catalog-container" style={{ paddingTop: '2rem', marginTop: '1rem', }}>
           <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
             <h2 className="section-title-grey">HASIL PENCARIAN</h2>
             <p style={{ color: 'var(--text-light)' }}>Menampilkan hasil untuk: <strong>"{searchTerm}"</strong></p>
@@ -206,9 +209,20 @@ function Home() {
             <div key={idx} className="video-card" data-aos="fade-up" data-aos-delay={100 * (idx + 1)}>
               <div style={{ width: '100%', height: '340px', overflow: 'hidden', position: 'relative', background: '#000' }}>
                 {isMp4 ? (
-                  <video src={vid.src} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <video 
+                    src={vid.src} 
+                    controls 
+                    playsInline 
+                    onPlay={(e) => {
+                      const allVideos = document.querySelectorAll('video');
+                      allVideos.forEach(v => {
+                        if (v !== e.target) v.pause();
+                      });
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  />
                 ) : (
-                  <iframe src={vid.src} sandbox="allow-scripts allow-same-origin allow-presentation" width="100%" height="460" frameBorder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" style={{ display: 'block', position: 'absolute', top: '-55px', left: 0, border: 'none', overflow: 'hidden' }}></iframe>
+                  <iframe src={vid.src} sandbox="allow-scripts allow-same-origin allow-presentation" width="100%" height="460" frameBorder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style={{ display: 'block', position: 'absolute', top: '-55px', left: 0, border: 'none', overflow: 'hidden' }}></iframe>
                 )}
               </div>
               <div className="video-info">
@@ -218,7 +232,7 @@ function Home() {
             );
           })}
         </div>
-        {videos.length > 4 && (
+        {(videos && videos.length > 4) && (
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
             <Link to="/videos" className="btn-produk-lainnya">
               Lihat Lebih Banyak &rarr;
@@ -270,7 +284,7 @@ function Home() {
                     height="100%" 
                     style={{ border: 0, minHeight: '350px', display: 'block' }} 
                     allowFullScreen="" 
-                    loading="lazy" 
+                    loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Enef Clinic Location"
                   ></iframe>
@@ -326,7 +340,7 @@ function Home() {
       </section>
 
       {/* Tips and Insight Section */}
-      <section id="insight" style={{ backgroundColor: '#fafafa', paddingTop: '4rem', paddingBottom: '4rem', marginTop: '2rem' }}>
+      <section id="insight" style={{ backgroundColor: '#fafafa', paddingTop: '4rem', marginTop: '2rem' }}>
         <div className="catalog-container" data-aos="fade-up">
           <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
             <div className="section-subtitle-gold">TIPS DAN INSIGHT</div>
@@ -365,4 +379,5 @@ function Home() {
 }
 
 export default Home;
+
 

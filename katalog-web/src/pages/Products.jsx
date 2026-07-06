@@ -5,6 +5,8 @@ import ProductCard from '../components/ProductCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { CMSContext } from '../context/CMSContext';
+import Footer from '../components/Footer';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,7 +22,7 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
+    <div className="app-container" style={{ minHeight: '100vh', }}>
       {/* Minimal Header */}
       <Header />
 
@@ -51,9 +53,13 @@ const Products = () => {
           </div>
         )}
       </div>
+
+      <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 };
 
 export default Products;
+
 

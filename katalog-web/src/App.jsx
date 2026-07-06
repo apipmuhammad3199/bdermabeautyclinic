@@ -9,6 +9,7 @@ import VideoGallery from './pages/VideoGallery';
 import Socials from './pages/Socials';
 import Booking from './pages/Booking';
 import Promo50 from './pages/Promo50';
+import Promo55 from './pages/Promo55';
 import Promo45 from './pages/Promo45';
 import Products from './pages/Products';
 import AllTreatment from './pages/AllTreatment';
@@ -27,6 +28,7 @@ function App() {
           <Route path="/treatments" element={<AllTreatment />} />
           <Route path="/promo" element={<PromoTreatment />} />
           <Route path="/promo-50" element={<Promo50 />} />
+          <Route path="/promo-55" element={<Promo55 />} />
           <Route path="/promo-45" element={<Promo45 />} />
           <Route path="/products" element={<Products />} />
           <Route path="/articles" element={<Articles />} />

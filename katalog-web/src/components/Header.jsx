@@ -64,6 +64,7 @@ function Header() {
         <Link to="/perawatan" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Perawatan</Link>
         <Link to="/promo" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Promo Treatment</Link>
         <Link to="/before-after" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Before After</Link>
+        <Link to="/videos" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Enef Channel</Link>
         <a href="#/" onClick={(e) => handleNavClick(e, 'lokasi')} className="nav-link">Klinik</a>
 
         <div className="social-links click-dropdown" ref={contactDropdownRef}>

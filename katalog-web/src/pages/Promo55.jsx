@@ -9,7 +9,7 @@ import 'aos/dist/aos.css';
 import '../index.css';
 import { CMSContext } from '../context/CMSContext';
 
-function Promo50() {
+function Promo55() {
   const { treatments } = useContext(CMSContext);
 
   const isPromoActive = (startDate, endDate) => {
@@ -23,7 +23,7 @@ function Promo50() {
     return today >= start && today <= end;
   };
 
-  const promoTreatments = treatments.filter(t => t.discount === 50 && isPromoActive(t.startDate, t.endDate));
+  const promoTreatments = treatments.filter(t => t.discount === 55 && isPromoActive(t.startDate, t.endDate));
 
   return (
     <div className="app-container" style={{ minHeight: '100vh', }}>
@@ -32,18 +32,18 @@ function Promo50() {
 
       <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '20px' }}>
         <div className="catalog-header" style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '2rem', color: 'var(--primary-color)' }}>Promo Spesial 50%</h2>
-          <p style={{ color: 'var(--text-light)' }}>Semua penawaran spesial Diskon 50% ada di sini. Jangan sampai terlewatkan!</p>
+          <h2 style={{ fontSize: '2rem', color: 'var(--primary-color)' }}>Promo Ekstra 55%</h2>
+          <p style={{ color: 'var(--text-light)' }}>Kesempatan terbaik dengan diskon terbesar kami. Promo 55% ini sangat terbatas!</p>
         </div>
         
         {promoTreatments.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-light)' }}>
-            Saat ini tidak ada promo diskon 50%.
+            Saat ini tidak ada promo diskon 55%.
           </div>
         ) : (
           <div className="catalog-grid">
             {promoTreatments.map((treatment, index) => (
-              <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 50 }} />
+              <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 55 }} />
             ))}
           </div>
         )}
@@ -55,6 +55,5 @@ function Promo50() {
   );
 }
 
-export default Promo50;
-
+export default Promo55;
 

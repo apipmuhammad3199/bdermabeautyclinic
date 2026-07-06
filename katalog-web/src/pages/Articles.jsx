@@ -16,7 +16,7 @@ function Articles() {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem', backgroundColor: '#fafafa' }}>
+    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
       {/* Minimal Header */}
       <header className="header" style={{ backgroundColor: '#fff', borderBottom: '1px solid #eaeaea' }}>
         <div className="logo-container">
@@ -70,5 +70,6 @@ function Articles() {
 }
 
 export default Articles;
+
 
 

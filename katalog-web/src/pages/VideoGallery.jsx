@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
@@ -14,21 +15,12 @@ function VideoGallery() {
 
   return (
     <div className="app-container">
-      {/* Header (Simplified) */}
-      <header className="header" style={{ justifyContent: 'center', padding: '1.5rem' }}>
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', color: 'var(--text-dark)' }}>
-          <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
-          <div className="clinic-name">Enef Clinic</div>
-        </Link>
-      </header>
+      <Header />
 
-      {/* Main Video Section */}
-      <section className="video-section" style={{ paddingTop: '2rem', minHeight: '60vh' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <h2>Semua Koleksi Video</h2>
-          <Link to="/" style={{ padding: '0.8rem 1.5rem', background: 'var(--primary-color)', color: 'white', textDecoration: 'none', borderRadius: '8px', fontWeight: '500' }}>
-            &larr; Kembali ke Beranda
-          </Link>
+      <section className="catalog-container" style={{ paddingTop: '2rem', marginTop: '2rem', minHeight: '60vh' }}>
+        <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+          <h2 className="section-title-grey">ENEF CHANNEL</h2>
+          <p style={{ color: 'var(--text-light)' }}>Kumpulan video edukasi, tips, dan treatment terbaru dari Enef Clinic</p>
         </div>
         
         {videos.length === 0 ? (
@@ -44,9 +36,20 @@ function VideoGallery() {
                 <div key={idx} className="video-card">
                   <div style={{ width: '100%', height: '340px', overflow: 'hidden', position: 'relative', background: '#000' }}>
                     {isMp4 ? (
-                      <video src={vid.src} autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <video 
+                        src={vid.src} 
+                        controls 
+                        playsInline 
+                        onPlay={(e) => {
+                          const allVideos = document.querySelectorAll('video');
+                          allVideos.forEach(v => {
+                            if (v !== e.target) v.pause();
+                          });
+                        }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                      />
                     ) : (
-                      <iframe src={vid.src} sandbox="allow-scripts allow-same-origin allow-presentation" width="100%" height="460" frameBorder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" style={{ display: 'block', position: 'absolute', top: '-55px', left: 0, border: 'none', overflow: 'hidden' }}></iframe>
+                      <iframe src={vid.src} sandbox="allow-scripts allow-same-origin allow-presentation" width="100%" height="460" frameBorder="0" scrolling="no" allowtransparency="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style={{ display: 'block', position: 'absolute', top: '-55px', left: 0, border: 'none', overflow: 'hidden' }}></iframe>
                     )}
                   </div>
                   <div className="video-info">
@@ -58,13 +61,13 @@ function VideoGallery() {
             </div>
 
             {visibleCount < videos.length && (
-              <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <div style={{ textAlign: 'center', marginTop: '3rem', marginBottom: '2rem' }}>
                 <button 
                   onClick={() => setVisibleCount(prev => prev + 6)}
-                  className="contact-us-btn"
-                  style={{ border: 'none', cursor: 'pointer', padding: '0.8rem 2rem' }}
+                  className="btn-produk-lainnya"
+                  style={{ border: 'none', cursor: 'pointer' }}
                 >
-                  Tampilkan Lebih Banyak
+                  Tampilkan Lebih Banyak &rarr;
                 </button>
               </div>
             )}
@@ -74,12 +77,6 @@ function VideoGallery() {
 
       <Footer />
       <FloatingWhatsApp />
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Enef Clinic. All rights reserved.</p>
-        <p style={{ marginTop: '0.5rem' }}>Elegance in every detail.</p>
-      </footer>
     </div>
   );
 }

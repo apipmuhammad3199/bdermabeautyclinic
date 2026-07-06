@@ -9,7 +9,7 @@ const PromoSlider = () => {
     if (slides.length === 0) return;
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === slides.length - 1 ? 0 : prevIndex + 1));
-    }, 5000); // Change slide every 5 seconds
+    }, 3000); // Change slide every 3 seconds
 
     return () => clearInterval(timer);
   }, [slides.length]);
@@ -18,7 +18,7 @@ const PromoSlider = () => {
     <div className="promo-slider">
       {slides.map((slide, index) => (
         <div className={`slide ${index === currentIndex ? 'active' : ''}`} key={index}>
-          <img src={slide.url || slide} alt={`Enef Clinic Promo ${index + 1}`} />
+          <img src={(slide.url || slide).startsWith('data:') || (slide.url || slide).startsWith('http') ? (slide.url || slide) : `${import.meta.env.BASE_URL}${(slide.url || slide).startsWith('/') ? (slide.url || slide).substring(1) : (slide.url || slide)}`} alt={`Enef Clinic Promo ${index + 1}`} />
         </div>
       ))}
     </div>

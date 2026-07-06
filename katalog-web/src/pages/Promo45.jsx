@@ -26,7 +26,7 @@ function Promo45() {
   const promoTreatments = treatments.filter(t => t.discount === 45 && isPromoActive(t.startDate, t.endDate));
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
+    <div className="app-container" style={{ minHeight: '100vh', }}>
       {/* Minimal Header */}
       <Header />
 
@@ -56,4 +56,5 @@ function Promo45() {
 }
 
 export default Promo45;
+
 

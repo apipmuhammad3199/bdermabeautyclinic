@@ -30,55 +30,145 @@ export const CMSProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const seedDatabase = async () => {
+      try {
+        const seedDocRef = doc(db, 'settings', 'seedStatusV5');
+        const seedDocSnap = await getDoc(seedDocRef);
+        if (!seedDocSnap.exists() || !seedDocSnap.data().isSeeded) {
+          console.log("Seeding database with defaults...");
+          const now = Date.now();
+          
+          const promosSnap = await getDocs(collection(db, 'promos'));
+          if (promosSnap.empty) {
+            const defaultPromos = [
+              { url: `${import.meta.env.BASE_URL}assets/Slide1.jpg` },
+              { url: `${import.meta.env.BASE_URL}assets/Slide2.jpg` },
+              { url: `${import.meta.env.BASE_URL}assets/Slide3.jpg` },
+              { url: `${import.meta.env.BASE_URL}assets/Slide4.jpeg` },
+              { url: `${import.meta.env.BASE_URL}assets/Slide5.jpeg` }
+            ];
+            for (const p of defaultPromos) await addDoc(collection(db, 'promos'), { ...p, createdAt: now });
+          }
+
+          const videosSnap = await getDocs(collection(db, 'videos'));
+          if (videosSnap.empty) {
+            const defaultVideos = [
+              { title: 'Testimoni 1', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
+            ];
+            for (const v of defaultVideos) await addDoc(collection(db, 'videos'), { ...v, createdAt: now });
+          }
+
+          const beforeAfterSnap = await getDocs(collection(db, 'before_after'));
+          if (beforeAfterSnap.empty) {
+            const correctTitles = [
+              "Microdermabrasion", "Injeksi Acne", "Meso Non-Needle + RF Wajah", "Thread Lift Hidung", "Thread Lift Hidung",
+              "Threadlift Columella", "Acne Recovery", "Ultimate Acne Booster", "Cauter Skin Tag", "Treatment Skin Tag",
+              "Acne Recovery", "IPL Hair Removal (Ketiak)", "Skinbooster Acne"
+            ];
+            const defaultBeforeAfters = Array.from({ length: 13 }, (_, i) => ({
+              title: correctTitles[i],
+              img: `${import.meta.env.BASE_URL}assets/before_after/before${i + 1}.jpeg`
+            }));
+            for (const ba of defaultBeforeAfters) await addDoc(collection(db, 'before_after'), { ...ba, createdAt: now });
+          }
+
+          const skincareSnap = await getDocs(collection(db, 'skincare_products'));
+          if (skincareSnap.empty) {
+            const defaultSkincare = [
+              { name: 'Body Whitening', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare1.jpeg`, price: '83000', description: 'Body Whitening SPF 20 Strawberry.' },
+              { name: 'Facial Wash', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare2.jpeg`, price: '83000', description: 'Bye Acne Facial Wash.' },
+              { name: 'Toner', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare3.jpeg`, price: '83000', description: 'Bye Acne Toner.' },
+              { name: 'Gentle Cleanser', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare4.jpeg`, price: '53000', description: 'Cera Niacin Gentle Cleanser.' },
+              { name: 'Night Cream', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare5.jpeg`, price: '83000', description: 'Dreamy Glow HyaluMoist.' },
+            ];
+            for (const s of defaultSkincare) await addDoc(collection(db, 'skincare_products'), { ...s, createdAt: now });
+          }
+
+          const treatmentsSnap = await getDocs(collection(db, 'treatments'));
+          if (treatmentsSnap.empty && defaultTreatments) {
+            for (const t of defaultTreatments) await addDoc(collection(db, 'treatments'), { ...t, createdAt: now });
+          }
+
+          const articlesSnap = await getDocs(collection(db, 'articles'));
+          if (articlesSnap.empty && defaultArticles) {
+            for (const a of defaultArticles) await addDoc(collection(db, 'articles'), { ...a, createdAt: now });
+          }
+
+          const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
+          if (testimonialsSnap.empty) {
+            const defaultTestimonials = [
+              { name: 'Rina Sari', treatment: 'Facial Acne', quote: 'Pelayanannya sangat ramah dan tempatnya bersih. Wajah saya terasa lebih glowing setelah perawatan pertama!', image: '' },
+              { name: 'Dwi Wahyuni', treatment: 'Peeling Glow', quote: 'Dokternya sabar banget jelasin kondisi kulit saya. Krimnya juga cocok dan nggak bikin iritasi.', image: '' },
+              { name: 'Anita Kusuma', treatment: 'Laser Rejuvenation', quote: 'Klinik favorit! Harganya terjangkau tapi hasilnya nggak main-main. Sangat direkomendasikan.', image: '' },
+              { name: 'Siti Rahma', treatment: 'IPL Hair Removal', quote: 'Hasilnya langsung terlihat sejak treatment pertama. Stafnya sangat profesional dan membantu.', image: '' }
+            ];
+            for (const t of defaultTestimonials) await addDoc(collection(db, 'testimonials'), { ...t, createdAt: now });
+          }
+
+          await setDoc(seedDocRef, { isSeeded: true });
+          console.log("Seeding complete!");
+        }
+      } catch (err) {
+        console.error("Error during seedDatabase:", err);
+      }
+    };
+
+    seedDatabase();
+    
+    // ONE-TIME FORCE SYNC IMAGES
+    const forceSyncImages = async () => {
+      try {
+        if (!defaultTreatments) return;
+        
+        // Sync treatments
+        const treatmentsSnap = await getDocs(collection(db, 'treatments'));
+        for (const docSnap of treatmentsSnap.docs) {
+          const data = docSnap.data();
+          if (!data.image) {
+            const defaultT = defaultTreatments.find(dt => dt.name && data.name && dt.name.toLowerCase() === data.name.toLowerCase());
+            if (defaultT && defaultT.image) {
+              await setDoc(doc(db, 'treatments', docSnap.id), { image: defaultT.image }, { merge: true });
+            }
+          }
+        }
+        
+        // Sync perawatan_pdfs
+        const pdfsSnap = await getDocs(collection(db, 'perawatan_pdfs'));
+        for (const docSnap of pdfsSnap.docs) {
+          const data = docSnap.data();
+          if (!data.image) {
+            const defaultT = defaultTreatments.find(dt => dt.name && data.name && dt.name.toLowerCase() === data.name.toLowerCase());
+            if (defaultT && defaultT.image) {
+              await setDoc(doc(db, 'perawatan_pdfs', docSnap.id), { image: defaultT.image }, { merge: true });
+            }
+          }
+        }
+        console.log("Force sync images complete!");
+      } catch (err) {
+        console.error("Error during force sync:", err);
+      }
+    };
+    forceSyncImages();
+
     // Listen to treatments
     const unsubTreatments = onSnapshot(collection(db, 'treatments'), (snapshot) => {
       const treatmentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       treatmentsData.sort((a, b) => b.createdAt - a.createdAt);
-      if (treatmentsData.length === 0 && defaultTreatments) {
-        setTreatments(defaultTreatments);
-      } else {
-        const mergedTreatments = treatmentsData.map(t => {
-          if (!t.image && defaultTreatments) {
-            const def = defaultTreatments.find(d => d.name === t.name);
-            if (def && def.image) {
-              return { ...t, image: def.image };
-            }
-          }
-          return t;
-        });
-        setTreatments(mergedTreatments);
-      }
+      setTreatments(treatmentsData);
     });
 
     // Listen to promos
     const unsubPromos = onSnapshot(collection(db, 'promos'), (snapshot) => {
       const promosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       promosData.sort((a, b) => b.createdAt - a.createdAt);
-      if (promosData.length === 0) {
-        setPromos([
-          { id: 'default1', url: `${import.meta.env.BASE_URL}assets/Slide1.jpg` },
-          { id: 'default2', url: `${import.meta.env.BASE_URL}assets/Slide2.jpg` },
-          { id: 'default3', url: `${import.meta.env.BASE_URL}assets/Slide3.jpg` },
-          { id: 'default4', url: `${import.meta.env.BASE_URL}assets/Slide4.jpeg` },
-          { id: 'default5', url: `${import.meta.env.BASE_URL}assets/Slide5.jpeg` },
-        ]);
-      } else {
-        setPromos(promosData);
-      }
+      setPromos(promosData);
     });
 
     // Listen to videos
     const unsubVideos = onSnapshot(collection(db, 'videos'), (snapshot) => {
       const videosData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       videosData.sort((a, b) => b.createdAt - a.createdAt);
-      if (videosData.length === 0) {
-        setVideos([
-          { id: 'vdefault1', src: `${import.meta.env.BASE_URL}assets/videos/enefclinic1.mp4`, title: "Treatment Enef Clinic" },
-          { id: 'vdefault2', src: `${import.meta.env.BASE_URL}assets/videos/enefclinic2.mp4`, title: "Bukti Nyata Pelanggan" }
-        ]);
-      } else {
-        setVideos(videosData);
-      }
+      setVideos(videosData);
     });
 
     // Listen to promo settings
@@ -91,17 +181,7 @@ export const CMSProvider = ({ children }) => {
     const unsubSkincare = onSnapshot(collection(db, 'skincare_products'), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       data.sort((a, b) => b.createdAt - a.createdAt);
-      if (data.length === 0) {
-        setSkincareProducts([
-          { id: 'skdefault1', name: 'Body Whitening SPF 20 Strawberry', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare1.jpeg` },
-          { id: 'skdefault2', name: 'Bye Acne Facial Wash', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare2.jpeg` },
-          { id: 'skdefault3', name: 'Bye Acne Toner', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare3.jpeg` },
-          { id: 'skdefault4', name: 'Cera Niacin Gentle Cleanser', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare4.jpeg` },
-          { id: 'skdefault5', name: 'Dreamy Glow HyaluMoist', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare5.jpeg` },
-        ]);
-      } else {
-        setSkincareProducts(data);
-      }
+      setSkincareProducts(data);
     });
 
     const unsubPerawatan = onSnapshot(collection(db, 'perawatan_pdfs'), (snapshot) => {
@@ -114,18 +194,7 @@ export const CMSProvider = ({ children }) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       data.sort((a, b) => b.createdAt - a.createdAt);
       
-      if (data.length === 0) {
-        const titles = ["Acne Grade 3", "Glowing Skin", "Flek Hitam", "Skin Rejuvenation"];
-        const defaults = Array.from({ length: 13 }, (_, i) => ({
-          id: `badefault${i+1}`,
-          title: titles[i % titles.length],
-          img: `${import.meta.env.BASE_URL}assets/before_after/before${i + 1}.jpeg`,
-          doctor: "Treatment by : dr. Enef"
-        }));
-        setBeforeAfterImages(defaults);
-      } else {
-        setBeforeAfterImages(data);
-      }
+      setBeforeAfterImages(data);
     });
 
     const unsubUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
@@ -144,16 +213,7 @@ export const CMSProvider = ({ children }) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       data.sort((a, b) => b.createdAt - a.createdAt);
       
-      if (data.length === 0) {
-        setTestimonials([
-          { id: 't1', name: 'Rina Sari', treatment: 'Facial Acne', quote: 'Pelayanannya sangat ramah dan tempatnya bersih. Wajah saya terasa lebih glowing setelah perawatan pertama!', image: '' },
-          { id: 't2', name: 'Dwi Wahyuni', treatment: 'Peeling Glow', quote: 'Dokternya sabar banget jelasin kondisi kulit saya. Krimnya juga cocok dan nggak bikin iritasi.', image: '' },
-          { id: 't3', name: 'Anita Kusuma', treatment: 'Laser Rejuvenation', quote: 'Klinik favorit! Harganya terjangkau tapi hasilnya nggak main-main. Sangat direkomendasikan.', image: '' },
-          { id: 't4', name: 'Siti Rahma', treatment: 'IPL Hair Removal', quote: 'Hasilnya langsung terlihat sejak treatment pertama. Stafnya sangat profesional dan membantu.', image: '' }
-        ]);
-      } else {
-        setTestimonials(data);
-      }
+      setTestimonials(data);
     });
 
     const unsubArticles = onSnapshot(collection(db, 'articles'), (snapshot) => {

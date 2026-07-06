@@ -79,7 +79,7 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
         </div>
       </header>
 
-      <div className="booking-page-container" style={{ paddingTop: '2rem', minHeight: 'auto', alignItems: 'flex-start', paddingBottom: '4rem' }}>
+      <div className="booking-page-container" style={{ paddingTop: '2rem', minHeight: 'auto', alignItems: 'flex-start', }}>
         <div className="booking-card" data-aos="fade-up">
         <div className="booking-header">
           <h2>Booking Online Enef Clinic</h2>
@@ -161,5 +161,6 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
 }
 
 export default Booking;
+
 
 

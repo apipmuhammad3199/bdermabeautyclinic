@@ -34,13 +34,15 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
   const pdfUrl = treatment.pdfLink || `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}`;
   const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
 
+  console.log(`Rendering TreatmentCard for ${treatment.name}, image value is:`, treatment.image);
+
   return (
     <div className="treatment-card group" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
       {getDiscountBadge(activeDiscount)}
       
       <div className="card-image-container">
         {treatment.image ? (
-          <img src={`${import.meta.env.BASE_URL}${treatment.image}`} alt={treatment.name} className="card-image" />
+          <img src={treatment.image.startsWith('data:') || treatment.image.startsWith('http') ? treatment.image : `${import.meta.env.BASE_URL}${treatment.image.startsWith('/') ? treatment.image.substring(1) : treatment.image}`} alt={treatment.name} className="card-image" />
         ) : (
           <div className="card-image-placeholder">
             <svg className="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">

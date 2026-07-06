@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 import TreatmentCard from '../components/TreatmentCard';
@@ -11,19 +11,11 @@ import { CMSContext } from '../context/CMSContext';
 
 function Perawatan() {
   const { treatments, perawatanPDFs } = useContext(CMSContext);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const isPromoActive = (startDate, endDate) => {
-    if (!startDate || !endDate) return true;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const start = new Date(startDate);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999);
-    return today >= start && today <= end;
-  };
-
-  const promoTreatments = treatments.filter(t => t.discount === 45 && isPromoActive(t.startDate, t.endDate));
+  const filteredTreatments = treatments.filter(t => 
+    t.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,27 +23,27 @@ function Perawatan() {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem', backgroundColor: '#fafafa' }}>
+    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
       <Header />
       
-      <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '30px' }}>
+      <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '30px', paddingBottom: '4rem' }}>
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
           <h2 className="section-title-grey" style={{ color: 'var(--primary-color)' }}>HALAMAN PERAWATAN</h2>
           <p style={{ color: 'var(--text-light)', marginTop: '1rem' }}>
-            Jelajahi dokumen perawatan eksklusif serta promo perawatan premium Enef Clinic.
+            Jelajahi dokumen perawatan eksklusif serta katalog perawatan Enef Clinic.
           </p>
         </div>
 
         {/* Perawatan PDFs Section */}
         {perawatanPDFs && perawatanPDFs.length > 0 && (
           <div style={{ marginBottom: '4rem' }}>
-            <h3 style={{ color: '#444', marginBottom: '1.5rem', textAlign: 'center' }}>Perawatan</h3>
+            <h3 style={{ color: '#444', marginBottom: '1.5rem', textAlign: 'center' }}>Dokumen Perawatan</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1.5rem' }}>
               {perawatanPDFs.map((pdf, index) => (
                 <div key={index} style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', textAlign: 'center', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseOut={e => e.currentTarget.style.transform = 'translateY(0)'}>
                   {pdf.image ? (
                     <div style={{ width: '100%', height: '150px', marginBottom: '1rem', borderRadius: '8px', overflow: 'hidden' }}>
-                      <img src={pdf.image} alt={pdf.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={pdf.image.startsWith('data:') || pdf.image.startsWith('http') ? pdf.image : `${import.meta.env.BASE_URL}${pdf.image.startsWith('/') ? pdf.image.substring(1) : pdf.image}`} alt={pdf.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                   ) : (
                     <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📄</div>
@@ -64,18 +56,23 @@ function Perawatan() {
           </div>
         )}
 
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <h3 style={{ color: '#444' }}>Promo Spesial 45%</h3>
+        <div className="search-container" style={{ marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 3rem auto' }}>
+          <input 
+            type="text" 
+            placeholder="Cari perawatan..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
-        {promoTreatments.length === 0 ? (
+        {filteredTreatments.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-light)' }}>
-            Saat ini tidak ada perawatan diskon 45%.
+            {searchTerm ? 'Perawatan tidak ditemukan.' : 'Saat ini tidak ada perawatan.'}
           </div>
         ) : (
           <div className="catalog-grid">
-            {promoTreatments.map((treatment, index) => (
-              <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 45 }} />
+            {filteredTreatments.map((treatment, index) => (
+              <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 0, endDate: null, discount: 0 }} />
             ))}
           </div>
         )}
