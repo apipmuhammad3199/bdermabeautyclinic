@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { CMSContext } from '../context/CMSContext';
 
 const getDiscountBadge = (discount) => {
   if (discount === 50) return <div className="badge badge-50">50% OFF</div>;
@@ -31,7 +32,13 @@ const calculateDiscountedPrice = (priceStr, discountPercent) => {
 };
 
 const TreatmentCard = ({ treatment, isProduct = false }) => {
-  const pdfUrl = treatment.pdfLink || (treatment.filename ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}` : null);
+  const { perawatanPDFs } = useContext(CMSContext);
+  
+  // Try to find a matching PDF from the CMS if it doesn't already have one
+  const matchedPdf = perawatanPDFs?.find(p => p.name.toLowerCase() === treatment.name.toLowerCase());
+  const finalPdfLink = treatment.pdfLink || (matchedPdf ? matchedPdf.pdfLink : null);
+  
+  const pdfUrl = finalPdfLink || (treatment.filename ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}` : null);
   const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
 
   console.log(`Rendering TreatmentCard for ${treatment.name}, image value is:`, treatment.image);

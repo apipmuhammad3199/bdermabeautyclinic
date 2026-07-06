@@ -71,17 +71,9 @@ function Perawatan() {
           </div>
         ) : (
           <div className="catalog-grid">
-            {filteredTreatments.map((treatment, index) => {
-              const matchedPdf = perawatanPDFs?.find(p => p.name.toLowerCase() === treatment.name.toLowerCase());
-              const treatmentWithPdf = { 
-                ...treatment, 
-                effectiveDiscount: 0, 
-                endDate: null, 
-                discount: 0,
-                pdfLink: matchedPdf ? matchedPdf.pdfLink : treatment.pdfLink
-              };
-              return <TreatmentCard key={index} treatment={treatmentWithPdf} />;
-            })}
+            {filteredTreatments.map((treatment, index) => (
+              <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 0, endDate: null, discount: 0 }} />
+            ))}
           </div>
         )}
       </section>
