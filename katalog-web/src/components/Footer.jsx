@@ -24,7 +24,7 @@ function Footer() {
           <Link to="/promo-50">Promo 50%</Link>
           <Link to="/products">Produk Skincare</Link>
           <Link to="/articles">Tips dan Insight</Link>
-          <a href="#/" onClick={(e) => { e.preventDefault(); const el = document.getElementById('lokasi'); if (el) { el.scrollIntoView({ behavior: 'smooth' }); } else { window.location.href = '/#/'; } }}>Lokasi Klinik</a>
+          <a href="/" onClick={(e) => { e.preventDefault(); const el = document.getElementById('lokasi'); if (el) { el.scrollIntoView({ behavior: 'smooth' }); } else { window.location.href = '/'; } }}>Lokasi Klinik</a>
         </div>
         <div className="footer-column">
           <h3>Kontak Kami</h3>

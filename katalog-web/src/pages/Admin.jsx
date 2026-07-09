@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
+import { storage } from '../firebase';
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -11,9 +13,12 @@ const fileToBase64 = (file) => {
   });
 };
 
-const uploadFileToBase64 = async (file) => {
+const uploadFileToStorage = async (file, folder = 'pdfs') => {
   if (!file) return null;
-  return await fileToBase64(file);
+  const fileName = `${Date.now()}_${file.name}`;
+  const fileRef = ref(storage, `${folder}/${fileName}`);
+  await uploadBytes(fileRef, file);
+  return await getDownloadURL(fileRef);
 };
 
 const compressImageToBase64 = async (file, maxWidth = 800) => {
@@ -492,7 +497,7 @@ function Admin() {
       
       let finalPdfUrl = treatmentPdf;
       if (treatmentPdfFile) {
-        finalPdfUrl = await uploadFileToBase64(treatmentPdfFile);
+        finalPdfUrl = await uploadFileToStorage(treatmentPdfFile, 'treatment_pdfs');
       }
       
       const data = {
