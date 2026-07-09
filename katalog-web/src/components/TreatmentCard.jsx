@@ -97,6 +97,15 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
           </div>
         )}
         <div className="card-overlay"></div>
+        {!isProduct && pdfUrl && (
+          <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="card-view-details">
+            <span>View Details</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        )}
       </div>
 
       <div className="card-content">
@@ -123,16 +132,6 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
       </div>
       
       <div className="treatment-actions-group">
-        {!isProduct && pdfUrl && (
-          <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="treatment-action">
-            <span>View Details</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        )}
-        
         <Link to={`/booking?${isProduct ? 'product' : 'treatment'}=${encodeURIComponent(treatment.name)}`} className="book-now-btn">
           {isProduct ? 'Beli Sekarang' : 'Book Now'}
         </Link>
