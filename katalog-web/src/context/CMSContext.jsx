@@ -32,7 +32,7 @@ export const CMSProvider = ({ children }) => {
   useEffect(() => {
     const seedDatabase = async () => {
       try {
-        const seedDocRef = doc(db, 'settings', 'seedStatusV5');
+        const seedDocRef = doc(db, 'settings', 'seedStatusV6');
         const seedDocSnap = await getDoc(seedDocRef);
         if (!seedDocSnap.exists() || !seedDocSnap.data().isSeeded) {
           console.log("Seeding database with defaults...");
@@ -87,6 +87,30 @@ export const CMSProvider = ({ children }) => {
           const treatmentsSnap = await getDocs(collection(db, 'treatments'));
           if (treatmentsSnap.empty && defaultTreatments) {
             for (const t of defaultTreatments) await addDoc(collection(db, 'treatments'), { ...t, createdAt: now });
+          }
+          
+          const pdfsSnap = await getDocs(collection(db, 'perawatan_pdfs'));
+          const existingPdfNames = pdfsSnap.docs.map(doc => doc.data().name?.trim().toLowerCase());
+          
+          const localPdfs = [
+            "ACNE TREATMENT.pdf", "BODY CONTOUR.pdf", "BODY TREATMENT.pdf", "BOTOX TREATMENT.pdf",
+            "CAUTER.pdf", "FACE CONTOUR TREATMENT.pdf", "FACIAL TREATMENT.pdf", "FILLER.pdf",
+            "GLOWING TREATMENT.pdf", "HAIR REMOVEL TRATMENT.pdf", "INJECTION TREATMENT.pdf",
+            "LASER TREATMENT.pdf", "LUXURY SKINBOOSTER.pdf", "MASSAGE BADAN.pdf",
+            "MELASMA FLEK TREATMENT.pdf", "MESOLIPO.pdf", "PAKET BODY CONTOUR.pdf",
+            "PEELING.pdf", "RADIO FREQUENCY.pdf", "SCAR TREATMENT.pdf", "SUBSISI.pdf",
+            "THREADLIFT..pdf", "TUNGGAL TREATMENT.pdf", "WHITENING TREATMENT.pdf"
+          ];
+          
+          for (const filename of localPdfs) {
+            const cleanName = filename.replace(/\.+pdf$/i, '').trim();
+            if (!existingPdfNames.includes(cleanName.toLowerCase())) {
+              await addDoc(collection(db, 'perawatan_pdfs'), {
+                name: cleanName,
+                pdfLink: `${import.meta.env.BASE_URL}assets/perawatan/${filename}`,
+                createdAt: now
+              });
+            }
           }
 
           const articlesSnap = await getDocs(collection(db, 'articles'));

@@ -7,7 +7,8 @@ function Booking() {
   const timeSlots = [
     "11:00", "11:30", "12:00", "12:30", 
     "13:00", "13:30", "14:00", "14:30", 
-    "15:00", "15:30", "16:00", "16:30", "17:00"
+    "15:00", "15:30", "16:00", "16:30",
+    "17:00", "17:30", "18:00", "18:30", "19:00"
   ];
 
   const [searchParams] = useSearchParams();
@@ -39,7 +40,7 @@ function Booking() {
     // Construct the WhatsApp message
     const message = `Selamat Datang di Layanan Booking Online Enef Clinic
 
-Kami informasikan, slot booking dibuka mulai jam 11.00 - 17.00
+Kami informasikan, slot booking dibuka mulai jam 11.00 - 19.00
 Booking maksimal H-1 sebelum kedatangan
 
 *Proses verifikasi data*
@@ -84,7 +85,7 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
         <div className="booking-header">
           <h2>Booking Online Enef Clinic</h2>
           <p className="booking-rules">
-            Slot booking dibuka mulai jam <strong>11.00 - 17.00</strong><br/>
+            Slot booking dibuka mulai jam <strong>11.00 - 19.00</strong><br/>
             Booking maksimal <strong>H-1</strong> sebelum kedatangan.<br/>
             Mohon sertakan foto KTP pada pesan WhatsApp jika Anda pasien baru.
           </p>

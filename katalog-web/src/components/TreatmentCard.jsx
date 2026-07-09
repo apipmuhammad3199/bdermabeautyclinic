@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
+import localPdfs from '../data/localPdfs.json';
 
 const getDiscountBadge = (discount) => {
   if (discount === 50) return <div className="badge badge-50">50% OFF</div>;
@@ -35,21 +36,38 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
   const { perawatanPDFs } = useContext(CMSContext);
   
   // Try to find a matching PDF from the CMS if it doesn't already have one
-  const matchedPdf = perawatanPDFs?.find(p => p.name.toLowerCase() === treatment.name.toLowerCase());
+  const matchedPdf = perawatanPDFs?.find(p => p.name?.trim().toLowerCase() === treatment.name?.trim().toLowerCase());
+  
+  // Try to find a matching PDF from the local assets/perawatan folder
+  const localMatch = localPdfs.find(filename => {
+    const cleanFile = filename.replace(/\.+pdf$/i, '').trim().toLowerCase();
+    const cleanName = treatment.name?.trim().toLowerCase() || '';
+    return cleanFile === cleanName || cleanFile.includes(cleanName) || cleanName.includes(cleanFile);
+  });
+
   const finalPdfLink = treatment.pdfLink || (matchedPdf ? matchedPdf.pdfLink : null);
   
-  const pdfUrl = finalPdfLink || (treatment.filename ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}` : null);
+  const pdfUrl = finalPdfLink 
+    || (localMatch ? `${import.meta.env.BASE_URL}assets/perawatan/${localMatch}` : null)
+    || (treatment.filename ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}` : null);
+
+  const fallbackImage = localMatch ? `${import.meta.env.BASE_URL}assets/perawatan/image/${localMatch.replace(/\.+pdf$/i, '.png')}` : null;
+  
+  const displayImage = treatment.image 
+    ? (treatment.image.startsWith('data:') || treatment.image.startsWith('http') ? treatment.image : `${import.meta.env.BASE_URL}${treatment.image.startsWith('/') ? treatment.image.substring(1) : treatment.image}`) 
+    : fallbackImage;
+
   const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
 
-  console.log(`Rendering TreatmentCard for ${treatment.name}, image value is:`, treatment.image);
+  console.log(`[TreatmentCard] ${treatment.name} | matchedPdf: ${matchedPdf ? 'FOUND' : 'NOT_FOUND'} | pdfUrl: ${pdfUrl}`);
 
   return (
     <div className="treatment-card group" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
       {getDiscountBadge(activeDiscount)}
       
       <div className="card-image-container">
-        {treatment.image ? (
-          <img src={treatment.image.startsWith('data:') || treatment.image.startsWith('http') ? treatment.image : `${import.meta.env.BASE_URL}${treatment.image.startsWith('/') ? treatment.image.substring(1) : treatment.image}`} alt={treatment.name} className="card-image" />
+        {displayImage ? (
+          <img src={displayImage} alt={treatment.name} className="card-image" />
         ) : (
           <div className="card-image-placeholder">
             <svg className="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">

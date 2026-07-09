@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Home from './pages/Home';
@@ -18,6 +18,11 @@ import Articles from './pages/Articles';
 import Perawatan from './pages/Perawatan';
 import BeforeAfter from './pages/BeforeAfter';
 import { CMSProvider } from './context/CMSContext';
+
+const ProtectedRoute = ({ children }) => {
+  const isAuth = localStorage.getItem('cms_auth') === 'true';
+  return isAuth ? children : <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
@@ -38,7 +43,7 @@ function App() {
           <Route path="/socials" element={<Socials />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
         </Routes>
       </Router>
     </CMSProvider>

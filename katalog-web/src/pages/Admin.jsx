@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CMSContext } from '../context/CMSContext';
 import { storage } from '../firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -11,6 +11,14 @@ const fileToBase64 = (file) => {
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+};
+
+const uploadFileToStorage = async (file, folder = 'pdfs') => {
+  if (!file) return null;
+  const fileName = `${Date.now()}_${file.name}`;
+  const fileRef = ref(storage, `${folder}/${fileName}`);
+  await uploadBytes(fileRef, file);
+  return await getDownloadURL(fileRef);
 };
 
 const compressImageToBase64 = async (file, maxWidth = 800) => {
@@ -88,6 +96,39 @@ function Admin() {
     localStorage.removeItem('cms_auth');
     navigate('/login');
   };
+
+  const handleSyncLocalPDFs = async () => {
+    try {
+      const localPdfs = [
+        "ACNE TREATMENT.pdf", "BODY CONTOUR.pdf", "BODY TREATMENT.pdf", "BOTOX TREATMENT.pdf",
+        "CAUTER.pdf", "FACE CONTOUR TREATMENT.pdf", "FACIAL TREATMENT.pdf", "FILLER.pdf",
+        "GLOWING TREATMENT.pdf", "HAIR REMOVEL TRATMENT.pdf", "INJECTION TREATMENT.pdf",
+        "LASER TREATMENT.pdf", "LUXURY SKINBOOSTER.pdf", "MASSAGE BADAN.pdf",
+        "MELASMA FLEK TREATMENT.pdf", "MESOLIPO.pdf", "PAKET BODY CONTOUR.pdf",
+        "PEELING.pdf", "RADIO FREQUENCY.pdf", "SCAR TREATMENT.pdf", "SUBSISI.pdf",
+        "THREADLIFT..pdf", "TUNGGAL TREATMENT.pdf", "WHITENING TREATMENT.pdf"
+      ];
+      
+      const existingNames = perawatanPDFs.map(p => p.name?.toLowerCase().trim());
+      let added = 0;
+
+      for (const filename of localPdfs) {
+        const cleanName = filename.replace(/\.+pdf$/i, '').trim();
+        if (!existingNames.includes(cleanName.toLowerCase())) {
+          await addPerawatanPDF({
+            name: cleanName,
+            pdfLink: `${import.meta.env.BASE_URL}assets/perawatan/${filename}`
+          });
+          added++;
+        }
+      }
+      showNotification(`Berhasil! ${added} PDF lokal telah ditambahkan ke CMS.`);
+    } catch (error) {
+      console.error("Error syncing PDFs:", error);
+      showNotification("Terjadi kesalahan saat mensinkronisasi.");
+    }
+  };
+
 
   const handleFileChange = (e, callback) => {
     const file = e.target.files[0];
@@ -238,7 +279,7 @@ function Admin() {
       }
       
       if (perawatanFile) {
-        pdfUrl = await fileToBase64(perawatanFile);
+        pdfUrl = await uploadFileToStorage(perawatanFile, 'perawatan_pdfs');
       }
       
       const updateData = { name: perawatanName };
@@ -448,6 +489,7 @@ function Admin() {
   const [treatmentPrice, setTreatmentPrice] = useState('');
   const [treatmentDiscount, setTreatmentDiscount] = useState('0');
   const [treatmentPdf, setTreatmentPdf] = useState('');
+  const [treatmentPdfFile, setTreatmentPdfFile] = useState(null);
   const [treatmentStartDate, setTreatmentStartDate] = useState('');
   const [treatmentEndDate, setTreatmentEndDate] = useState('');
   const [treatmentImageFile, setTreatmentImageFile] = useState(null);
@@ -463,6 +505,7 @@ function Admin() {
     setTreatmentStartDate(t.startDate || '');
     setTreatmentEndDate(t.endDate || '');
     setTreatmentPdf(t.pdfLink === "#" ? '' : (t.pdfLink || ''));
+    setTreatmentPdfFile(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -475,6 +518,7 @@ function Admin() {
     setTreatmentStartDate('');
     setTreatmentEndDate('');
     setTreatmentPdf('');
+    setTreatmentPdfFile(null);
     setTreatmentImageFile(null);
   };
 
@@ -499,6 +543,11 @@ function Admin() {
         imageUrl = await compressImageToBase64(treatmentImageFile);
       }
       
+      let finalPdfUrl = treatmentPdf;
+      if (treatmentPdfFile) {
+        finalPdfUrl = await uploadFileToStorage(treatmentPdfFile, 'treatment_pdfs');
+      }
+      
       const data = {
         name: treatmentName,
         description: treatmentDesc,
@@ -506,7 +555,7 @@ function Admin() {
         discount: parseInt(treatmentDiscount, 10),
         startDate: treatmentStartDate,
         endDate: treatmentEndDate,
-        pdfLink: treatmentPdf || "#"
+        pdfLink: finalPdfUrl || "#"
       };
       
       if (imageUrl) {
@@ -528,6 +577,7 @@ function Admin() {
       setTreatmentStartDate('');
       setTreatmentEndDate('');
       setTreatmentPdf('');
+      setTreatmentPdfFile(null);
       setTreatmentImageFile(null);
       setUploadingTreatmentImage(false);
       setEditingId(null);
@@ -798,8 +848,9 @@ function Admin() {
                   <input type="file" accept="image/*" className="admin-input" onChange={e => setTreatmentImageFile(e.target.files[0])} />
                 </div>
                 <div className="admin-form-group">
-                  <label>Upload PDF Brosur (Opsional - Demo Lokal)</label>
-                  <input type="file" accept=".pdf" className="admin-input" onChange={(e) => handleFileChange(e, setTreatmentPdf)} />
+                  <label>Upload PDF Brosur (Opsional)</label>
+                  <input type="file" accept=".pdf" className="admin-input" onChange={(e) => setTreatmentPdfFile(e.target.files[0])} />
+                  {treatmentPdf && !treatmentPdfFile && <div style={{marginTop: '0.5rem', fontSize: '0.85rem'}}><a href={treatmentPdf} target="_blank" rel="noopener noreferrer">Lihat PDF Saat Ini</a></div>}
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                   <button type="submit" className="admin-btn" disabled={uploadingTreatmentImage} style={{ flex: 1 }}>{uploadingTreatmentImage ? 'Menyimpan...' : (editingId ? 'Simpan Perubahan' : 'Simpan Treatment')}</button>
@@ -972,7 +1023,10 @@ function Admin() {
               </form>
             </div>
             <div className="admin-card" style={{ flex: 1 }}>
-              <h3>Daftar Perawatan</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ margin: 0 }}>Daftar Perawatan</h3>
+                <button onClick={handleSyncLocalPDFs} className="admin-btn" style={{ background: '#28a745', fontSize: '0.8rem', padding: '0.4rem 0.8rem', minWidth: 'auto' }}>Sync 24 PDF Lokal</button>
+              </div>
               <div>
                 {perawatanPDFs.map((p, idx) => (
                   <div key={p.id || idx} className="admin-list-item">
