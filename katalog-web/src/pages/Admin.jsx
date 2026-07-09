@@ -247,6 +247,7 @@ function Admin() {
 
   // --- Perawatan PDF State ---
   const [perawatanName, setPerawatanName] = useState('');
+  const [perawatanPdfLink, setPerawatanPdfLink] = useState('');
   const [perawatanFile, setPerawatanFile] = useState(null);
   const [perawatanImageFile, setPerawatanImageFile] = useState(null);
   const [uploadingPerawatan, setUploadingPerawatan] = useState(false);
@@ -255,6 +256,7 @@ function Admin() {
   const handleEditPerawatan = (p) => {
     setEditingPerawatanId(p.id);
     setPerawatanName(p.name);
+    setPerawatanPdfLink(p.pdfLink || '');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -264,26 +266,26 @@ function Admin() {
       showNotification('Nama perawatan wajib diisi!');
       return;
     }
-    if (!perawatanFile && !editingPerawatanId) {
-      showNotification('File PDF wajib diisi!');
+    if (!perawatanFile && !perawatanPdfLink && !editingPerawatanId) {
+      showNotification('File PDF atau Link Eksternal wajib diisi!');
       return;
     }
     setUploadingPerawatan(true);
     
     try {
       let imgUrl = '';
-      let pdfUrl = '';
+      let finalPdfUrl = perawatanPdfLink;
       
       if (perawatanImageFile) {
         imgUrl = await compressImageToBase64(perawatanImageFile);
       }
       
       if (perawatanFile) {
-        pdfUrl = await uploadFileToStorage(perawatanFile, 'perawatan_pdfs');
+        finalPdfUrl = await uploadFileToStorage(perawatanFile, 'perawatan_pdfs');
       }
       
       const updateData = { name: perawatanName };
-      if (pdfUrl) updateData.pdfLink = pdfUrl;
+      if (finalPdfUrl) updateData.pdfLink = finalPdfUrl;
       if (imgUrl) updateData.image = imgUrl;
 
       if (editingPerawatanId) {
@@ -295,7 +297,7 @@ function Admin() {
         showNotification('Perawatan berhasil ditambahkan!');
       }
 
-      setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); 
+      setPerawatanName(''); setPerawatanPdfLink(''); setPerawatanFile(null); setPerawatanImageFile(null); 
       setUploadingPerawatan(false);
       const inputs = document.querySelectorAll('input[type="file"]');
       inputs.forEach(i => i.value = '');
@@ -1008,7 +1010,11 @@ function Admin() {
                 </div>
                 <div className="admin-form-group">
                   <label>Upload PDF {editingPerawatanId && '(Opsional)'}</label>
-                  <input type="file" accept=".pdf" className="admin-input" onChange={e => setPerawatanFile(e.target.files[0])} required={!editingPerawatanId} />
+                  <input type="file" accept=".pdf" className="admin-input" onChange={e => setPerawatanFile(e.target.files[0])} />
+                </div>
+                <div className="admin-form-group">
+                  <label>Atau Link PDF Eksternal</label>
+                  <input type="text" className="admin-input" value={perawatanPdfLink} onChange={e => setPerawatanPdfLink(e.target.value)} placeholder="https://..." />
                 </div>
                 <div className="admin-form-group">
                   <label>Upload Gambar (Opsional)</label>
@@ -1017,7 +1023,7 @@ function Admin() {
                 <div style={{ display: 'flex', gap: '1rem' }}>
                   <button type="submit" className="admin-btn" style={{ flex: 1 }} disabled={uploadingPerawatan}>{uploadingPerawatan ? 'Menyimpan...' : (editingPerawatanId ? 'Simpan Perubahan' : 'Simpan Perawatan')}</button>
                   {editingPerawatanId && (
-                    <button type="button" className="admin-btn admin-btn-outline" style={{ flex: 1 }} onClick={() => { setEditingPerawatanId(null); setPerawatanName(''); setPerawatanFile(null); setPerawatanImageFile(null); }}>Batal Edit</button>
+                    <button type="button" className="admin-btn admin-btn-outline" style={{ flex: 1 }} onClick={() => { setEditingPerawatanId(null); setPerawatanName(''); setPerawatanPdfLink(''); setPerawatanFile(null); setPerawatanImageFile(null); }}>Batal Edit</button>
                   )}
                 </div>
               </form>
