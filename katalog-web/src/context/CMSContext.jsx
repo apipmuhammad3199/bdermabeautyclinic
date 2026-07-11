@@ -174,6 +174,30 @@ export const CMSProvider = ({ children }) => {
     };
     forceSyncImages();
 
+    // ONE-TIME FORCE RE-SEED TREATMENTS V3
+    const forceReseedTreatmentsV3 = async () => {
+      try {
+        const seedFlag = localStorage.getItem('hasReseededTreatmentsV3');
+        if (seedFlag || !defaultTreatments) return;
+        
+        console.log("Wiping and re-seeding treatments...");
+        const treatmentsSnap = await getDocs(collection(db, 'treatments'));
+        for (const docSnap of treatmentsSnap.docs) {
+          await deleteDoc(doc(db, 'treatments', docSnap.id));
+        }
+        
+        for (const t of defaultTreatments) {
+          await addDoc(collection(db, 'treatments'), { ...t, createdAt: Date.now() });
+        }
+        
+        localStorage.setItem('hasReseededTreatmentsV3', 'true');
+        console.log("Re-seed complete!");
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    forceReseedTreatmentsV3();
+
     // Listen to treatments
     const unsubTreatments = onSnapshot(collection(db, 'treatments'), (snapshot) => {
       const treatmentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

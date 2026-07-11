@@ -66,7 +66,14 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
     || (isUsablePdfLink(treatment.pdfLink) ? treatment.pdfLink : null)
     || (isUsablePdfLink(matchedPdf?.pdfLink) ? matchedPdf.pdfLink : null);
   
-  const pdfUrl = finalPdfLink 
+  const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
+
+  const promoPdfUrl = (activeDiscount > 0 && treatment.filename)
+    ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}`
+    : null;
+
+  const pdfUrl = promoPdfUrl
+    || finalPdfLink 
     || (localMatch ? `${import.meta.env.BASE_URL}assets/perawatan/${localMatch}` : null)
     || (treatment.filename ? `${import.meta.env.BASE_URL}assets/treatments/${treatment.filename}` : null);
 
@@ -75,8 +82,6 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
   const displayImage = treatment.image 
     ? (treatment.image.startsWith('data:') || treatment.image.startsWith('http') ? treatment.image : `${import.meta.env.BASE_URL}${treatment.image.startsWith('/') ? treatment.image.substring(1) : treatment.image}`) 
     : fallbackImage;
-
-  const activeDiscount = treatment.effectiveDiscount !== undefined ? treatment.effectiveDiscount : treatment.discount;
 
   console.log(`[TreatmentCard] ${treatment.name} | matchedPdf: ${matchedPdf ? 'FOUND' : 'NOT_FOUND'} | pdfUrl: ${pdfUrl}`);
 

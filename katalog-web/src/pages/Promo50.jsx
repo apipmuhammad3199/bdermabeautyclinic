@@ -8,6 +8,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../index.css';
 import { CMSContext } from '../context/CMSContext';
+import { sortTreatments } from '../utils/sortTreatments';
 
 function Promo50() {
   const { treatments } = useContext(CMSContext);
@@ -42,7 +43,7 @@ function Promo50() {
           </div>
         ) : (
           <div className="catalog-grid">
-            {promoTreatments.map((treatment, index) => (
+            {sortTreatments(promoTreatments).map((treatment, index) => (
               <TreatmentCard key={index} treatment={{ ...treatment, effectiveDiscount: 50 }} />
             ))}
           </div>
@@ -56,5 +57,3 @@ function Promo50() {
 }
 
 export default Promo50;
-
-

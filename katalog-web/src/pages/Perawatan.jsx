@@ -8,6 +8,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../index.css';
 import { CMSContext } from '../context/CMSContext';
+import { sortTreatments } from '../utils/sortTreatments';
 
 function Perawatan() {
   const { treatments } = useContext(CMSContext);
@@ -23,9 +24,9 @@ function Perawatan() {
       }, {})
   );
 
-  const filteredTreatments = uniqueTreatments
-    .filter(t => t.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  const filteredTreatments = sortTreatments(
+    uniqueTreatments.filter(t => t.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
