@@ -47,7 +47,7 @@ function Perawatan() {
 
         if (key.includes('melasma') || key.includes('flek') || key.includes('flex')) {
           key = 'melasma / flex treatment';
-          t = { ...t, name: 'Melasma / Flex Treatment' };
+          t = { ...t, name: 'MELASMA / FLEX TREATMENT' };
         }
 
         if (!acc[key]) {
