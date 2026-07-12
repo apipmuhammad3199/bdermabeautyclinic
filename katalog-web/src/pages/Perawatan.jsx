@@ -50,7 +50,8 @@ function Perawatan() {
           t = { ...t, name: 'MELASMA / FLEX TREATMENT' };
         }
 
-        if (!acc[key]) {
+        // Prefer item with image if key already exists
+        if (!acc[key] || (t.image && !acc[key].image)) {
           acc[key] = t;
         }
         return acc;
