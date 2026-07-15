@@ -24,10 +24,31 @@ const ProtectedRoute = ({ children }) => {
   return isAuth ? children : <Navigate to="/login" replace />;
 };
 
+// Setiap pindah halaman selalu mulai dari paling atas —
+// tanpa ini browser kadang mempertahankan posisi scroll halaman sebelumnya.
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  useEffect(() => {
+    // 'instant' mengabaikan scroll-behavior:smooth global — tanpa ini halaman
+    // baru terlihat "mulai di tengah" lalu merayap pelan ke atas.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   return (
     <CMSProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/treatments" element={<AllTreatment />} />

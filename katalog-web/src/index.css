@@ -1945,3 +1945,329 @@ button.floating-wa {
   }
 }
 
+
+/* ===== Paket Treatment (banner + modal) ===== */
+.paket-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: linear-gradient(120deg, var(--text-dark) 0%, #6b5442 55%, var(--primary-color) 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 2.25rem 2.75rem;
+  margin-bottom: 2.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 14px 34px rgba(46, 32, 22, 0.22);
+}
+
+.paket-banner:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px rgba(46, 32, 22, 0.3);
+}
+
+/* Kilau lembut yang menyapu banner secara berkala */
+.paket-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.22) 50%, transparent 100%);
+  transform: skewX(-12deg);
+  animation: paketShine 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes paketShine {
+  0% { left: -60%; }
+  55% { left: 140%; }
+  100% { left: 140%; }
+}
+
+.paket-banner-content {
+  max-width: 60%;
+}
+
+.paket-banner-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #f3dfc9;
+  margin-bottom: 0.5rem;
+}
+
+.paket-banner-title {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.paket-banner-desc {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.paket-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  background: #fff;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  transition: gap 0.25s ease, background 0.25s ease;
+}
+
+.paket-banner:hover .paket-banner-btn {
+  gap: 0.85rem;
+  background: #f7e8dc;
+}
+
+.paket-banner-visual {
+  flex-shrink: 0;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+}
+
+.paket-banner-count {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.paket-banner-count-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 768px) {
+  .paket-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .paket-banner-content {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.paket-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000; /* di atas tombol WhatsApp mengambang (9999) */
+  background: rgba(46, 32, 22, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: paketOverlayIn 0.3s ease both;
+}
+
+.paket-modal-overlay.closing {
+  animation: paketOverlayOut 0.28s ease both;
+}
+
+.paket-modal {
+  background: linear-gradient(180deg, #fffdfb 0%, #faf5ef 100%);
+  width: 100%;
+  max-width: 1100px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 30px 80px rgba(46, 32, 22, 0.35);
+  padding: 2rem 1.75rem;
+  animation: paketModalIn 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.paket-modal-overlay.closing .paket-modal {
+  animation: paketModalOut 0.28s ease both;
+}
+
+.paket-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.paket-modal-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--primary-color);
+  margin-bottom: 0.35rem;
+}
+
+.paket-modal-title {
+  font-size: 1.75rem;
+  letter-spacing: 1px;
+  color: var(--text-dark);
+}
+
+.paket-modal-subtitle {
+  margin-top: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.paket-modal-chip {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-left: 0.25rem;
+}
+
+.paket-modal-close {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-dark);
+  transition: all 0.25s ease;
+}
+
+.paket-modal-close:hover {
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.paket-modal-item {
+  animation: paketItemIn 0.5s ease both;
+}
+
+@keyframes paketOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes paketOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes paketModalIn {
+  from { opacity: 0; transform: translateY(48px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes paketModalOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(28px) scale(0.96); }
+}
+
+@keyframes paketItemIn {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* AOS menyembunyikan elemen sampai ada scroll — di dalam modal tidak ada
+   scroll event dokumen, jadi paksa kartu langsung terlihat. */
+.paket-modal [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ===== Varian 1: banner + strip thumbnail ===== */
+.paket-banner-visual-thumbs {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.paket-banner-thumbs {
+  display: flex;
+  align-items: center;
+}
+
+.paket-banner-thumb {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  margin-left: -20px;
+  background: #fff;
+  transition: transform 0.25s ease;
+}
+
+.paket-banner-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Foto ke-2 dst diblur sebagai "bocoran" — isi lengkap baru terlihat di modal */
+.paket-banner-thumb.is-blurred img {
+  filter: blur(5px);
+  transform: scale(1.15);
+}
+
+.paket-banner-thumb.is-blurred::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(74, 59, 50, 0.2);
+}
+
+.paket-banner-thumb:first-child {
+  margin-left: 0;
+}
+
+.paket-banner:hover .paket-banner-thumb {
+  transform: translateY(-4px);
+}
+
