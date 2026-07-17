@@ -366,6 +366,19 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 2rem 4rem;
 }
 
+/* Extra breathing room below the fixed navbar. .app-container already adds more
+   padding-top on mobile (header wraps to two rows there), so add less extra
+   margin at that breakpoint to avoid stacking two large gaps on top of each other. */
+.perawatan-hero {
+  margin-top: 64px;
+}
+
+@media (max-width: 992px) {
+  .perawatan-hero {
+    margin-top: 20px;
+  }
+}
+
 /* Tabs */
 .tabs-container {
   display: flex;

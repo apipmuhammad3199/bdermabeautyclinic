@@ -140,7 +140,7 @@ function Perawatan() {
     <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
       <Header />
       
-      <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '30px', paddingBottom: '4rem' }}>
+      <section className="catalog-container perawatan-hero" data-aos="fade-up" style={{ paddingBottom: '4rem' }}>
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
           <h2 className="section-title-grey" style={{ color: 'var(--primary-color)' }}>HALAMAN PERAWATAN</h2>
           <p style={{ color: 'var(--text-light)', marginTop: '1rem' }}>
@@ -167,7 +167,6 @@ function Perawatan() {
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowPaketModal(true); }}
           >
             <div className="paket-banner-content">
-              <span className="paket-banner-eyebrow">✨ Promo Spesial</span>
               <h3 className="paket-banner-title">PAKET TREATMENT</h3>
               <p className="paket-banner-desc">
                 {paketTreatments.length} paket pilihan dengan harga spesial untuk kulit sehat &amp; glowing
@@ -218,10 +217,9 @@ function Perawatan() {
           <div className="paket-modal" onClick={(e) => e.stopPropagation()}>
             <div className="paket-modal-header">
               <div className="paket-modal-heading">
-                <span className="paket-modal-eyebrow">✨ Promo Spesial</span>
                 <h2 className="paket-modal-title">PAKET TREATMENT</h2>
                 <p className="paket-modal-subtitle">
-                  {paketTreatments.length} paket pilihan dengan diskon <span className="paket-modal-chip">45% OFF</span>
+                  {paketTreatments.length} paket pilihan untuk kulit sehat &amp; glowing
                 </p>
               </div>
               <button
@@ -240,7 +238,7 @@ function Perawatan() {
                   className="paket-modal-item"
                   style={{ animationDelay: `${0.1 + index * 0.08}s` }}
                 >
-                  <TreatmentCard treatment={{ ...treatment, effectiveDiscount: 45 }} />
+                  <TreatmentCard treatment={{ ...treatment, effectiveDiscount: 0, endDate: null, discount: 0 }} />
                 </div>
               ))}
             </div>
