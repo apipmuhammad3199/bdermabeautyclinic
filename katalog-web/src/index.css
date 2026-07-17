@@ -113,6 +113,12 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
+.nav-links-scroll {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 @media (max-width: 992px) {
   .header {
     flex-direction: column;
@@ -140,32 +146,44 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     padding: 0 1rem 0.5rem 1rem;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: center;
     border-bottom: none;
     transform: none;
     opacity: 1;
     pointer-events: auto;
-    
-    /* Horizontal scroll */
+    width: 100%;
+  }
+
+  /* Only the links scroll horizontally — kept separate from the contact
+     button so its dropdown isn't clipped by this container's overflow. */
+  .nav-links-scroll {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    width: 100%;
-    
+
     /* Hide scrollbar */
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
-  .desktop-nav::-webkit-scrollbar {
+
+  .nav-links-scroll::-webkit-scrollbar {
     display: none;
   }
-  
+
+  .social-links.click-dropdown {
+    flex-shrink: 0;
+  }
+
   .app-container {
     padding-top: 130px;
   }
-  
+
   .click-dropdown-content {
     position: absolute;
     top: 100%;
@@ -176,7 +194,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (min-width: 769px) {
-  .desktop-nav {
+  .nav-links-scroll {
     gap: 2rem;
   }
 }

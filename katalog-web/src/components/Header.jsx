@@ -59,13 +59,15 @@ function Header() {
       </button>
 
       <nav className={`desktop-nav ${isMobileMenuOpen ? 'mobile-open' : ''}`} ref={mobileMenuRef}>
-        <Link to="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Beranda</Link>
-        <Link to="/products" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Skincare</Link>
-        <Link to="/perawatan" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Perawatan</Link>
-        <Link to="/promo" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Promo Treatment</Link>
-        <Link to="/before-after" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Before After</Link>
-        <Link to="/videos" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Enef Channel</Link>
-        <a href="/" onClick={(e) => handleNavClick(e, 'lokasi')} className="nav-link">Klinik</a>
+        <div className="nav-links-scroll">
+          <Link to="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Beranda</Link>
+          <Link to="/products" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Skincare</Link>
+          <Link to="/perawatan" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Perawatan</Link>
+          <Link to="/promo" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Promo Treatment</Link>
+          <Link to="/before-after" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Before After</Link>
+          <Link to="/videos" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>Enef Channel</Link>
+          <a href="/" onClick={(e) => handleNavClick(e, 'lokasi')} className="nav-link">Klinik</a>
+        </div>
 
         <div className="social-links click-dropdown" ref={contactDropdownRef}>
           <button 
