@@ -201,6 +201,21 @@ export const CMSProvider = ({ children }) => {
     // Listen to treatments
     const unsubTreatments = onSnapshot(collection(db, 'treatments'), (snapshot) => {
       const treatmentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Inject local LHALA PEEL TREATMENT
+      if (!treatmentsData.find(t => t.name === 'LHALA PEEL TREATMENT')) {
+        treatmentsData.push({
+          id: 'local_lhala_peel',
+          name: 'LHALA PEEL TREATMENT',
+          price: '', // Removed price as requested
+          discount: 0,
+          pdfLink: '/assets/perawatan/LHALA PEEL TREATMENT.pdf',
+          image: '/assets/images_enif/LHALA PEEL TREATMENT.png', // Set image path for the uploaded image
+          isNew: true, // Flag for the New Treatment badge
+          createdAt: Date.now()
+        });
+      }
+      
       treatmentsData.sort((a, b) => b.createdAt - a.createdAt);
       setTreatments(treatmentsData);
     });

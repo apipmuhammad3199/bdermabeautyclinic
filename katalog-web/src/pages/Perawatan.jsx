@@ -26,6 +26,7 @@ const paketThumbSrc = (t) => {
 };
 
 const CATEGORY_ORDER = [
+  (name) => name.includes("lhala peel"),
   (name) => name.includes("facial"),
   (name) => name.includes("whitening"),
   (name) => name.includes("melasma") || name.includes("flek") || name.includes("flex"),

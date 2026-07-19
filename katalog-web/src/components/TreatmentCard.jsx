@@ -87,7 +87,11 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
 
   return (
     <div className="treatment-card group" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
-      {getDiscountBadge(activeDiscount)}
+      {treatment.isNew ? (
+        <div className="badge" style={{ backgroundColor: 'var(--primary-color)', padding: '0.4rem 1rem', borderRadius: '0 0 0 8px', fontWeight: 'bold' }}>NEW TREATMENT</div>
+      ) : (
+        getDiscountBadge(activeDiscount)
+      )}
       
       <div className="card-image-container">
         {displayImage ? (
