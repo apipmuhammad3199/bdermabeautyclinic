@@ -258,7 +258,7 @@ function Admin() {
 
   const handleEditBa = (ba) => {
     setEditingBaId(ba.id);
-    setBaTitle(ba.title === "Treatment By Enef Clinic" ? "" : ba.title);
+    setBaTitle(ba.title === "Treatment By B'DERMABEAUTY CLINIC" ? "" : ba.title);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -276,8 +276,8 @@ function Admin() {
         url = await compressImageToBase64(baFile);
       }
       
-      const title = baTitle || "Treatment By Enef Clinic";
-      const doctor = "Treatment by : dr. Enef";
+      const title = baTitle || "Treatment By B'DERMABEAUTY CLINIC";
+      const doctor = "Treatment by : Tim Dokter Sp.DVE B'DERMABEAUTY";
       
       if (editingBaId) {
         const updateData = { title, doctor };

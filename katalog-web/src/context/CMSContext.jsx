@@ -9,11 +9,11 @@ export const CMSContext = createContext();
 export const CMSProvider = ({ children }) => {
   const [treatments, setTreatments] = useState([]);
   const [promos, setPromos] = useState([
-    { id: 'default1', url: `${import.meta.env.BASE_URL}assets/Slide1.jpg` },
-    { id: 'default2', url: `${import.meta.env.BASE_URL}assets/Slide2.jpg` },
-    { id: 'default3', url: `${import.meta.env.BASE_URL}assets/Slide3.jpg` },
-    { id: 'default4', url: `${import.meta.env.BASE_URL}assets/Slide4.jpeg` },
-    { id: 'default5', url: `${import.meta.env.BASE_URL}assets/Slide5.jpeg` },
+    { id: 'default1', url: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1600&q=85' },
+    { id: 'default2', url: 'https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=1600&q=85' },
+    { id: 'default3', url: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1600&q=85' },
+    { id: 'default4', url: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=85' },
+    { id: 'default5', url: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1600&q=85' },
   ]);
   const [videos, setVideos] = useState([]);
   const [promoSettings, setPromoSettings] = useState({ 
@@ -41,11 +41,11 @@ export const CMSProvider = ({ children }) => {
           const promosSnap = await getDocs(collection(db, 'promos'));
           if (promosSnap.empty) {
             const defaultPromos = [
-              { url: `${import.meta.env.BASE_URL}assets/Slide1.jpg` },
-              { url: `${import.meta.env.BASE_URL}assets/Slide2.jpg` },
-              { url: `${import.meta.env.BASE_URL}assets/Slide3.jpg` },
-              { url: `${import.meta.env.BASE_URL}assets/Slide4.jpeg` },
-              { url: `${import.meta.env.BASE_URL}assets/Slide5.jpeg` }
+              { url: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1600&q=85' },
+              { url: 'https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=1600&q=85' },
+              { url: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1600&q=85' },
+              { url: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=85' },
+              { url: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1600&q=85' }
             ];
             for (const p of defaultPromos) await addDoc(collection(db, 'promos'), { ...p, createdAt: now });
           }
@@ -65,9 +65,24 @@ export const CMSProvider = ({ children }) => {
               "Threadlift Columella", "Acne Recovery", "Ultimate Acne Booster", "Cauter Skin Tag", "Treatment Skin Tag",
               "Acne Recovery", "IPL Hair Removal (Ketiak)", "Skinbooster Acne"
             ];
+            const cleanUnsplashBAs = [
+              "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&w=800&q=85",
+              "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85"
+            ];
             const defaultBeforeAfters = Array.from({ length: 13 }, (_, i) => ({
               title: correctTitles[i],
-              img: `${import.meta.env.BASE_URL}assets/before_after/before${i + 1}.jpeg`
+              img: cleanUnsplashBAs[i % cleanUnsplashBAs.length]
             }));
             for (const ba of defaultBeforeAfters) await addDoc(collection(db, 'before_after'), { ...ba, createdAt: now });
           }
@@ -75,11 +90,11 @@ export const CMSProvider = ({ children }) => {
           const skincareSnap = await getDocs(collection(db, 'skincare_products'));
           if (skincareSnap.empty) {
             const defaultSkincare = [
-              { name: 'Body Whitening', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare1.jpeg`, price: '83000', description: 'Body Whitening SPF 20 Strawberry.' },
-              { name: 'Facial Wash', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare2.jpeg`, price: '83000', description: 'Bye Acne Facial Wash.' },
-              { name: 'Toner', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare3.jpeg`, price: '83000', description: 'Bye Acne Toner.' },
-              { name: 'Gentle Cleanser', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare4.jpeg`, price: '53000', description: 'Cera Niacin Gentle Cleanser.' },
-              { name: 'Night Cream', image: `${import.meta.env.BASE_URL}assets/product_skincare/skincare5.jpeg`, price: '83000', description: 'Dreamy Glow HyaluMoist.' },
+              { name: 'Body Whitening', image: 'https://images.unsplash.com/photo-1608248597309-45da1707ad33?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Body Whitening SPF 20 Strawberry.' },
+              { name: 'Facial Wash', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Bye Acne Facial Wash.' },
+              { name: 'Toner', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Bye Acne Toner.' },
+              { name: 'Gentle Cleanser', image: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=800&q=85', price: '53000', description: 'Cera Niacin Gentle Cleanser.' },
+              { name: 'Night Cream', image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Dreamy Glow HyaluMoist.' },
             ];
             for (const s of defaultSkincare) await addDoc(collection(db, 'skincare_products'), { ...s, createdAt: now });
           }
@@ -174,29 +189,101 @@ export const CMSProvider = ({ children }) => {
     };
     forceSyncImages();
 
-    // ONE-TIME FORCE RE-SEED TREATMENTS V3
-    const forceReseedTreatmentsV3 = async () => {
+    // ONE-TIME FORCE RE-SEED CLEAN UNSPLASH V6
+    const forceReseedCleanUnsplashV6 = async () => {
       try {
-        const seedFlag = localStorage.getItem('hasReseededTreatmentsV3');
+        const seedFlag = localStorage.getItem('hasReseededCleanUnsplashV6');
         if (seedFlag || !defaultTreatments) return;
         
-        console.log("Wiping and re-seeding treatments...");
+        console.log("Wiping and re-seeding clean Unsplash collections...");
+        const now = Date.now();
+
+        // 1. Promos
+        const promosSnap = await getDocs(collection(db, 'promos'));
+        for (const docSnap of promosSnap.docs) {
+          await deleteDoc(doc(db, 'promos', docSnap.id));
+        }
+        const cleanPromos = [
+          { url: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1600&q=85' },
+          { url: 'https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=1600&q=85' },
+          { url: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1600&q=85' },
+          { url: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1600&q=85' },
+          { url: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1600&q=85' }
+        ];
+        for (const p of cleanPromos) await addDoc(collection(db, 'promos'), { ...p, createdAt: now });
+
+        // 2. Skincare Products
+        const skincareSnap = await getDocs(collection(db, 'skincare_products'));
+        for (const docSnap of skincareSnap.docs) {
+          await deleteDoc(doc(db, 'skincare_products', docSnap.id));
+        }
+        const cleanSkincare = [
+          { name: 'Body Whitening', image: 'https://images.unsplash.com/photo-1608248597309-45da1707ad33?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Body Whitening SPF 20 Strawberry.' },
+          { name: 'Facial Wash', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Bye Acne Facial Wash.' },
+          { name: 'Toner', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Bye Acne Toner.' },
+          { name: 'Gentle Cleanser', image: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=800&q=85', price: '53000', description: 'Cera Niacin Gentle Cleanser.' },
+          { name: 'Night Cream', image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=800&q=85', price: '83000', description: 'Dreamy Glow HyaluMoist.' }
+        ];
+        for (const s of cleanSkincare) await addDoc(collection(db, 'skincare_products'), { ...s, createdAt: now });
+
+        // 3. Before & After
+        const baSnap = await getDocs(collection(db, 'before_after'));
+        for (const docSnap of baSnap.docs) {
+          await deleteDoc(doc(db, 'before_after', docSnap.id));
+        }
+        const correctTitles = [
+          "Microdermabrasion", "Injeksi Acne", "Meso Non-Needle + RF Wajah", "Thread Lift Hidung", "Thread Lift Hidung",
+          "Threadlift Columella", "Acne Recovery", "Ultimate Acne Booster", "Cauter Skin Tag", "Treatment Skin Tag",
+          "Acne Recovery", "IPL Hair Removal (Ketiak)", "Skinbooster Acne"
+        ];
+        const cleanUnsplashBAs = [
+          "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1512290900673-7002df3ce6a9?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&w=800&q=85",
+          "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=85"
+        ];
+        const defaultBeforeAfters = Array.from({ length: 13 }, (_, i) => ({
+          title: correctTitles[i],
+          img: cleanUnsplashBAs[i % cleanUnsplashBAs.length]
+        }));
+        for (const ba of defaultBeforeAfters) await addDoc(collection(db, 'before_after'), { ...ba, createdAt: now });
+
+        // 4. Treatments
         const treatmentsSnap = await getDocs(collection(db, 'treatments'));
         for (const docSnap of treatmentsSnap.docs) {
           await deleteDoc(doc(db, 'treatments', docSnap.id));
         }
-        
         for (const t of defaultTreatments) {
-          await addDoc(collection(db, 'treatments'), { ...t, createdAt: Date.now() });
+          await addDoc(collection(db, 'treatments'), { ...t, createdAt: now });
         }
+
+        // 5. Videos
+        const videosSnap = await getDocs(collection(db, 'videos'));
+        for (const docSnap of videosSnap.docs) {
+          await deleteDoc(doc(db, 'videos', docSnap.id));
+        }
+        const cleanVideos = [
+          { title: "B'DERMABEAUTY Aesthetic Clinic", src: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+          { title: "Dermatological Excellence Samarinda", src: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        ];
+        for (const v of cleanVideos) await addDoc(collection(db, 'videos'), { ...v, createdAt: now });
         
-        localStorage.setItem('hasReseededTreatmentsV3', 'true');
-        console.log("Re-seed complete!");
+        localStorage.setItem('hasReseededCleanUnsplashV6', 'true');
+        console.log("Re-seed clean Unsplash V6 complete!");
       } catch (err) {
         console.error(err);
       }
     };
-    forceReseedTreatmentsV3();
+    forceReseedCleanUnsplashV6();
 
     // Listen to treatments
     const unsubTreatments = onSnapshot(collection(db, 'treatments'), (snapshot) => {
@@ -210,7 +297,7 @@ export const CMSProvider = ({ children }) => {
           price: '', // Removed price as requested
           discount: 0,
           pdfLink: '/assets/perawatan/LHALA PEEL TREATMENT.pdf',
-          image: '/assets/images_enif/LHALA PEEL TREATMENT.png', // Set image path for the uploaded image
+          image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85',
           isNew: true, // Flag for the New Treatment badge
           createdAt: Date.now()
         });

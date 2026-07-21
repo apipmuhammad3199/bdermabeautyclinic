@@ -12,42 +12,61 @@ const ProductCard = ({ product }) => {
   };
 
   const waText = encodeURIComponent(`Halo B'DERMABEAUTY CLINIC Premiere, saya ingin pesan produk Skincare: ${product.name}`);
-  const waUrl = `https://api.whatsapp.com/send?phone=628214464406&text=${waText}`;
+  const waUrl = `https://wa.me/message/ZA7HJ5GJNF7YL1`;
 
   return (
     <>
       <div 
-        className="product-card card-glass group relative flex flex-col justify-between p-5 rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[#18181B] transition-all duration-300 hover:border-[#D4AF37] hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]" 
-        style={{ cursor: 'pointer', textDecoration: 'none', display: 'flex' }}
+        className="product-card card-glass group relative flex flex-col justify-between p-5 rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[#18181B] transition-all duration-300 hover:border-[#D4AF37] hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] h-full overflow-hidden" 
+        style={{ cursor: 'pointer', textDecoration: 'none', display: 'flex', position: 'relative' }}
         onClick={() => setIsModalOpen(true)}
       >
-        <div className="badge" style={{ background: 'rgba(212, 175, 55, 0.15)', color: '#D4AF37', border: '1px solid rgba(212, 175, 55, 0.3)', padding: '0.3rem 0.8rem', fontSize: '0.65rem', fontWeight: '600', tracking: '1px', position: 'absolute', top: 0, right: 0, borderBottomLeftRadius: '8px' }}>
+        <div 
+          className="badge" 
+          style={{ 
+            background: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)', 
+            color: '#0F0F10', 
+            padding: '0.35rem 0.85rem', 
+            fontSize: '0.65rem', 
+            fontWeight: '700', 
+            letterSpacing: '1px', 
+            position: 'absolute', 
+            top: 0, 
+            right: 0, 
+            borderBottomLeftRadius: '10px',
+            borderTopRightRadius: '16px',
+            zIndex: 10,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
+          }}
+        >
           PREMIERE LINE
         </div>
 
-        <div className="product-image-container relative w-full h-56 bg-[#141416] rounded-xl overflow-hidden mb-4 flex items-center justify-center border border-[rgba(212,175,55,0.15)]">
+        <div className="product-image-container relative w-full aspect-[4/3] bg-[#141416] rounded-xl overflow-hidden mb-4 flex items-center justify-center border border-[rgba(212,175,55,0.15)] mt-2">
           <img 
-            src={product.image && (product.image.startsWith('data:') || product.image.startsWith('http') || product.image.includes('assets')) ? product.image : `${import.meta.env.BASE_URL}assets/product_skincare/${product.image}`} 
+            src={product.image && product.image.startsWith('http') ? product.image : 'https://images.unsplash.com/photo-1608248597309-45da1707ad33?auto=format&fit=crop&w=800&q=85'} 
             alt={product.name} 
-            className="product-image w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className="product-image w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <div className="product-content text-center flex-grow">
-          <h3 className="product-name font-['Cinzel',serif] text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] uppercase tracking-wide mb-2">
+        
+        <div className="product-content text-center flex-grow flex flex-col justify-between mb-4">
+          <h3 className="product-name font-['Cinzel',serif] text-sm md:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] uppercase tracking-wide line-clamp-2 min-h-[2.4rem] flex items-center justify-center">
             {product.name}
           </h3>
           {product.price && (
-            <p className="font-bold text-[#FCF6BA] text-sm mb-3">
+            <p className="font-bold text-[#FCF6BA] text-sm md:text-base mt-2">
               {formatPrice(product.price)}
             </p>
           )}
         </div>
+        
         <a 
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="btn-gold w-full text-center py-2 rounded-xl font-bold text-xs text-[#0F0F10] tracking-wide shadow-[0_4px_15px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_20px_rgba(212,175,55,0.45)] transition-all duration-300"
+          className="btn-gold w-full text-center py-2.5 rounded-xl font-bold text-xs text-[#0F0F10] tracking-wide shadow-[0_4px_15px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_20px_rgba(212,175,55,0.45)] transition-all duration-300"
         >
           Order Skincare
         </a>
@@ -82,7 +101,7 @@ const ProductCard = ({ product }) => {
               &times;
             </button>
             <img 
-              src={product.image && (product.image.startsWith('data:') || product.image.startsWith('http') || product.image.includes('assets')) ? product.image : `${import.meta.env.BASE_URL}assets/product_skincare/${product.image}`} 
+              src={product.image && product.image.startsWith('http') ? product.image : 'https://images.unsplash.com/photo-1608248597309-45da1707ad33?auto=format&fit=crop&w=800&q=85'} 
               alt={product.name} 
               style={{ width: '100%', height: '240px', objectFit: 'contain', borderRadius: '12px', backgroundColor: '#141416' }}
             />
@@ -93,18 +112,62 @@ const ProductCard = ({ product }) => {
               </p>
             )}
             {product.description && (
-              <p style={{ color: '#CCCCCC', lineHeight: '1.6', fontSize: '0.9rem', whiteSpace: 'pre-wrap', marginTop: '0.5rem' }}>
+              <p style={{ color: '#CCCCCC', lineHeight: '1.6', fontSize: '0.9rem', whiteSpace: 'pre-wrap', marginTop: '0.25rem' }}>
                 {product.description}
               </p>
             )}
-            <a 
-              href={waUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-gold w-full text-center py-3 rounded-xl font-bold text-sm text-[#0F0F10] mt-2"
-            >
-              Pesan Sekarang via WA
-            </a>
+
+            <div style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#D4AF37', letterSpacing: '1px', uppercase: 'true' }}>
+                ORDER VIA MARKETPLACE & WA
+              </div>
+              <a 
+                href="https://wa.me/message/ZA7HJ5GJNF7YL1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-gold w-full text-center py-2.5 rounded-xl font-bold text-xs text-[#0F0F10]"
+              >
+                💬 Order via WhatsApp Admin
+              </a>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                <a 
+                  href="https://shopee.co.id/bdermabeauty_official_shop?smtt=0.288148504-1666797165.9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#EE4D2D', color: '#FFF', padding: '0.55rem 0.25rem', borderRadius: '10px',
+                    textAlign: 'center', fontSize: '0.75rem', fontWeight: '700', textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                  }}
+                >
+                  Shopee
+                </a>
+                <a 
+                  href="https://www.tokopedia.com/bder?utm_source=salinlink&utm_medium=share&utm_campaign=Shop-72921724-14622950-271022-no"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#03AC0E', color: '#FFF', padding: '0.55rem 0.25rem', borderRadius: '10px',
+                    textAlign: 'center', fontSize: '0.75rem', fontWeight: '700', textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                  }}
+                >
+                  Tokopedia
+                </a>
+                <a 
+                  href="https://s.lazada.co.id/s.RQxCM"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundColor: '#0F146D', color: '#FFF', padding: '0.55rem 0.25rem', borderRadius: '10px',
+                    textAlign: 'center', fontSize: '0.75rem', fontWeight: '700', textDecoration: 'none',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                  }}
+                >
+                  Lazada
+                </a>
+              </div>
+            </div>
           </div>
         </div>,
         document.body
@@ -114,3 +177,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+

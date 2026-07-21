@@ -17,7 +17,7 @@ doc.pipe(fs.createWriteStream(outputPath));
 // Title Page
 doc.fontSize(24).font('Helvetica-Bold').text('LHALA PEEL TREATMENT', { align: 'center' });
 doc.moveDown(2);
-doc.fontSize(14).font('Helvetica').text('enef clinic', { align: 'center' });
+doc.fontSize(14).font('Helvetica').text("B'DERMABEAUTY CLINIC Premiere", { align: 'center' });
 doc.addPage();
 
 // Content

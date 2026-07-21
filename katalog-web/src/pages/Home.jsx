@@ -283,30 +283,30 @@ function Home() {
             {/* Left Info Column */}
             <div className="maps-info-left card-glass" style={{ background: '#18181B', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '20px', padding: '2rem', backdropFilter: 'blur(12px)' }}>
               <h3 style={{ fontFamily: 'Cinzel, serif', fontSize: '1.4rem', color: '#FAFAFA', marginBottom: '0.8rem', background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                B'DERMABEAUTY CLINIC Premiere
+                B'DERMABEAUTY CLINIC Premiere (Samarinda)
               </h3>
               <p className="maps-address" style={{ color: '#CCCCCC', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.8rem' }}>
-                Ruko Emporium Citra Niaga No. 10<br/>Jl. Palagan Ambarawa, Ngrawan Kidul, Bawen,<br/>Jawa Tengah, Indonesia.
+                Jl. Siradj Salman No.08, RT.52, Air Hitam,<br/>Kec. Samarinda Ulu, Kota Samarinda,<br/>Kalimantan Timur 75117
               </p>
               
               <h4 style={{ fontFamily: 'Cinzel, serif', fontSize: '1.1rem', color: '#FCF6BA', marginBottom: '1rem', letterSpacing: '1px' }}>
                 ✦ JAM OPERASIONAL
               </h4>
               <div className="op-hours-table" style={{ background: '#141416', borderRadius: '12px', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '1rem' }}>
-                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(212, 175, 55, 0.1)', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Senin - Sabtu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WIB</span></div>
-                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Minggu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WIB</span></div>
+                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(212, 175, 55, 0.1)', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Senin - Sabtu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WITA</span></div>
+                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Minggu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WITA</span></div>
               </div>
 
               <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                 <a 
-                  href="https://maps.google.com/?q=Enef+clinic+Bawen" 
+                  href="https://g.co/kgs/J6jYSq" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="btn-gold" 
                   style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '10px', padding: '0.85rem' }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
-                  Petunjuk Arah Google Maps
+                  Petunjuk Arah Google Maps Samarinda
                 </a>
               </div>
             </div>
@@ -315,23 +315,23 @@ function Home() {
             <div className="maps-container-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.3)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', minHeight: '320px' }}>
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.07705354904!2d110.40742187515155!3d-7.231998592774136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708170d3752e25%3A0xe5f92ff4cbffb1e6!2sEnef%20clinic!5e0!3m2!1sid!2sid!4v1709618195846!5m2!1sid!2sid" 
+                  src="https://maps.google.com/maps?q=Bdermabeauty+Clinic+Siradj+Salman+Samarinda&t=&z=16&ie=UTF8&iwloc=&output=embed" 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0, minHeight: '320px', display: 'block' }} 
                   allowFullScreen="" 
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="B'DERMABEAUTY CLINIC Premiere Location"
+                  title="B'DERMABEAUTY CLINIC Premiere Samarinda Location"
                 ></iframe>
               </div>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', height: '180px' }}>
                 <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.25)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
-                  <img src={`${import.meta.env.BASE_URL}assets/Maps1.jpeg`} alt="B'DERMABEAUTY CLINIC Exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
+                  <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=85" alt="B'DERMABEAUTY CLINIC Exterior Suite" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
                 </div>
                 <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.25)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
-                  <img src={`${import.meta.env.BASE_URL}assets/Maps2.jpeg`} alt="B'DERMABEAUTY CLINIC Interior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
+                  <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85" alt="B'DERMABEAUTY CLINIC Interior Suite" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
                 </div>
               </div>
             </div>

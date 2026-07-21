@@ -23,7 +23,7 @@ try {
     console.log('Nothing to commit or commit failed. Continuing...');
   }
   
-  execSync('git push --force https://github.com/apipmuhammad3199/enif-clinic-katalog.git master:gh-pages', { stdio: 'inherit' });
+  execSync('git push --force https://github.com/apipmuhammad3199/bdermabeautyclinic.git HEAD:gh-pages', { stdio: 'inherit' });
   console.log('Successfully deployed to gh-pages!');
 } catch (error) {
   console.error('Deployment failed:', error);
