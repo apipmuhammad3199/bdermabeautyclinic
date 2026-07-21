@@ -46,6 +46,8 @@ const isUsablePdfLink = (link) => Boolean(link) && link !== '#' && !link.startsW
 const TreatmentCard = ({ treatment, isProduct = false }) => {
   const { perawatanPDFs } = useContext(CMSContext);
 
+  if (!treatment) return null;
+
   const matchedPdf = perawatanPDFs?.find(p => p.name?.trim().toLowerCase() === treatment.name?.trim().toLowerCase());
   
   const localMatch = localPdfs.find(filename => {

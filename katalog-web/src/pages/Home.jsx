@@ -94,22 +94,19 @@ function Home() {
     return { ...treatment, effectiveDiscount };
   });
 
-  const treatments55 = processedTreatments.filter(t => t.effectiveDiscount === 55 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  const treatments50 = processedTreatments.filter(t => t.effectiveDiscount === 50 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  const treatments45 = processedTreatments.filter(t => t.effectiveDiscount === 45 && t.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const treatments55 = processedTreatments.filter(t => t.effectiveDiscount === 55 && (t.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
+  const treatments50 = processedTreatments.filter(t => t.effectiveDiscount === 50 && (t.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
+  const treatments45 = processedTreatments.filter(t => t.effectiveDiscount === 45 && (t.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
   
-  // Logika Semua Layanan: 
-  // Jika sedang mencari (searchTerm tidak kosong), tampilkan semuanya.
-  // Jika tidak mencari, sembunyikan yang sedang promo agar tidak dobel.
   const treatmentsAll = processedTreatments.filter(t => {
-    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (t.name || '').toLowerCase().includes(searchTerm.toLowerCase());
     if (searchTerm === '') {
       return t.effectiveDiscount === 0 && matchesSearch;
     }
     return matchesSearch;
   });
 
-  const searchedProducts = skincareProducts.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const searchedProducts = (skincareProducts || []).filter(p => (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
 
   // Duplicate array for infinite marquee effect
   const marqueeProducts = [...(skincareProducts || []), ...(skincareProducts || [])];

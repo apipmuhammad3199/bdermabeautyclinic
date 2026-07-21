@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom';
 const ProductCard = ({ product }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  if (!product) return null;
+
   const formatPrice = (price) => {
     if (!price) return '';
     return 'Rp. ' + Number(price).toLocaleString('id-ID');
