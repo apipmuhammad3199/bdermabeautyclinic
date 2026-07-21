@@ -2,12 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/assets/logo.png" />
-    <link rel="apple-touch-icon" href="/assets/logo.png" />
-    <link rel="shortcut icon" href="/assets/logo.png" />
+    <link rel="icon" type="image/jpeg" href="./assets/logo.png" />
+    <link rel="apple-touch-icon" href="./assets/logo.png" />
+    <link rel="shortcut icon" href="./assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="deploy-timestamp" content="2026-07-06T01:42:00Z" />
-    <title>Enef Clinic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>B'DERMABEAUTY CLINIC Premiere</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -15,7 +18,7 @@
       // Single Page Apps for GitHub Pages: restore the real path after 404.html redirected it
       // https://github.com/rafgraph/spa-github-pages
       (function (l) {
-        if (l.search[1] === '/') {
+        if (l.search && l.search[1] === '/') {
           var decoded = l.search
             .slice(1)
             .split('&')
@@ -23,12 +26,12 @@
               return s.replace(/~and~/g, '&');
             })
             .join('?');
-          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+          window.history.replaceState(null, null, (l.pathname.slice(-1) === '/' ? l.pathname.slice(0, -1) : l.pathname) + decoded + l.hash);
         }
       })(window.location);
     </script>
-    <script type="module" crossorigin src="/assets/index-BE-UYAJb.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-Bn2_Jl8U.css">
+    <script type="module" crossorigin src="./assets/index-DPVW6Vrn.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-bJWbHHO9.css">
   </head>
   <body>
     <div id="root"></div>
