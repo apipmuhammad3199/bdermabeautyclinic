@@ -679,8 +679,8 @@ function Admin() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem', padding: '0 1rem' }}>
-          <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Logo" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px', objectFit: 'cover' }} />
-          <h2 style={{ marginBottom: 0, padding: 0 }}>Enef CMS</h2>
+          <img src={`${import.meta.env.BASE_URL}assets/logo.svg`} alt="B'DERMABEAUTY Logo" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px', objectFit: 'contain' }} />
+          <h2 style={{ marginBottom: 0, padding: 0, fontSize: '1.2rem' }}>B'DERMABEAUTY CMS</h2>
         </div>
         <div className="sidebar-menu">
           <button className={`sidebar-btn ${activeTab === 'promo' ? 'active' : ''}`} onClick={() => setActiveTab('promo')}> Kelola Promo</button>

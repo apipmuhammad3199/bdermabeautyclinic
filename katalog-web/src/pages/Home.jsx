@@ -128,15 +128,46 @@ function Home() {
     <div className="app-container">
       <Header />
 
-      {/* Promo Slider */}
-      <PromoSlider />
+      {/* Banner Promo / Slider Container */}
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <div className="card-glass overflow-hidden rounded-2xl border border-[rgba(212,175,55,0.25)] shadow-[0_10px_35px_rgba(0,0,0,0.6)] backdrop-blur-md">
+          <PromoSlider />
+        </div>
+      </div>
 
       {/* Hero Section */}
-      <section id="beranda" className="hero" data-aos="fade-up">
-        <h3 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--text-light)', marginBottom: '0.5rem' }}>Eksklusif Untuk Anda</h3>
-        <h1>Telah Menjawab Permasalahan Kulit </h1>
-        <p>Temukan rangkaian perawatan estetika dan produk premium kami yang dirancang khusus untuk memancarkan kecantikan dan kecerahan alami Anda.</p>
+      <section id="beranda" className="hero py-12 px-4 text-center max-w-5xl mx-auto" data-aos="fade-up">
+        {/* Badge Atas */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[rgba(212,175,55,0.3)] bg-[rgba(24,24,27,0.8)] text-[#D4AF37] text-xs font-semibold tracking-widest uppercase mb-6 shadow-[0_2px_12px_rgba(212,175,55,0.15)]">
+          <span>✦ PREMIERE MEDICAL BEAUTY & AESTHETIC</span>
+        </div>
+
+        {/* Headline Utama */}
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 font-['Cinzel',serif] text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] leading-tight">
+          Redefining Medical Beauty & Aesthetic Excellence
+        </h1>
+
+        {/* Sub-headline */}
+        <p className="text-base md:text-xl text-[#CCCCCC] max-w-2xl mx-auto mb-8 font-light leading-relaxed">
+          Unveiling Your Radiant Skin with Personalized Care
+        </p>
         
+        {/* Call To Action Buttons */}
+        <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
+          <Link 
+            to="/booking" 
+            className="btn-gold px-8 py-3.5 rounded-full font-bold text-sm tracking-wide shadow-[0_4px_20px_rgba(212,175,55,0.35)] hover:scale-105 transition-all duration-300"
+          >
+            Reservasi Konsultasi
+          </Link>
+          <Link 
+            to="/perawatan" 
+            className="px-8 py-3.5 rounded-full border border-[#D4AF37] text-[#FAFAFA] font-semibold text-sm tracking-wide bg-transparent hover:bg-[rgba(212,175,55,0.15)] hover:text-[#D4AF37] transition-all duration-300"
+          >
+            Eksplor Treatment
+          </Link>
+        </div>
+
         <div className="search-container">
           <input 
             type="text" 
@@ -244,61 +275,69 @@ function Home() {
 
 
       {/* Location Section */}
-      <section id="lokasi" style={{ backgroundColor: 'transparent', paddingTop: '1rem', paddingBottom: '2rem', marginTop: '0' }}>
+      <section id="lokasi" style={{ backgroundColor: 'transparent', paddingTop: '2rem', paddingBottom: '3rem' }}>
         <div className="maps-section-wrapper" data-aos="fade-up">
-          <div style={{ marginBottom: '0.5rem', textAlign: 'left' }}>
-            <div className="section-subtitle-gold" style={{ textAlign: 'left' }}>DAPATKAN LOKASI TERDEKAT</div>
+          <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+            <div className="section-subtitle-gold">DAPATKAN LOKASI TERDEKAT</div>
+            <h2 className="section-title-grey" style={{ fontSize: '2.2rem' }}>EXECUTIVE SUITE & KLINIK KAMI</h2>
           </div>
 
-          <div className="maps-layout">
-            <div className="maps-info-left">
-              <h2>Enef Clinic Ambarawa</h2>
-              <p className="maps-address">
+          <div className="maps-layout" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem' }}>
+            {/* Left Info Column */}
+            <div className="maps-info-left card-glass" style={{ background: '#18181B', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '20px', padding: '2rem', backdropFilter: 'blur(12px)' }}>
+              <h3 style={{ fontFamily: 'Cinzel, serif', fontSize: '1.4rem', color: '#FAFAFA', marginBottom: '0.8rem', background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                B'DERMABEAUTY CLINIC Premiere
+              </h3>
+              <p className="maps-address" style={{ color: '#CCCCCC', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.8rem' }}>
                 Ruko Emporium Citra Niaga No. 10<br/>Jl. Palagan Ambarawa, Ngrawan Kidul, Bawen,<br/>Jawa Tengah, Indonesia.
               </p>
               
-              <h3>Jam Operasional</h3>
-              <div className="op-hours-table">
-                <div className="op-row"><span>Senin</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Selasa</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Rabu</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Kamis</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Jumat</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Sabtu</span><span>11:00 - 19:00</span></div>
-                <div className="op-row"><span>Minggu</span><span>11:00 - 19:00</span></div>
+              <h4 style={{ fontFamily: 'Cinzel, serif', fontSize: '1.1rem', color: '#FCF6BA', marginBottom: '1rem', letterSpacing: '1px' }}>
+                ✦ JAM OPERASIONAL
+              </h4>
+              <div className="op-hours-table" style={{ background: '#141416', borderRadius: '12px', border: '1px solid rgba(212, 175, 55, 0.2)', padding: '1rem' }}>
+                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(212, 175, 55, 0.1)', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Senin - Sabtu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WIB</span></div>
+                <div className="op-row" style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', color: '#FAFAFA', fontSize: '0.9rem' }}><span>Minggu</span><span style={{ color: '#FCF6BA', fontWeight: 'bold' }}>11:00 - 19:00 WIB</span></div>
               </div>
 
-              <div style={{ marginTop: '2rem' }}>
-                <a href="https://api.whatsapp.com/send?phone=628214464406&text=Hai%2C%20Kak%20%F0%9F%A5%B0%0ASelamat%20Datang%20di%20Layanan%20Booking%20Online%20Enef%20Clinic%20%F0%9F%A4%8E%0A%0AKami%20informasikan%2C%20slot%20booking%20dibuka%20mulai%20jam%2011.00-19.00%0ABooking%20maksimal%20H-1%20sebelum%20kedatangan%20%F0%9F%A5%B0%0A%0ATerima%20kasih%20%F0%9F%A5%B0%0ASalam%20hangat%0AEnef%20Clinic%0A%0APesan%20ini%20dikirim%20otomatis%20oleh%20sistem" target="_blank" rel="noopener noreferrer" className="contact-us-btn" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '10px' }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="20" height="20" fill="currentColor"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zM223.9 414.8c-33 0-65.4-8.9-94-25.7l-6.7-4-69.8 18.3L72 334.1l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-                  Reservasi Sekarang
+              <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                <a 
+                  href="https://maps.google.com/?q=Enef+clinic+Bawen" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="btn-gold" 
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '10px', padding: '0.85rem' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Petunjuk Arah Google Maps
                 </a>
               </div>
             </div>
             
-            <div className="maps-container-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', flex: 1 }}>
-                <div style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', minHeight: '350px' }}>
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.07705354904!2d110.40742187515155!3d-7.231998592774136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708170d3752e25%3A0xe5f92ff4cbffb1e6!2sEnef%20clinic!5e0!3m2!1sid!2sid!4v1709618195846!5m2!1sid!2sid" 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0, minHeight: '350px', display: 'block' }} 
-                    allowFullScreen="" 
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Enef Clinic Location"
-                  ></iframe>
+            {/* Right Maps & Preview Column */}
+            <div className="maps-container-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.3)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', minHeight: '320px' }}>
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.07705354904!2d110.40742187515155!3d-7.231998592774136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708170d3752e25%3A0xe5f92ff4cbffb1e6!2sEnef%20clinic!5e0!3m2!1sid!2sid!4v1709618195846!5m2!1sid!2sid" 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0, minHeight: '320px', display: 'block' }} 
+                  allowFullScreen="" 
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="B'DERMABEAUTY CLINIC Premiere Location"
+                ></iframe>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', height: '180px' }}>
+                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.25)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
+                  <img src={`${import.meta.env.BASE_URL}assets/Maps1.jpeg`} alt="B'DERMABEAUTY CLINIC Exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
                 </div>
-                
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', height: '350px' }}>
-                  <div style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-                    <img src={`${import.meta.env.BASE_URL}assets/Maps1.jpeg`} alt="Enef Clinic Exterior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
-                  </div>
-                  <div style={{ borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
-                    <img src={`${import.meta.env.BASE_URL}assets/Maps2.jpeg`} alt="Enef Clinic Interior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
-                  </div>
+                <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(212, 175, 55, 0.25)', boxShadow: '0 4px 15px rgba(0,0,0,0.3)' }}>
+                  <img src={`${import.meta.env.BASE_URL}assets/Maps2.jpeg`} alt="B'DERMABEAUTY CLINIC Interior" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 15%', transition: 'transform 0.3s ease' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} />
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </section>

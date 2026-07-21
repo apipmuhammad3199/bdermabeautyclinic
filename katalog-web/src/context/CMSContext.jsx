@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { collection, onSnapshot, addDoc, deleteDoc, doc, setDoc } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, deleteDoc, doc, setDoc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import defaultTreatments from '../data.json';
 import { articles as defaultArticles } from '../data/articles';
@@ -32,7 +32,7 @@ export const CMSProvider = ({ children }) => {
   useEffect(() => {
     const seedDatabase = async () => {
       try {
-        const seedDocRef = doc(db, 'settings', 'seedStatusV6');
+        const seedDocRef = doc(db, 'settings', 'seedStatusV8');
         const seedDocSnap = await getDoc(seedDocRef);
         if (!seedDocSnap.exists() || !seedDocSnap.data().isSeeded) {
           console.log("Seeding database with defaults...");

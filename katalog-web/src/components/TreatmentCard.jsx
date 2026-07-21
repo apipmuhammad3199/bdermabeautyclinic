@@ -11,10 +11,11 @@ const isSameTreatmentName = (left, right) => {
   return leftName === rightName || leftName === `${rightName} 2` || `${leftName} 2` === rightName;
 };
 
-const getDiscountBadge = (discount) => {
-  if (discount === 50) return <div className="badge badge-50">50% OFF</div>;
-  if (discount === 45) return <div className="badge badge-45">45% OFF</div>;
-  return null;
+const getDiscountBadge = (discount, isProduct) => {
+  if (discount === 50) return <div className="badge" style={{ background: 'var(--gold-gradient)', color: '#0F0F10', padding: '0.35rem 0.9rem', fontSize: '0.7rem', fontWeight: 'bold' }}>50% OFF</div>;
+  if (discount === 45) return <div className="badge" style={{ background: 'var(--gold-gradient)', color: '#0F0F10', padding: '0.35rem 0.9rem', fontSize: '0.7rem', fontWeight: 'bold' }}>45% OFF</div>;
+  if (isProduct) return <div className="badge" style={{ background: 'rgba(212, 175, 55, 0.15)', color: '#D4AF37', border: '1px solid rgba(212, 175, 55, 0.3)', padding: '0.3rem 0.8rem', fontSize: '0.65rem', fontWeight: '600', tracking: '1px' }}>PREMIERE LINE</div>;
+  return <div className="badge" style={{ background: 'rgba(212, 175, 55, 0.15)', color: '#D4AF37', border: '1px solid rgba(212, 175, 55, 0.3)', padding: '0.3rem 0.8rem', fontSize: '0.65rem', fontWeight: '600', tracking: '1px' }}>DOCTOR'S CHOICE</div>;
 };
 
 const formatDate = (dateString) => {
@@ -40,18 +41,13 @@ const calculateDiscountedPrice = (priceStr, discountPercent) => {
   }).format(discountedPrice);
 };
 
-// blob: URLs are only valid within the browser session that created them (e.g. an old
-// admin-upload bug that saved URL.createObjectURL() output straight to Firestore) —
-// treat them as no link at all so the fallback chain below kicks in instead.
 const isUsablePdfLink = (link) => Boolean(link) && link !== '#' && !link.startsWith('blob:');
 
 const TreatmentCard = ({ treatment, isProduct = false }) => {
   const { perawatanPDFs } = useContext(CMSContext);
 
-  // Try to find a matching PDF from the CMS if it doesn't already have one
   const matchedPdf = perawatanPDFs?.find(p => p.name?.trim().toLowerCase() === treatment.name?.trim().toLowerCase());
   
-  // Try to find a matching PDF from the local assets/perawatan folder
   const localMatch = localPdfs.find(filename => {
     const cleanFile = filename.replace(/\.+pdf$/i, '').trim();
     const cleanName = treatment.name?.trim() || '';
@@ -83,29 +79,30 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
     ? (treatment.image.startsWith('data:') || treatment.image.startsWith('http') ? treatment.image : `${import.meta.env.BASE_URL}${treatment.image.startsWith('/') ? treatment.image.substring(1) : treatment.image}`) 
     : fallbackImage;
 
-  console.log(`[TreatmentCard] ${treatment.name} | matchedPdf: ${matchedPdf ? 'FOUND' : 'NOT_FOUND'} | pdfUrl: ${pdfUrl}`);
+  const waText = encodeURIComponent(`Halo B'DERMABEAUTY CLINIC Premiere, saya berminat untuk reservasi/order ${treatment.name}`);
+  const waUrl = `https://api.whatsapp.com/send?phone=628214464406&text=${waText}`;
 
   return (
-    <div className="treatment-card group" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+    <div className="treatment-card card-glass group relative flex flex-col justify-between p-6 rounded-2xl border border-[rgba(212,175,55,0.25)] bg-[#18181B] transition-all duration-300 hover:border-[#D4AF37] hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]" data-aos="fade-up">
       {treatment.isNew ? (
-        <div className="badge" style={{ backgroundColor: 'var(--primary-color)', padding: '0.4rem 1rem', borderRadius: '0 0 0 8px', fontWeight: 'bold' }}>NEW TREATMENT</div>
+        <div className="badge" style={{ background: 'var(--gold-gradient)', color: '#0F0F10', padding: '0.4rem 1rem', borderRadius: '0 0 0 8px', fontWeight: 'bold' }}>BEST SELLER</div>
       ) : (
-        getDiscountBadge(activeDiscount)
+        getDiscountBadge(activeDiscount, isProduct)
       )}
       
-      <div className="card-image-container">
+      <div className="card-image-container relative w-full aspect-[4/3] mb-4 overflow-hidden rounded-xl bg-[#141416] border border-[rgba(212,175,55,0.15)]">
         {displayImage ? (
-          <img src={displayImage} alt={treatment.name} className="card-image" />
+          <img src={displayImage} alt={treatment.name} className="card-image w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
         ) : (
-          <div className="card-image-placeholder">
-            <svg className="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+          <div className="card-image-placeholder w-full h-full flex items-center justify-center bg-[#18181B]">
+            <svg className="placeholder-icon w-12 h-12 text-[#D4AF37]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               <circle cx="8.5" cy="8.5" r="1.5"></circle>
               <polyline points="21 15 16 10 5 21"></polyline>
             </svg>
           </div>
         )}
-        <div className="card-overlay"></div>
+        <div className="card-overlay absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
         {!isProduct && pdfUrl && (
           <a href={pdfUrl} target="_blank" rel="noopener noreferrer" className="card-view-details">
             <span>View Details</span>
@@ -117,33 +114,40 @@ const TreatmentCard = ({ treatment, isProduct = false }) => {
         )}
       </div>
 
-      <div className="card-content">
-        <h3 className="treatment-name">{treatment.name}</h3>
+      <div className="card-content flex-grow text-center">
+        <h3 className="treatment-name font-['Cinzel',serif] text-xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728]">
+          {treatment.name}
+        </h3>
         {treatment.price && (
-          <div className="price-container">
+          <div className="price-container mb-2">
             {activeDiscount > 0 ? (
-              <div className="discount-wrapper">
-                <span className="original-price">{treatment.price}</span>
-                <span className="discounted-price">
+              <div className="discount-wrapper flex items-center justify-center gap-2">
+                <span className="original-price line-through text-[#A0A0AB] text-sm">{treatment.price}</span>
+                <span className="discounted-price font-bold text-[#FCF6BA] text-lg">
                   {calculateDiscountedPrice(treatment.price, activeDiscount)}
                 </span>
               </div>
             ) : (
-              <span className="regular-price">{treatment.price}</span>
+              <span className="regular-price font-bold text-[#FCF6BA] text-base">{treatment.price}</span>
             )}
           </div>
         )}
         {treatment.endDate && (
-          <div className="promo-date">
+          <div className="promo-date text-xs text-[#A0A0AB] mb-3">
             *Promo s/d {formatDate(treatment.endDate)}
           </div>
         )}
       </div>
       
-      <div className="treatment-actions-group">
-        <Link to={`/booking?${isProduct ? 'product' : 'treatment'}=${encodeURIComponent(treatment.name)}`} className="book-now-btn">
-          {isProduct ? 'Beli Sekarang' : 'Book Now'}
-        </Link>
+      <div className="treatment-actions-group mt-4 flex flex-col gap-2">
+        <a 
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="book-now-btn btn-gold w-full text-center py-2.5 rounded-xl font-bold text-sm text-[#0F0F10] tracking-wide shadow-[0_4px_15px_rgba(212,175,55,0.25)] hover:shadow-[0_6px_20px_rgba(212,175,55,0.45)] transition-all duration-300"
+        >
+          {isProduct ? 'Order Skincare' : 'Book Treatment'}
+        </a>
       </div>
     </div>
   );

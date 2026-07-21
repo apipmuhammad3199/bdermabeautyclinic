@@ -24,8 +24,7 @@ const ProtectedRoute = ({ children }) => {
   return isAuth ? children : <Navigate to="/login" replace />;
 };
 
-// Setiap pindah halaman selalu mulai dari paling atas —
-// tanpa ini browser kadang mempertahankan posisi scroll halaman sebelumnya.
+// Setiap pindah halaman selalu mulai dari paling atas
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -36,8 +35,6 @@ const ScrollToTop = () => {
   }, []);
 
   useEffect(() => {
-    // 'instant' mengabaikan scroll-behavior:smooth global — tanpa ini halaman
-    // baru terlihat "mulai di tengah" lalu merayap pelan ke atas.
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
 
@@ -45,28 +42,39 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  useEffect(() => {
+    document.title = "B'DERMABEAUTY CLINIC Premiere | Luxury Aesthetic & Skincare";
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: 'ease-out-cubic',
+    });
+  }, []);
+
   return (
     <CMSProvider>
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/treatments" element={<AllTreatment />} />
-          <Route path="/promo" element={<PromoTreatment />} />
-          <Route path="/promo-50" element={<Promo50 />} />
-          <Route path="/promo-55" element={<Promo55 />} />
-          <Route path="/promo-45" element={<Promo45 />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/articles" element={<Articles />} />
-          <Route path="/perawatan" element={<Perawatan />} />
-          <Route path="/before-after" element={<BeforeAfter />} />
-          <Route path="/videos" element={<VideoGallery />} />
-          <Route path="/socials" element={<Socials />} />
-          <Route path="/booking" element={<Booking />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        </Routes>
-      </Router>
+      <div className="bg-[#0F0F10] text-[#FAFAFA] min-h-screen selection:bg-[#D4AF37] selection:text-[#0F0F10]">
+        <Router>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/treatments" element={<AllTreatment />} />
+            <Route path="/promo" element={<PromoTreatment />} />
+            <Route path="/promo-50" element={<Promo50 />} />
+            <Route path="/promo-55" element={<Promo55 />} />
+            <Route path="/promo-45" element={<Promo45 />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/perawatan" element={<Perawatan />} />
+            <Route path="/before-after" element={<BeforeAfter />} />
+            <Route path="/videos" element={<VideoGallery />} />
+            <Route path="/socials" element={<Socials />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+          </Routes>
+        </Router>
+      </div>
     </CMSProvider>
   );
 }

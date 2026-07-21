@@ -18,7 +18,7 @@ function BeforeAfter() {
     const interval = setInterval(() => {
       if (sliderRef.current) {
         const container = sliderRef.current;
-        const scrollAmount = container.clientWidth >= 768 ? 280 : container.clientWidth;
+        const scrollAmount = container.clientWidth >= 768 ? 320 : container.clientWidth;
         if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
           container.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
@@ -32,34 +32,34 @@ function BeforeAfter() {
 
   const scrollLeft = () => {
     if (sliderRef.current) {
-      const scrollAmount = sliderRef.current.clientWidth >= 768 ? 280 : sliderRef.current.clientWidth;
+      const scrollAmount = sliderRef.current.clientWidth >= 768 ? 320 : sliderRef.current.clientWidth;
       sliderRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      const scrollAmount = sliderRef.current.clientWidth >= 768 ? 280 : sliderRef.current.clientWidth;
+      const scrollAmount = sliderRef.current.clientWidth >= 768 ? 320 : sliderRef.current.clientWidth;
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem', backgroundColor: '#fafafa' }}>
+    <div className="app-container" style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
       <Header />
       
-      <section className="catalog-container" style={{ paddingTop: '10px', marginTop: '20px', paddingBottom: '10px' }}>
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }} data-aos="fade-up">
-          <div className="section-subtitle-gold">HASIL NYATA</div>
-          <h2 className="section-title-grey" style={{ marginBottom: '1rem' }}>MEREKA TELAH MENCOBA DAN MEMBUKTIKAN HASILNYA</h2>
-          <p style={{ color: 'var(--text-light)', maxWidth: '600px', margin: '0 auto' }}>
-            Lihat perubahan luar biasa dari pasien-pasien kami setelah menjalani perawatan di Enef Clinic.
+      <section className="catalog-container" style={{ paddingTop: '20px', marginTop: '20px', paddingBottom: '10px' }}>
+        <div style={{ marginBottom: '2.5rem', textAlign: 'center' }} data-aos="fade-up">
+          <div className="section-subtitle-gold">TRANSFORMASI EKSKLUSIF</div>
+          <h2 className="section-title-grey" style={{ marginBottom: '1rem', fontSize: '2.2rem' }}>BEFORE & AFTER GALERI</h2>
+          <p style={{ color: 'var(--text-light)', maxWidth: '650px', margin: '0 auto' }}>
+            Lihat perubahan luar biasa dan bukti nyata dari pasien-pasien kami setelah menjalani perawatan di B'DERMABEAUTY CLINIC Premiere.
           </p>
         </div>
       </section>
 
-      <div className="slider-wrapper" style={{ position: 'relative', width: '100%', margin: '0 auto 4rem auto' }} data-aos="fade-up" data-aos-delay="100">
-        <button onClick={scrollLeft} className="slider-btn left" style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10094;</button>
+      <div className="slider-wrapper" style={{ position: 'relative', width: '100%', maxWidth: '1200px', margin: '0 auto 4rem auto' }} data-aos="fade-up" data-aos-delay="100">
+        <button onClick={scrollLeft} className="slider-btn left" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: '#18181B', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%', width: '48px', height: '48px', boxShadow: '0 4px 15px rgba(0,0,0,0.6)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#D4AF37', transition: 'all 0.3s ease' }}>&#10094;</button>
           
           <div 
             ref={sliderRef}
@@ -68,88 +68,130 @@ function BeforeAfter() {
               display: 'flex', 
               overflowX: 'auto', 
               scrollBehavior: 'smooth', 
-              gap: '20px',
-              padding: '20px 5px 40px 5px',
-              scrollbarWidth: 'none', /* Firefox */
-              msOverflowStyle: 'none'  /* IE/Edge */
+              gap: '24px',
+              padding: '20px 10px 40px 10px',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
             }}
           >
             {beforeAfterImages.length === 0 ? (
-              <div style={{ padding: '2rem', textAlign: 'center', width: '100%', color: '#888' }}>Belum ada foto yang diunggah.</div>
+              <div style={{ padding: '3rem', textAlign: 'center', width: '100%', color: 'var(--text-light)' }}>Belum ada foto transformasi yang diunggah.</div>
             ) : beforeAfterImages.map((slide, index) => (
               <div key={index} style={{ 
-                minWidth: '320px', 
-                maxWidth: '350px',
+                minWidth: '330px', 
+                maxWidth: '360px',
                 flex: '0 0 auto',
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                {/* Gold Card */}
+                {/* Dark Luxury Gold Card */}
                 <div style={{
-                  borderRadius: '12px',
-                  background: 'linear-gradient(180deg, #e7d1b8 0%, #d8b891 100%)',
-                  padding: '1.2rem',
+                  borderRadius: '20px',
+                  background: '#18181B',
+                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  backdropFilter: 'blur(12px)',
+                  padding: '1.5rem',
                   position: 'relative',
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)'
                 }}>
-                  {/* Clinic Name / Logo Placeholder */}
+                  {/* Clinic Watermark & Logo Tag */}
                   <div style={{
-                    alignSelf: 'flex-start',
-                    color: '#B68B5D',
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    marginBottom: '1rem',
-                    fontFamily: 'serif'
+                    display: 'flex',
+                    justify: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
+                    marginBottom: '1rem'
                   }}>
-                    Enef<br/><span style={{fontSize: '0.6rem', letterSpacing: '1px'}}>SKIN CLINIC</span>
+                    <span style={{
+                      fontFamily: 'Cinzel, serif',
+                      fontSize: '0.85rem',
+                      fontWeight: 'bold',
+                      background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      letterSpacing: '1px'
+                    }}>
+                      B'DERMABEAUTY
+                    </span>
+                    <span style={{
+                      fontSize: '0.65rem',
+                      color: 'rgba(212, 175, 55, 0.8)',
+                      letterSpacing: '2px',
+                      textTransform: 'uppercase',
+                      fontFamily: 'Montserrat, sans-serif'
+                    }}>
+                      PREMIERE
+                    </span>
                   </div>
 
-                  {/* Top Title Pill */}
+                  {/* Title Pill */}
                   <div style={{
-                    background: 'linear-gradient(90deg, #f5d8a0 0%, #cd9f5e 100%)',
-                    color: '#5a3d1c',
-                    padding: '0.3rem 1.5rem',
-                    borderRadius: '20px',
+                    background: 'rgba(212, 175, 55, 0.15)',
+                    border: '1px solid rgba(212, 175, 55, 0.3)',
+                    color: '#FCF6BA',
+                    padding: '0.4rem 1.2rem',
+                    borderRadius: '30px',
                     fontSize: '0.85rem',
                     fontWeight: 'bold',
-                    marginBottom: '1rem',
-                    boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+                    fontFamily: 'Cinzel, serif',
+                    marginBottom: '1.2rem',
                     textAlign: 'center',
-                    width: '90%'
+                    width: '100%'
                   }}>
                     {slide.title}
                   </div>
 
-                  {/* Image Container */}
+                  {/* Image Frame with Gold Precision Border & Watermark */}
                   <div style={{
                     position: 'relative',
                     width: '100%',
-                    borderRadius: '8px',
-                    marginBottom: '2rem'
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(212, 175, 55, 0.25)',
+                    marginBottom: '1.5rem',
+                    backgroundColor: '#141416'
                   }}>
                     <img 
                       src={slide.img} 
                       alt={`Before After ${index + 1}`} 
-                      style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '8px', objectFit: 'contain' }}
+                      style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain' }}
                       loading="lazy"
                     />
+
+                    {/* Preserved High-Precision Watermark Overlay */}
+                    <div style={{
+                      position: 'absolute',
+                      top: '10px',
+                      right: '10px',
+                      background: 'rgba(15, 15, 16, 0.75)',
+                      border: '1px solid rgba(212, 175, 55, 0.3)',
+                      backdropFilter: 'blur(4px)',
+                      color: '#D4AF37',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.6rem',
+                      fontWeight: '600',
+                      letterSpacing: '1px'
+                    }}>
+                      B'DERMABEAUTY Premiere
+                    </div>
                     
                     {/* Before Pill */}
                     <div style={{
                       position: 'absolute',
-                      bottom: '-12px',
-                      left: '20%',
-                      transform: 'translateX(-50%)',
-                      backgroundColor: 'white',
-                      color: '#cd9f5e',
-                      padding: '0.2rem 1.2rem',
-                      borderRadius: '15px',
+                      bottom: '10px',
+                      left: '15px',
+                      backgroundColor: 'rgba(15, 15, 16, 0.85)',
+                      border: '1px solid rgba(212, 175, 55, 0.4)',
+                      color: '#FCF6BA',
+                      padding: '0.25rem 1rem',
+                      borderRadius: '20px',
                       fontSize: '0.75rem',
                       fontWeight: 'bold',
-                      fontStyle: 'italic',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
                     }}>
                       Before
                     </div>
@@ -157,45 +199,45 @@ function BeforeAfter() {
                     {/* After Pill */}
                     <div style={{
                       position: 'absolute',
-                      bottom: '-12px',
-                      right: '20%',
-                      transform: 'translateX(50%)',
-                      backgroundColor: 'white',
-                      color: '#cd9f5e',
-                      padding: '0.2rem 1.2rem',
-                      borderRadius: '15px',
+                      bottom: '10px',
+                      right: '15px',
+                      backgroundColor: 'rgba(212, 175, 55, 0.9)',
+                      color: '#0F0F10',
+                      padding: '0.25rem 1rem',
+                      borderRadius: '20px',
                       fontSize: '0.75rem',
                       fontWeight: 'bold',
-                      fontStyle: 'italic',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
                     }}>
                       After
                     </div>
                   </div>
 
-                  {/* Bottom Text & Watermark */}
+                  {/* Bottom Doctor Info & Signature */}
                   <div style={{
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-end',
+                    justify: 'space-between',
+                    alignItems: 'center',
                     width: '100%',
-                    marginTop: 'auto'
+                    marginTop: 'auto',
+                    paddingTop: '0.5rem',
+                    borderTop: '1px solid rgba(212, 175, 55, 0.15)'
                   }}>
                     <div style={{
-                      color: '#8C6740',
+                      color: '#D4AF37',
                       fontSize: '0.75rem',
-                      fontWeight: '500'
+                      fontWeight: '600'
                     }}>
-                      {slide.doctor}
+                      {slide.doctor || "Treatment by : dr. B'DERMA"}
                     </div>
                     <div style={{
-                      color: '#c49e70',
+                      color: '#A0A0AB',
                       fontSize: '0.6rem',
-                      fontWeight: 'bold',
+                      fontWeight: '600',
                       textAlign: 'right',
-                      lineHeight: '1.2'
+                      letterSpacing: '1px'
                     }}>
-                      #JUARANYA<br/>ATASI MASALAH<br/>KULIT
+                      #PREMIEREBEAUTY
                     </div>
                   </div>
                 </div>
@@ -203,7 +245,7 @@ function BeforeAfter() {
             ))}
           </div>
           
-          <button onClick={scrollRight} className="slider-btn right" style={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'white', border: 'none', borderRadius: '50%', width: '50px', height: '50px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: 'var(--primary-color)', transition: 'all 0.3s ease' }}>&#10095;</button>
+          <button onClick={scrollRight} className="slider-btn right" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: '#18181B', border: '1px solid rgba(212, 175, 55, 0.4)', borderRadius: '50%', width: '48px', height: '48px', boxShadow: '0 4px 15px rgba(0,0,0,0.6)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#D4AF37', transition: 'all 0.3s ease' }}>&#10095;</button>
         </div>
 
         <style dangerouslySetInnerHTML={{__html: `
@@ -211,8 +253,10 @@ function BeforeAfter() {
             display: none;
           }
           .slider-btn:hover {
-            background-color: var(--primary-color) !important;
-            color: white !important;
+            background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728) !important;
+            color: #0F0F10 !important;
+            border-color: #FCF6BA !important;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5) !important;
           }
           @media (max-width: 768px) {
             .slider-btn {

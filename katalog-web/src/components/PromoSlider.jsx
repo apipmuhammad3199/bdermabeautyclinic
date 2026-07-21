@@ -18,7 +18,7 @@ const PromoSlider = () => {
     <div className="promo-slider">
       {slides.map((slide, index) => (
         <div className={`slide ${index === currentIndex ? 'active' : ''}`} key={index}>
-          <img src={(slide.url || slide).startsWith('data:') || (slide.url || slide).startsWith('http') ? (slide.url || slide) : `${import.meta.env.BASE_URL}${(slide.url || slide).startsWith('/') ? (slide.url || slide).substring(1) : (slide.url || slide)}`} alt={`Enef Clinic Promo ${index + 1}`} />
+          <img src={(slide.url || slide).startsWith('data:') || (slide.url || slide).startsWith('http') ? (slide.url || slide) : `${import.meta.env.BASE_URL}${(slide.url || slide).startsWith('/') ? (slide.url || slide).substring(1) : (slide.url || slide)}`} alt={`B'DERMABEAUTY CLINIC Premiere Promo ${index + 1}`} />
         </div>
       ))}
     </div>

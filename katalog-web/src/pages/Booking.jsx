@@ -38,7 +38,7 @@ function Booking() {
     e.preventDefault();
     
     // Construct the WhatsApp message
-    const message = `Selamat Datang di Layanan Booking Online Enef Clinic
+    const message = `Selamat Datang di Layanan Booking Online B'DERMABEAUTY CLINIC Premiere
 
 Kami informasikan, slot booking dibuka mulai jam 11.00 - 19.00
 Booking maksimal H-1 sebelum kedatangan
@@ -54,7 +54,7 @@ Hari dan tanggal : ${formData.date}
 Jam : ${formData.time}
 Treatment : ${formData.treatment}
 
-Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
+Mohon sertakan foto KTP jika belum pernah terdaftar di B'DERMABEAUTY CLINIC Premiere.`;
 
     const encodedMessage = encodeURIComponent(message);
     const waNumber = '628214464406';
@@ -64,13 +64,16 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
   };
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
+    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
       {/* Minimal Header */}
-      <header className="header" style={{ backgroundColor: '#fff', borderBottom: '1px solid #eaeaea' }}>
+      <header className="header">
         <div className="logo-container">
           <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
-            <div className="clinic-name">Enef Clinic</div>
+            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="B'DERMABEAUTY CLINIC Premiere Logo" className="logo" />
+            <div className="brand-title-wrap">
+              <span className="clinic-name">B'DERMABEAUTY</span>
+              <span className="clinic-tagline">CLINIC Premiere</span>
+            </div>
           </Link>
         </div>
         <div className="social-links">
@@ -83,7 +86,7 @@ Mohon sertakan foto KTP jika belum pernah terdaftar di Enef Clinic.`;
       <div className="booking-page-container" style={{ paddingTop: '2rem', minHeight: 'auto', alignItems: 'flex-start', }}>
         <div className="booking-card" data-aos="fade-up">
         <div className="booking-header">
-          <h2>Booking Online Enef Clinic</h2>
+          <h2>Booking Online B'DERMABEAUTY</h2>
           <p className="booking-rules">
             Slot booking dibuka mulai jam <strong>11.00 - 19.00</strong><br/>
             Booking maksimal <strong>H-1</strong> sebelum kedatangan.<br/>

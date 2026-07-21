@@ -145,7 +145,7 @@ function Perawatan() {
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
           <h2 className="section-title-grey" style={{ color: 'var(--primary-color)' }}>HALAMAN PERAWATAN</h2>
           <p style={{ color: 'var(--text-light)', marginTop: '1rem' }}>
-            Jelajahi dokumen perawatan eksklusif Enef Clinic.
+            Jelajahi dokumen perawatan eksklusif B'DERMABEAUTY CLINIC Premiere.
           </p>
         </div>
 

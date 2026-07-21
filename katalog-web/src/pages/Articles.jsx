@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
 import AOS from 'aos';
@@ -16,21 +17,8 @@ function Articles() {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
-      {/* Minimal Header */}
-      <header className="header" style={{ backgroundColor: '#fff', borderBottom: '1px solid #eaeaea' }}>
-        <div className="logo-container">
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: '10px' }}>
-            <img src={`${import.meta.env.BASE_URL}assets/logo.png`} alt="Enef Clinic Logo" className="logo" />
-            <div className="clinic-name">Enef Clinic</div>
-          </Link>
-        </div>
-        <div className="social-links">
-          <Link to="/" className="contact-us-btn">
-            Kembali ke Beranda
-          </Link>
-        </div>
-      </header>
+    <div className="app-container" style={{ minHeight: '100vh' }}>
+      <Header />
 
       <section className="catalog-container" data-aos="fade-up" style={{ marginTop: '20px' }}>
         <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
